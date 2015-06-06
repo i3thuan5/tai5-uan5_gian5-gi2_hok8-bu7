@@ -3,6 +3,9 @@
 	<name>臺灣言語服務</name>
 	<comment></comment>
 	<projects>
+		<project>臺灣言語工具</project>
+		<project>臺灣言語資料庫</project>
+		<project>iCorpus</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
