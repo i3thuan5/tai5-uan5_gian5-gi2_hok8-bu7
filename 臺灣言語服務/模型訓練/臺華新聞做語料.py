@@ -16,10 +16,13 @@ class 臺華新聞做語料(程式腳本):
 		分析器=拆文分析器()
 		譀鏡=物件譀鏡()
 		for 資料 in 掠資料落來.掠資料():
-			章物件=分析器.轉做章物件(資料['華語'])
-			for 句物件 in 章物件.內底句:
+			for 華語句 in 資料['華語'].split('\n'):
+				句物件=分析器.轉做句物件(華語句)
 				華.append(譀鏡.看分詞(句物件))
-			閩.append(資料['閩南語'])
+			閩.extend(資料['閩南語'].split('\n'))
+			if len(華)!=len(閩):
+				print(華[-100:],閩[-100:])
+				raise RuntimeError('華臺數量無仝！！')
 		
 		self.這馬目錄 = os.path.dirname(os.path.abspath(__file__))
 		資料目錄 = os.path.join(self.這馬目錄, '翻譯語料')
