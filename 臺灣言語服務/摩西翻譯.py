@@ -12,7 +12,7 @@ class 摩西翻譯():
 	def __init__(self):
 		self.這馬目錄 = os.path.dirname(os.path.abspath(__file__))
 		self.moses模型資料夾路徑 = os.path.join(self.這馬目錄, '模型語料', '翻譯模型')
-	def 翻譯(self, request, 查詢語句):
+	def 翻譯(self, request, 查詢腔口, 查詢語句):
 		翻譯編碼器 = 語句編碼器()
 		
 		分析器 = 拆文分析器()
