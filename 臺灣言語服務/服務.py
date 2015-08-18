@@ -45,7 +45,7 @@ def 辭典加檔案的詞(辭典, 檔名):
 print('匯辭典開始')
 print(datetime.now())
 母語辭典 = 型音辭典(4)
-辭典檔案 = join(settings.BASE_DIR, '語料', '翻譯語料', '閩南語', '加工語料', '母語辭典.txt.gz')
+辭典檔案 = join(settings.BASE_DIR, '語料', '翻譯模型', '閩南語', '母語辭典.txt.gz')
 語言模型檔案 = join(settings.BASE_DIR, '語料', '翻譯模型', '閩南語', '語言模型.lm')
 辭典加檔案的詞(母語辭典, 辭典檔案)
 print('匯辭典結束')
@@ -63,9 +63,11 @@ class 服務:
     def 正規化翻譯(self, request):
         try:
             查詢腔口 = request.POST['查詢腔口']
-            查詢語句 = request.POST['查詢語句']
         except:
             查詢腔口 = '閩南語'
+        try:
+            查詢語句 = request.POST['查詢語句']
+        except:
             查詢語句 = '壹 隻 好 e5 豬'
             查詢語句='語句匯入傷濟改'
             查詢語句='語句匯入太多次'
