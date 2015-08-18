@@ -10,9 +10,11 @@ from 臺灣言語工具.辭典.型音辭典 import 型音辭典
 from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶端
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 
 
 全部翻譯母語模型 = {}
+全部合成母語模型 = {}
 
 
 class 模型載入(AppConfig):
@@ -20,9 +22,10 @@ class 模型載入(AppConfig):
     verbose_name = "臺灣言語服務模型載入"
 
     def ready(self):
-        self.走摩西模型()
+        self.摩西模型()
+        self.HTS模型()
 
-    def 走摩西模型(self):
+    def 摩西模型(self):
         翻譯模型資料夾 = join(settings.BASE_DIR, '語料', '翻譯模型')
         for 母語腔口 in listdir(翻譯模型資料夾):
             母語翻譯模型資料夾 = join(翻譯模型資料夾, 母語腔口)
@@ -42,3 +45,12 @@ class 模型載入(AppConfig):
                 '連詞': 母語連詞,
             }
             全部翻譯母語模型[母語腔口] = 母語模型
+
+    def HTS模型(self):
+        合成模型資料夾 = join(settings.BASE_DIR, '語料', '合成模型')
+        for 母語腔口 in listdir(合成模型資料夾):
+            母語合成模型 = join(合成模型資料夾, 母語腔口, 'Taiwanese.htsvoice')
+            全部合成母語模型[母語腔口] = {
+                '模型': 母語合成模型,
+                '拼音': 臺灣閩南語羅馬字拼音,
+            }
