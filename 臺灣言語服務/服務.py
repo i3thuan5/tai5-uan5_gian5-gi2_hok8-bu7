@@ -89,7 +89,6 @@ class 服務:
         變調物件 = self._閩南語變調.變調(音值物件)
         標仔陣列 = self._標仔轉換.物件轉完整合成標仔(變調物件)
         愛合成標仔 = self._標仔轉換.跳脫標仔陣列(標仔陣列)
-        print(愛合成標仔)
         一點幾位元組, 一秒幾點, 幾个聲道, 原始取樣 = \
             htsengine.synthesize(合成母語模型['模型'], 愛合成標仔)
         音檔 = self._音檔頭前表.加起哩(原始取樣, 一點幾位元組, 一秒幾點, 幾个聲道)
@@ -123,6 +122,7 @@ class 服務:
     def 音檔包做回應(self, 音檔):
         回應 = HttpResponse()
         回應.write(音檔)
-        回應['Content-Type'] = 'audio/x-wav'
+        回應['Content-Type'] = 'audio/wav'
         回應['Content-Length'] = len(音檔)
+        回應['Content-Disposition'] = 'filename="voice.wav"'
         return 回應
