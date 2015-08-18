@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from os import listdir, makedirs
-import os
 from os.path import join, basename
 import re
 
@@ -20,6 +18,8 @@ from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
 from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
 from 臺灣言語工具.斷詞.連詞揀集內組 import 連詞揀集內組
+from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
+from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 '''
 from 臺灣言語服務.模型訓練 import 模型訓練
 訓練=模型訓練()
@@ -31,13 +31,8 @@ class 模型訓練(程式腳本):
     漢語語言 = re.compile('(臺語|台語|閩南|客家|客語|華語)')
     _翻譯編碼器 = 語句編碼器()  # 若用著Unicdoe擴充就需要
 
-    def __init__(self, 資料夾=join(settings.BASE_DIR, '語料')):
-        self.資料夾目錄 = 資料夾
-
     def 走(self):
-        翻譯語料資料夾 = join(self.資料夾目錄, '翻譯語料')
         self.輸出語料(翻譯語料資料夾)
-        翻譯模型資料夾 = join(self.資料夾目錄, '翻譯模型')
         self.訓練摩西翻譯模型(翻譯語料資料夾, 翻譯模型資料夾)
 
     def 輸出語料(self, 語料資料夾):
@@ -48,7 +43,7 @@ class 模型訓練(程式腳本):
         makedirs(模型資料夾, exist_ok=True)
         for 語言 in listdir(語料資料夾):
             語言資料夾 = join(語料資料夾, 語言)
-            翻譯模型資料夾路徑 = os.path.join(模型資料夾, 語言)
+            翻譯模型資料夾路徑 = join(模型資料夾, 語言)
             makedirs(翻譯模型資料夾路徑, exist_ok=True)
             if self.漢語語言.search(語言):
                 平行華語, 平行母語, 母語文本 = self._漢語語料訓練(語言資料夾, 翻譯模型資料夾路徑)
@@ -126,16 +121,16 @@ class 模型訓練(程式腳本):
 
     def _原始語料(self, 語言資料夾):
         平行華語 = [
-            os.path.join(語言資料夾, '對齊外語語句.txt.gz'),
-            os.path.join(語言資料夾, '對齊外語字詞.txt.gz'),
+            join(語言資料夾, '對齊外語語句.txt.gz'),
+            join(語言資料夾, '對齊外語字詞.txt.gz'),
         ]
         平行母語 = [
-            os.path.join(語言資料夾, '對齊母語語句.txt.gz'),
-            os.path.join(語言資料夾, '對齊母語字詞.txt.gz'),
+            join(語言資料夾, '對齊母語語句.txt.gz'),
+            join(語言資料夾, '對齊母語字詞.txt.gz'),
         ]
         母語文本 = [
-            os.path.join(語言資料夾, '語句文本.txt.gz'),
-            os.path.join(語言資料夾, '字詞文本.txt.gz'),
+            join(語言資料夾, '語句文本.txt.gz'),
+            join(語言資料夾, '字詞文本.txt.gz'),
         ]
         return 平行華語, 平行母語, 母語文本
 
