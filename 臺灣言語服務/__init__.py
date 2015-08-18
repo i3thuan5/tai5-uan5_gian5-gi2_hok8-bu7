@@ -1,0 +1,1 @@
+default_app_config = '臺灣言語服務.載入模型.載入模型'

@@ -10,7 +10,7 @@ echo "from 臺灣言語服務.模型訓練 import 模型訓練; 訓練=模型訓
 ```
 
 ## 使用方法
-
+先在`settings.py`的`INSTALLED_APPS`加`'臺灣言語服務'`
 ```bash
 python manage.py runserver
 ```

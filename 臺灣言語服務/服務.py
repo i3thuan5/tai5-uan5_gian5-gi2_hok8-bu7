@@ -16,41 +16,14 @@
 
 感謝您的使用與推廣～～勞力！承蒙！
 """
-from datetime import datetime
-from django.conf import settings
-from django.http.response import HttpResponse
-from os.path import join
+from django.http.response import HttpResponse, JsonResponse
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.解析整理.文章粗胚 import 文章粗胚
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
-from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶端
-from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語工具.解析整理.物件譀鏡 import 物件譀鏡
-from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
-from 臺灣言語工具.解析整理.詞物件網仔 import 詞物件網仔
-from 臺灣言語工具.辭典.型音辭典 import 型音辭典
-from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
 from 臺灣言語工具.斷詞.連詞揀集內組 import 連詞揀集內組
-
-
-def 辭典加檔案的詞(辭典, 檔名):
-    腳本 = 程式腳本()
-    分析器 = 拆文分析器()
-    網仔 = 詞物件網仔()
-    for 一逝 in 腳本._讀檔案(檔名):
-        for 詞物件 in 網仔.網出詞物件(分析器.轉做句物件(一逝)):
-            辭典.加詞(詞物件)
-
-print('匯辭典開始')
-print(datetime.now())
-母語辭典 = 型音辭典(4)
-辭典檔案 = join(settings.BASE_DIR, '語料', '翻譯模型', '閩南語', '母語辭典.txt.gz')
-語言模型檔案 = join(settings.BASE_DIR, '語料', '翻譯模型', '閩南語', '語言模型.lm')
-辭典加檔案的詞(母語辭典, 辭典檔案)
-print('匯辭典結束')
-print(datetime.now())
-母語連詞 = KenLM語言模型(語言模型檔案)
+from 臺灣言語服務.載入模型 import 全部母語模型
 
 
 class 服務:
@@ -69,18 +42,22 @@ class 服務:
             查詢語句 = request.POST['查詢語句']
         except:
             查詢語句 = '壹 隻 好 e5 豬'
-            查詢語句='語句匯入傷濟改'
-            查詢語句='語句匯入太多次'
-        #         if not self.腔口有支援無(查詢腔口):
-        #             return self.文字包做回應('無這个腔口')
+            查詢語句 = '語句匯入傷濟改'
+            查詢語句 = '語句匯入太多次'
+
+        母語模型 = 全部母語模型[查詢腔口]
+
         整理後語句 = self._粗胚.數字英文中央全加分字符號(
             self._粗胚.建立物件語句前處理減號(臺灣閩南語羅馬字拼音, 查詢語句)
         )
         華語章物件 = self._分析器.轉做章物件(整理後語句)
-        揣詞章物件, _, _ = self._揣詞.揣詞(母語辭典, 華語章物件)
-        選好章物件, _, _ = self._揀集內組.揀(母語連詞, 揣詞章物件)
-        _摩西用戶 = 摩西用戶端(埠=8500, 編碼器=語句編碼器())
-        閩南語章物件, _翻譯結構華語章物件, _分數 = _摩西用戶.翻譯(選好章物件)
+        揣詞章物件, _, _ = self._揣詞.揣詞(母語模型['辭典'], 華語章物件)
+        選好章物件, _, _ = self._揀集內組.揀(母語模型['連詞'], 揣詞章物件)
+
+        try:
+            閩南語章物件, _翻譯結構華語章物件, _分數 = 母語模型['摩西用戶端'].翻譯(選好章物件)
+        except ConnectionRefusedError:
+            return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'})
         翻譯結果 = self._譀鏡.看分詞(閩南語章物件,
                             物件分詞符號=' ', 物件分字符號='-', 物件分句符號='')
         return self.文字包做回應(翻譯結果)
