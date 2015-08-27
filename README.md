@@ -1,6 +1,21 @@
 # 臺灣言語服務
 
-
+## 設定
+在Django的`settings.py`設定檔加上
+```
+INSTALLED_APPS = +(
+    '臺灣言語資料庫',
+    '臺灣言語服務',
+)
+```
+網址對應`urls.py`加上對應路徑
+```python3
+urlpatterns = patterns(
+    ...
+    url(r'^', include('臺灣言語服務.網址')),
+    ...
+)
+```
 
 ## 訓練模型
 佇`臺灣言語資料庫`專案
@@ -10,7 +25,6 @@ echo "from 臺灣言語服務.模型訓練 import 模型訓練; 訓練=模型訓
 ```
 
 ## 使用方法
-先在`settings.py`的`INSTALLED_APPS`加`'臺灣言語服務'`
 ```bash
 python manage.py runserver
 ```
