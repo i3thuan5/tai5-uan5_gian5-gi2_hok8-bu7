@@ -26,8 +26,14 @@ class 模型載入(AppConfig):
     _語言判斷 = 語言判斷()
 
     def ready(self):
-        self.摩西模型()
-        self.HTS模型()
+        try:
+            self.摩西模型()
+        except FileNotFoundError:
+            pass
+        try:
+            self.HTS模型()
+        except FileNotFoundError:
+            pass
 
     def 摩西模型(self):
         for 第幾个, 母語腔口 in enumerate(listdir(翻譯模型資料夾)):
