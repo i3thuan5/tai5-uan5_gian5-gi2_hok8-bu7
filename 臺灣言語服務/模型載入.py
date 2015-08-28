@@ -39,7 +39,11 @@ class 模型載入(AppConfig):
         for 第幾个, 母語腔口 in enumerate(listdir(翻譯模型資料夾)):
             母語翻譯模型資料夾 = join(翻譯模型資料夾, 母語腔口)
             摩西埠 = 8500 + 第幾个
-            服務 = 摩西服務端(母語翻譯模型資料夾, 埠=摩西埠)
+            try:
+                服務 = 摩西服務端(母語翻譯模型資料夾, 埠=摩西埠)
+            except OSError as 錯誤:
+                print(錯誤)
+                continue
             服務.走()
 
             辭典檔案 = join(母語翻譯模型資料夾, '母語辭典.txt.gz')
