@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from os import listdir, makedirs
 from os.path import join, basename
+from sys import stderr
 import traceback
 
 
@@ -21,7 +22,6 @@ from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀�
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.語言判斷 import 語言判斷
-from sys import stderr
 from 臺灣言語工具.語言模型.實際語言模型 import 實際語言模型
 '''
 from 臺灣言語服務.模型訓練 import 模型訓練
