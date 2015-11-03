@@ -37,7 +37,8 @@ setup(
         'Topic :: Text Processing :: Linguistic',
     ],
     install_requires=[
-        'tai5-uan5_gian5-gi2_kang1-ku7',
         'tai5-uan5_gian5-gi2_tsu1-liau7-khoo3',
+        'psycopg2',
+        'django-cors-headers',
     ],
 )
