@@ -52,7 +52,7 @@ class 模型訓練(程式腳本):
         for 語言 in listdir(語料資料夾):
             try:
                 self.訓練摩西翻譯模型(語料資料夾, 模型資料夾, 語言)
-            except RuntimeError:
+            except:
                 print('{}的摩西模型訓練失敗！！'.format(語言), file=stderr)
                 traceback.print_exc()
                 print(file=stderr)
