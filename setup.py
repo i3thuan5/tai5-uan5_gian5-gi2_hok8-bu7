@@ -1,11 +1,16 @@
 from distutils.core import setup
 import os
+import sys
 from 版本 import 版本
 
-'''
-tar無法度下傷長的檔案名，所以愛用zip
-python setup.py sdist --format=zip upload
-'''
+# tar無法度下傷長的檔案名，所以愛用zip
+# python setup.py sdist --format=zip upload
+try:
+    # travis攏先`python setup.py sdist`才閣上傳
+    sys.argv.insert(sys.argv.index('sdist') + 1, '--format=zip')
+except ValueError:
+    # 無upload
+    pass
 
 
 def 讀(檔名):
@@ -31,6 +36,7 @@ setup(
         'Development Status :: 3 - Alpha',
         'Operating System :: Unix',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Text Processing',
