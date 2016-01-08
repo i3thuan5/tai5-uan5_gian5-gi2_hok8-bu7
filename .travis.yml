@@ -33,6 +33,7 @@ addons:
 install:
 - pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3
 - pip install https://github.com/sih4sing5hong5/hts_engine_python/archive/master.zip
+- pip install git+https://github.com/conrado/libavwrapper@6409123ee24df823a5ee0bac7a08043e6b317721#egg=libavwrapper
 - pip install flake8
 - pip install python-coveralls
 branches:
