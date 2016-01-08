@@ -4,7 +4,7 @@ from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 
 
-class 模型訓練試驗(TestCase):
+class 模型訓練整合試驗(TestCase):
 
     def test_閩南語混合語料(self):
         訓練 = 模型訓練()
