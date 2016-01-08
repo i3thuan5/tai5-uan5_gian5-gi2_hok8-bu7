@@ -5,7 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 import htsengine
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.解析整理.文章粗胚 import 文章粗胚
-from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.解析整理.物件譀鏡 import 物件譀鏡
 from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
 from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀集內組
@@ -29,6 +28,10 @@ class 服務:
     def __init__(self, 全部翻譯母語模型={}, 全部合成母語模型={}):
         self.全部翻譯母語模型 = 全部翻譯母語模型
         self.全部合成母語模型 = 全部合成母語模型
+
+    def 正規化翻譯支援腔口(self, request):
+        全部翻譯母語 = sorted(self.全部翻譯母語模型.keys())
+        return self.json包做回應({'腔口': 全部翻譯母語})
 
     @csrf_exempt
     def 正規化翻譯(self, request):
@@ -108,6 +111,10 @@ class 服務:
 
     def 文字包做回應(self, 文字):
         回應 = HttpResponse(文字)
+        return 回應
+
+    def json包做回應(self, json):
+        回應 = JsonResponse(json)
         return 回應
 
     def 音檔包做回應(self, 音檔):
