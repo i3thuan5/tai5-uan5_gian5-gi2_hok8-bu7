@@ -61,3 +61,4 @@ target/
 venv
 文件/_*
 MANIFEST
+/node_modules/
