@@ -42,7 +42,7 @@ branches:
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
 - pip install .
-- coverage run manage.py test -p 'test*單元試驗.py'
+- coverage run --source=臺灣言語服務 manage.py test -p 'test*單元試驗.py'
 - flake8 . --exclude=venv,文件 --count --show-source --ignore=E501
 after_success:
 - coverage report
