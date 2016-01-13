@@ -68,23 +68,26 @@ class 服務:
     @csrf_exempt
     def 語音合成(self, request):
         try:
+            查詢語句 = request.POST['查詢語句']
+        except:
+            查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
+        try:
             查詢腔口 = request.POST['查詢腔口']
             合成母語模型 = self.全部合成母語模型[查詢腔口]
         except:
+            查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
             查詢腔口 = '閩南語'
             合成母語模型 = self.全部合成母語模型[查詢腔口]
-        try:
-            查詢語句 = request.POST['查詢語句']
-        except:
-            查詢語句 = '語｜gu2 句｜ku3 匯-入｜hue7-lip8 傷｜siunn1 濟｜tse7 改｜kai2'
-        self._語音合成實作(合成母語模型, 查詢語句)
+        return self._語音合成實作(合成母語模型, 查詢語句)
 
     def _語音合成實作(self, 合成母語模型, 查詢語句):
         母語章物件 = self._分析器.轉做章物件(查詢語句)
-
         音值物件 = self._家私.轉音(合成母語模型['拼音'], 母語章物件, 函式='音值')
-        變調物件 = self._閩南語變調.變調(音值物件)
-        標仔陣列 = self._標仔轉換.物件轉完整合成標仔(變調物件)
+        try:
+            音值物件 = 合成母語模型['變調'].變調(音值物件)
+        except:
+            pass
+        標仔陣列 = self._標仔轉換.物件轉完整合成標仔(音值物件)
         愛合成標仔 = self._標仔轉換.跳脫標仔陣列(標仔陣列)
         音檔 = 合成母語模型['模型'].合成(愛合成標仔)
 #         調好音 = self.音標調音(查詢腔口, 音檔)
@@ -123,5 +126,5 @@ class 服務:
         回應.write(音檔)
         回應['Content-Type'] = 'audio/wav'
         回應['Content-Length'] = len(音檔)
-        回應['Content-Disposition'] = 'filename="voice.wav"'
+        回應['Content-Disposition'] = 'filename="taiwanese.wav"'
         return 回應
