@@ -2,7 +2,6 @@
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-import htsengine
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.解析整理.文章粗胚 import 文章粗胚
 from 臺灣言語工具.解析整理.物件譀鏡 import 物件譀鏡
@@ -11,7 +10,6 @@ from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀�
 from 臺灣言語工具.語音合成.語音標仔轉換 import 語音標仔轉換
 from 臺灣言語工具.解析整理.轉物件音家私 import 轉物件音家私
 from 臺灣言語工具.語音合成.閩南語變調 import 閩南語變調
-from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 
 
 class 服務:
@@ -44,9 +42,7 @@ class 服務:
         try:
             查詢語句 = request.POST['查詢語句']
         except:
-            查詢語句 = '壹 隻 好 e5 豬'
-            查詢語句 = '語句匯入傷濟改'
-            查詢語句 = '語句匯入太多次'
+            查詢語句 = '你好嗎？我很好！'
         return self._正規化翻譯實作(母語模型, 查詢語句)
 
     def _正規化翻譯實作(self, 母語模型, 查詢語句):
@@ -66,26 +62,34 @@ class 服務:
                             物件分詞符號=' ', 物件分字符號='-', 物件分句符號='')
         return self.文字包做回應(翻譯結果)
 
+    def 語音合成支援腔口(self, request):
+        return self.json包做回應({'腔口': sorted(self.全部合成母語模型.keys())})
+
     @csrf_exempt
     def 語音合成(self, request):
         try:
-            查詢腔口 = request.POST['查詢腔口']
-        except:
-            查詢腔口 = '閩南語'
-        try:
             查詢語句 = request.POST['查詢語句']
         except:
-            查詢語句 = '語｜gu2 句｜ku3 匯-入｜hue7-lip8 傷｜siunn1 濟｜tse7 改｜kai2'
-        母語章物件 = self._分析器.轉做章物件(查詢語句)
+            查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
+        try:
+            查詢腔口 = request.POST['查詢腔口']
+            合成母語模型 = self.全部合成母語模型[查詢腔口]
+        except:
+            查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
+            查詢腔口 = '閩南語'
+            合成母語模型 = self.全部合成母語模型[查詢腔口]
+        return self._語音合成實作(合成母語模型, 查詢語句)
 
-        合成母語模型 = self.全部合成母語模型[查詢腔口]
+    def _語音合成實作(self, 合成母語模型, 查詢語句):
+        母語章物件 = self._分析器.轉做章物件(查詢語句)
         音值物件 = self._家私.轉音(合成母語模型['拼音'], 母語章物件, 函式='音值')
-        變調物件 = self._閩南語變調.變調(音值物件)
-        標仔陣列 = self._標仔轉換.物件轉完整合成標仔(變調物件)
+        try:
+            音值物件 = 合成母語模型['變調'].變調(音值物件)
+        except:
+            pass
+        標仔陣列 = self._標仔轉換.物件轉完整合成標仔(音值物件)
         愛合成標仔 = self._標仔轉換.跳脫標仔陣列(標仔陣列)
-        一點幾位元組, 一秒幾點, 幾个聲道, 原始取樣 = \
-            htsengine.synthesize(合成母語模型['模型'], 愛合成標仔)
-        音檔 = 聲音檔.對參數轉(一點幾位元組, 一秒幾點, 幾个聲道, 原始取樣)
+        音檔 = 合成母語模型['模型'].合成(愛合成標仔)
 #         調好音 = self.音標調音(查詢腔口, 音檔)
         return self.音檔包做回應(音檔.wav格式資料())
 
@@ -122,5 +126,5 @@ class 服務:
         回應.write(音檔)
         回應['Content-Type'] = 'audio/wav'
         回應['Content-Length'] = len(音檔)
-        回應['Content-Disposition'] = 'filename="voice.wav"'
+        回應['Content-Disposition'] = 'filename="taiwanese.wav"'
         return 回應

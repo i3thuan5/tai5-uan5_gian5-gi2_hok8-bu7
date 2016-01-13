@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.apps import AppConfig
 from os import listdir
 from os.path import join
+
+from django.apps import AppConfig
 
 
 from 臺灣言語工具.翻譯.摩西工具.摩西服務端 import 摩西服務端
@@ -14,6 +15,8 @@ from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.資料模型路徑 import 合成模型資料夾
 from 臺灣言語工具.音標系統.客話.臺灣客家話拼音 import 臺灣客家話拼音
 from 臺灣言語服務.語言判斷 import 語言判斷
+from 臺灣言語工具.語音合成.HTS工具.HTS合成模型 import HTS合成模型
+from 臺灣言語工具.語音合成.閩南語變調 import 閩南語變調
 
 
 全部翻譯母語模型 = {}
@@ -66,8 +69,9 @@ class 模型載入(AppConfig):
         for 母語腔口 in listdir(合成模型資料夾):
             母語合成模型 = join(合成模型資料夾, 母語腔口, 'Taiwanese.htsvoice')
             全部合成母語模型[母語腔口] = {
-                '模型': 母語合成模型,
+                '模型': HTS合成模型(母語合成模型),
                 '拼音': self._語言拼音(母語腔口),
+                '變調': self._語言變調(母語腔口),
             }
 
     def _語言拼音(self, 語言):
@@ -76,3 +80,8 @@ class 模型載入(AppConfig):
         if self._語言判斷.是客話(語言):
             return 臺灣客家話拼音
         raise RuntimeError('此無支援「{}」的拼音！！'.format(語言))
+
+    def _語言變調(self, 語言):
+        if self._語言判斷.是閩南語(語言):
+            return 閩南語變調
+        return None
