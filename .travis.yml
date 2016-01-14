@@ -12,6 +12,7 @@ addons:
     packages:
     - gcc-4.9
     - g++-4.9
+    - python3-dev
     - libc6-dev-i386
     - linux-libc-dev
     - gcc-multilib
@@ -21,19 +22,14 @@ addons:
     - subversion
     - automake
     - libtool
-    - automake
     - zlib1g-dev
-    - libboost-all-dev
     - libbz2-dev
     - liblzma-dev
-    - python3-dev
+    - libboost-all-dev
     - libgoogle-perftools-dev
     - libxmlrpc-c++.*-dev
     - cmake
 install:
-- pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3
-- pip install https://github.com/sih4sing5hong5/hts_engine_python/archive/master.zip
-- pip install git+https://github.com/conrado/libavwrapper@6409123ee24df823a5ee0bac7a08043e6b317721#egg=libavwrapper
 - pip install flake8
 - pip install python-coveralls
 branches:
