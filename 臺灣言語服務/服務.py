@@ -2,6 +2,7 @@
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.解析整理.文章粗胚 import 文章粗胚
 from 臺灣言語工具.解析整理.物件譀鏡 import 物件譀鏡
@@ -10,6 +11,7 @@ from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀�
 from 臺灣言語工具.語音合成.語音標仔轉換 import 語音標仔轉換
 from 臺灣言語工具.解析整理.轉物件音家私 import 轉物件音家私
 from 臺灣言語工具.語音合成.閩南語變調 import 閩南語變調
+from 臺灣言語工具.綜合標音.句綜合標音 import 句綜合標音
 
 
 class 服務:
@@ -55,12 +57,18 @@ class 服務:
         選好章物件, _, _ = self._揀集內組.揀(母語模型['語言模型'], 揣詞章物件)
 
         try:
-            閩南語章物件, _翻譯結構華語章物件, _分數 = 母語模型['摩西用戶端'].翻譯(選好章物件)
+            母語章物件, _翻譯結構華語章物件, _分數 = 母語模型['摩西用戶端'].翻譯(選好章物件)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'})
-        翻譯結果 = self._譀鏡.看分詞(閩南語章物件,
-                            物件分詞符號=' ', 物件分字符號='-', 物件分句符號='')
-        return self.文字包做回應(翻譯結果)
+        翻譯正規化結果 = self._譀鏡.看分詞(母語章物件,
+                               物件分詞符號=' ', 物件分字符號='-', 物件分句符號='')
+        翻譯結果 = {
+            '翻譯正規化結果': 翻譯正規化結果}
+        try:
+            翻譯結果['綜合標音'] = 句綜合標音(母語模型['字綜合標音'], 母語章物件),
+        except:
+            pass
+        return self.json包做回應(翻譯結果)
 
     def 語音合成支援腔口(self, request):
         return self.json包做回應({'腔口': sorted(self.全部合成母語模型.keys())})
