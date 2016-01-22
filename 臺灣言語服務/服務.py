@@ -35,14 +35,18 @@ class 服務:
 
     @csrf_exempt
     def 正規化翻譯(self, request):
+        if request.method == 'GET':
+            連線參數=request.GET
+        else:
+            連線參數=request.POST
         try:
-            查詢腔口 = request.POST['查詢腔口']
+            查詢腔口 = 連線參數['查詢腔口']
             母語模型 = self.全部翻譯母語模型[查詢腔口]
         except:
             查詢腔口 = '閩南語'
             母語模型 = self.全部翻譯母語模型[查詢腔口]
         try:
-            查詢語句 = request.POST['查詢語句']
+            查詢語句 = 連線參數['查詢語句']
         except:
             查詢語句 = '你好嗎？我很好！'
         return self._正規化翻譯實作(母語模型, 查詢語句)
@@ -76,12 +80,16 @@ class 服務:
 
     @csrf_exempt
     def 語音合成(self, request):
+        if request.method == 'GET':
+            連線參數=request.GET
+        else:
+            連線參數=request.POST
         try:
-            查詢語句 = request.POST['查詢語句']
+            查詢語句 = 連線參數['查詢語句']
         except:
             查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
         try:
-            查詢腔口 = request.POST['查詢腔口']
+            查詢腔口 = 連線參數['查詢腔口']
             合成母語模型 = self.全部合成母語模型[查詢腔口]
         except:
             查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
