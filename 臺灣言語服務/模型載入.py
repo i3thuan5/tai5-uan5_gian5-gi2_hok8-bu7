@@ -40,7 +40,7 @@ class 模型載入(AppConfig):
             pass
 
     def 摩西模型(self):
-        for 第幾个, 母語腔口 in enumerate(listdir(翻譯模型資料夾)):
+        for 第幾个, 母語腔口 in enumerate(sorted(listdir(翻譯模型資料夾))):
             摩西埠 = 8500 + 第幾个
             try:
                 全部翻譯母語模型[母語腔口] = self.摩西翻譯模型(翻譯模型資料夾, 母語腔口, 摩西埠)
@@ -73,7 +73,7 @@ class 模型載入(AppConfig):
         return 母語模型
 
     def HTS模型(self):
-        for 母語腔口 in listdir(合成模型資料夾):
+        for 母語腔口 in sorted(listdir(合成模型資料夾)):
             全部合成母語模型[母語腔口] = self.HTS合成模型(合成模型資料夾, 母語腔口)
 
     @classmethod
