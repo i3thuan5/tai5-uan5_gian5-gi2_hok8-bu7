@@ -91,7 +91,7 @@ class 模型載入(AppConfig):
             return 臺灣閩南語羅馬字拼音
         if 語言判斷.是客話(語言):
             return 臺灣客家話拼音
-        raise RuntimeError('此無支援「{}」的拼音！！'.format(語言))
+        return 臺灣閩南語羅馬字拼音
 
     @classmethod
     def _語言變調(cls, 語言):
