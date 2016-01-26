@@ -42,7 +42,7 @@ class 詔安腔合成整合試驗(TestCase):
         連線要求 = RequestFactory().get('/語音合成')
         連線要求.GET = {
             '查詢腔口': '詔安腔',
-            '查詢語句': '你好嗎？我很好！'
+            '查詢語句': '你｜henˋ 好｜hoo^ 無｜moˋ ？ 𠊎｜ngaiˋ 真｜zhinˇ 好｜hoo^ ！'
         }
         連線回應 = self.服務功能.語音合成(連線要求)
         self.assertEqual(連線回應.status_code, 200)
