@@ -10,7 +10,6 @@ from 臺灣言語工具.辭典.型音辭典 import 型音辭典
 from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶端
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
-from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.資料模型路徑 import 合成模型資料夾
 from 臺灣言語工具.音標系統.客話.臺灣客家話拼音 import 臺灣客家話拼音
@@ -19,6 +18,7 @@ from 臺灣言語工具.語音合成.HTS工具.HTS合成模型 import HTS合成�
 from 臺灣言語工具.語音合成.閩南語變調 import 閩南語變調
 from 臺灣言語工具.綜合標音.閩南語字綜合標音 import 閩南語字綜合標音
 from 臺灣言語工具.綜合標音.客話字綜合標音 import 客話字綜合標音
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音相容教會羅馬字音標 import 臺灣閩南語羅馬字拼音相容教會羅馬字音標
 
 
 全部翻譯母語模型 = {}
@@ -88,10 +88,10 @@ class 模型載入(AppConfig):
     @classmethod
     def _語言拼音(cls, 語言):
         if 語言判斷.是閩南語(語言):
-            return 臺灣閩南語羅馬字拼音
+            return 臺灣閩南語羅馬字拼音相容教會羅馬字音標
         if 語言判斷.是客話(語言):
             return 臺灣客家話拼音
-        return 臺灣閩南語羅馬字拼音
+        return 臺灣閩南語羅馬字拼音相容教會羅馬字音標
 
     @classmethod
     def _語言變調(cls, 語言):
