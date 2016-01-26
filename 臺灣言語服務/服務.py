@@ -36,9 +36,9 @@ class 服務:
     @csrf_exempt
     def 正規化翻譯(self, request):
         if request.method == 'GET':
-            連線參數=request.GET
+            連線參數 = request.GET
         else:
-            連線參數=request.POST
+            連線參數 = request.POST
         try:
             查詢腔口 = 連線參數['查詢腔口']
             母語模型 = self.全部翻譯母語模型[查詢腔口]
@@ -81,9 +81,9 @@ class 服務:
     @csrf_exempt
     def 語音合成(self, request):
         if request.method == 'GET':
-            連線參數=request.GET
+            連線參數 = request.GET
         else:
-            連線參數=request.POST
+            連線參數 = request.POST
         try:
             查詢語句 = 連線參數['查詢語句']
         except:
