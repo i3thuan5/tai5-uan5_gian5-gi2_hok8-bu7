@@ -2,9 +2,8 @@ import re
 
 
 class 語言判斷:
-
     漢語語言 = re.compile('(臺語|台語|閩南|客家|客語|華語)')
-    閩南語 = re.compile('(臺語|台語|閩南|)')
+    閩南語 = re.compile('(臺語|台語|閩南)')
     客話 = re.compile('(客家|客語|四縣|海陸|大埔|饒平|詔安)')
 
     @classmethod

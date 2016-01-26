@@ -74,12 +74,16 @@ class 模型載入(AppConfig):
 
     def HTS模型(self):
         for 母語腔口 in listdir(合成模型資料夾):
-            母語合成模型 = join(合成模型資料夾, 母語腔口, 'Taiwanese.htsvoice')
-            全部合成母語模型[母語腔口] = {
-                '模型': HTS合成模型(母語合成模型),
-                '拼音': self._語言拼音(母語腔口),
-                '變調': self._語言變調(母語腔口),
-            }
+            全部合成母語模型[母語腔口] = self.HTS合成模型(合成模型資料夾, 母語腔口)
+
+    @classmethod
+    def HTS合成模型(cls, 合成模型資料夾, 母語腔口):
+        母語合成模型 = join(合成模型資料夾, 母語腔口, 'Taiwanese.htsvoice')
+        return {
+            '模型': HTS合成模型(母語合成模型),
+            '拼音': cls._語言拼音(母語腔口),
+            '變調': cls._語言變調(母語腔口),
+        }
 
     @classmethod
     def _語言拼音(cls, 語言):
