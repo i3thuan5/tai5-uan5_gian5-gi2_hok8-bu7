@@ -7,6 +7,6 @@
 
 使用[臺灣言語工具](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_kang1-ku7)，做好翻譯、語音合成等自動化模型訓練，
 
-並提供Web-based的服務，可以參考[網頁展示](http://用.意傳.台灣/)和[API介面](https://app.apiary.io/tai5uan5gian5gi2hok8bu7/editor)。
+並提供Web-based的服務，可以參考[網頁展示](http://xn--jny.xn--v0qr21b.xn--kpry57d)和[API介面](https://app.apiary.io/tai5uan5gian5gi2hok8bu7/editor)。
 
 請看[說明文件](http://sih4sing5hong5.github.io/tai5-uan5_gian5-gi2_hok8-bu7/)。
