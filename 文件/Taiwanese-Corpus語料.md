@@ -2,7 +2,9 @@
 
 目前專案都放在[Taiwanese-Corpus](https://github.com/Taiwanese-Corpus)。
 
-使用說明請洽各專案README。
+各專案詳細內容請洽各專案README。
+
+若對匯入細節有興趣，可以參考`臺灣語言資料庫`的[資料匯入](http://sih4sing5hong5.github.io/tai5-uan5_gian5-gi2_tsu1-liau7-khoo3/%E8%B3%87%E6%96%99%E5%8C%AF%E5%85%A5.html)。
 
 ## 全部匯入
 提供一個方便匯入的指令，不過匯入相當耗時。建議可以邊匯入，邊編譯安裝環境時的moses
