@@ -1,4 +1,4 @@
-# 匯入資料
+# Taiwanese-Corpus語料
 
 目前專案都放在[Taiwanese-Corpus](https://github.com/Taiwanese-Corpus)。
 
