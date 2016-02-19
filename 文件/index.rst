@@ -15,7 +15,7 @@ GitHub專案： https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7
    
    介紹
    安裝
-   匯入資料
+   Taiwanese-Corpus語料
    執行
    開發
 
