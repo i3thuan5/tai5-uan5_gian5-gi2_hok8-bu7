@@ -8,7 +8,7 @@
 本專案用[臺灣言語資料庫](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_tsu1-liau7-khoo3)的格式來存取語料，
 並使用[臺灣言語工具](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_kang1-ku7)的parse、模型訓練等功能。
 
-[說明文件](http://sih4sing5hong5.github.io/tai5-uan5_gian5-gi2_hok8-bu7/)有更詳細的說明。
+[wiki](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7/wiki)有更詳細的說明。
 
 ## 相關專案
 * [臺灣言語資料庫](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_tsu1-liau7-khoo3)
