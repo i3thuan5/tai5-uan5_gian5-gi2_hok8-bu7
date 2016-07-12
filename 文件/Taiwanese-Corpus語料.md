@@ -60,11 +60,11 @@ python manage.py 匯入資料 https://Taiwanese-Corpus.github.io/Linya-Huang_201
 * [台文/華文線頂辭典](https://github.com/Taiwanese-Corpus/Tinn-liong-ui_2000_taihoa-dictionary)
   * xls
 * [教育部臺灣閩南語字詞頻調查工作](https://github.com/Taiwanese-Corpus/Ungian_2009_KIPsupin)
-  * 允言整理過的doc
+  * 允言整理過的doc、json
 * [臺語國校仔課本](https://github.com/Taiwanese-Corpus/kok4hau7-kho3pun2)
-  * 允言整理過的doc
+  * 允言整理過的doc、json
 * [新約聖經語料](https://github.com/Taiwanese-Corpus/Pakhelke-1916_KoTan-1975_hiantaiekpun-2008_tailwanese-bible)
-  * 允言整理過的doc
+  * 允言整理過的doc、json
 * [廈英大辭典](https://github.com/Taiwanese-Corpus/Carstairs-Douglas_1873_chinese-english-dictionary)
   * 未整理的doc
 * [台日大辭典台語譯本](https://github.com/Taiwanese-Corpus/Ogawa-Naoyoshi_1931-1932)
