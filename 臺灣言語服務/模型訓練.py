@@ -48,14 +48,14 @@ class 模型訓練(程式腳本):
         makedirs(模型資料夾, exist_ok=True)
         for 語言 in listdir(語料資料夾):
             try:
-                cls.訓練摩西翻譯模型(語料資料夾, 模型資料夾, 語言)
+                cls.訓練一个摩西翻譯模型(語料資料夾, 模型資料夾, 語言)
             except:
                 print('{}的摩西模型訓練失敗！！'.format(語言), file=stderr)
                 traceback.print_exc()
                 print(file=stderr)
 
     @classmethod
-    def 訓練摩西翻譯模型(cls, 語料資料夾, 模型資料夾, 語言):
+    def 訓練一个摩西翻譯模型(cls, 語料資料夾, 模型資料夾, 語言):
         語言資料夾 = join(語料資料夾, 語言)
         翻譯模型資料夾路徑 = join(模型資料夾, 語言)
         makedirs(翻譯模型資料夾路徑, exist_ok=True)
