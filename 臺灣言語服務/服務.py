@@ -65,6 +65,50 @@ class 服務:
             pass
         return self.json包做回應(翻譯結果)
 
+    @csrf_exempt
+    def 標漢字音標(self, request):
+        if request.method == 'GET':
+            連線參數 = request.GET
+        else:
+            連線參數 = request.POST
+        try:
+            查詢腔口 = 連線參數['查詢腔口']
+            母語模型 = self.全部翻譯母語模型[查詢腔口]
+        except:
+            查詢腔口 = '閩南語'
+            母語模型 = self.全部翻譯母語模型[查詢腔口]
+        try:
+            查詢語句 = 連線參數['查詢語句']
+        except:
+            查詢語句 = '你好嗎？我很好！'
+        return self._標漢字音標實作(母語模型, 查詢語句)
+
+    def _標漢字音標實作(self, 母語模型, 查詢語句):
+        整理後語句 = 文章粗胚.數字英文中央全加分字符號(
+            文章粗胚.建立物件語句前處理減號(母語模型['拼音'], 查詢語句)
+        )
+
+        try:
+            母語章物件 = (
+                拆文分析器.建立章物件(整理後語句)
+                .轉音(母語模型['拼音'])
+                .揣詞(拄好長度辭典揣詞, 母語模型['辭典'])
+                .揀(語言模型揀集內組, 母語模型['語言模型'])
+            )
+        except ConnectionRefusedError:
+            return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'})
+        翻譯正規化結果 = 母語章物件.看分詞(
+            物件分詞符號=' ', 物件分字符號='-', 物件分句符號=' '
+        )
+        翻譯結果 = {
+            '翻譯正規化結果': 翻譯正規化結果
+        }
+        try:
+            翻譯結果['綜合標音'] = 母語章物件.綜合標音(母語模型['字綜合標音'])
+        except:
+            pass
+        return self.json包做回應(翻譯結果)
+
     def 語音合成支援腔口(self, request):
         return self.json包做回應({'腔口': sorted(self.全部合成母語模型.keys())})
 
