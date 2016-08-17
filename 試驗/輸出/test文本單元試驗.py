@@ -136,6 +136,14 @@ class 輸出文本單元試驗(TestCase):
             ['食飽未？']
         )
 
+    def test_無仝語言袂使出現(self):
+        self.加一筆母語食飽未()
+        self.語料 = 資料輸出工具('臺語').輸出文本語料(self.目錄)
+        self.assertEqual(
+            self.得著檔案資料(join(self.目錄, '閩南語', '語句文本.txt.gz')),
+            []
+        )
+
     @patch('臺灣言語資料庫.資料模型.文本表.文本佮音標格式化資料')
     def test_用格式化輸出(self, 格式化mocka):
         格式化mocka.return_value = ''
