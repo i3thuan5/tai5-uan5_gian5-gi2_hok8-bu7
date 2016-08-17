@@ -74,7 +74,7 @@ class 資料輸出工具:
         self._關檔案表的檔案(檔案表)
 
     def _建立檔案表(self, 腔口, 資料目錄, 語料檔名):
-        makedirs(資料目錄,  exist_ok=True)
+        makedirs(資料目錄, exist_ok=True)
         檔案表 = {}
         for 腔 in 腔口:
             makedirs(join(資料目錄, 腔.語言腔口), exist_ok=True)
