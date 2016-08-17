@@ -244,6 +244,20 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料(self.目錄)
         格式化mocka.assert_called_once_with()
 
+    def test_無仝語言袂使出現(self):
+        外語 = self.加一筆外語你好嗎()
+        self.外語加一筆母語食飽未(外語)
+        self.資料內容['語言腔口'] = '臺語'
+        外語 = self.加一筆外語你好嗎()
+        self.外語加一筆母語食飽未(外語)
+        self.語料 = 資料輸出工具('臺語').輸出翻譯語料(self.目錄)
+        self.assertFalse(
+            isfile(join(self.目錄, '閩南語', '對齊外語語句.txt.gz'))
+        )
+        self.assertFalse(
+            isfile(join(self.目錄, '閩南語', '對齊母語語句.txt.gz'))
+        )
+
     def 加一筆外語你好嗎(self):
         外語內容 = {'外語語言': '華語', '外語資料': '你好嗎？'}
         外語內容.update(self.資料內容)

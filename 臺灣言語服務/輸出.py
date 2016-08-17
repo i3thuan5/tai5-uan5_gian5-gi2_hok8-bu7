@@ -1,6 +1,8 @@
 import gzip
 from os import makedirs
 from os.path import join
+
+from django.db.models.query_utils import Q
 from 臺灣言語資料庫.資料模型 import 外語表
 from 臺灣言語資料庫.欄位資訊 import 語句
 from 臺灣言語資料庫.欄位資訊 import 字詞
@@ -23,9 +25,19 @@ class 資料輸出工具:
         '字詞文本',
     ]
 
+    def __init__(self, 要求語言=None):
+        if 要求語言 is None:
+            self.條件 = Q()
+            self.腔口條件 = Q()
+        else:
+            self.條件 = Q(語言腔口__語言腔口=要求語言)
+            self.腔口條件 = Q(語言腔口=要求語言)
+
     def 輸出翻譯語料(self, 資料目錄):
-        檔案表 = self._建立檔案表(語言腔口表.揣出有語句文本的語言腔口(), 資料目錄, self.翻譯語料檔名)
-        for 外語 in 外語表.全部外語資料():
+        檔案表 = self._建立檔案表(
+            語言腔口表.揣出有語句文本的語言腔口().filter(self.腔口條件), 資料目錄, self.翻譯語料檔名
+        )
+        for 外語 in 外語表.全部外語資料().filter(self.條件):
             try:
                 檔案表欄位 = 檔案表[外語.語言腔口.語言腔口][外語.種類.種類]
             except KeyError:
@@ -40,7 +52,7 @@ class 資料輸出工具:
                         檔案表欄位, [外語.外語資料], 影音.影音文本, '文本'
                     )
 
-        for 影音 in 影音表.源頭的影音資料():
+        for 影音 in 影音表.源頭的影音資料().filter(self.條件):
             try:
                 檔案表欄位 = 檔案表[影音.語言腔口.語言腔口][影音.種類.種類]
             except KeyError:
@@ -49,7 +61,7 @@ class 資料輸出工具:
                 self._加文本翻譯語料(
                     檔案表欄位, [], 影音.影音文本, '文本'
                 )
-        for 文本 in 文本表.源頭的文本資料():
+        for 文本 in 文本表.源頭的文本資料().filter(self.條件):
             try:
                 檔案表欄位 = 檔案表[文本.語言腔口.語言腔口][文本.種類.種類]
             except KeyError:
@@ -67,8 +79,10 @@ class 資料輸出工具:
         self._關檔案表的檔案(檔案表)
 
     def 輸出文本語料(self, 資料目錄):
-        檔案表 = self._建立檔案表(語言腔口表.揣出有文本的語言腔口(), 資料目錄, self.文本語料檔名)
-        for 文本 in 文本表.上尾層的文本資料():
+        檔案表 = self._建立檔案表(
+            語言腔口表.揣出有文本的語言腔口().filter(self.腔口條件), 資料目錄, self.文本語料檔名
+        )
+        for 文本 in 文本表.上尾層的文本資料().filter(self.條件):
             檔案表欄位 = 檔案表[文本.語言腔口.語言腔口][文本.種類.種類]
             print(文本.文本佮音標格式化資料(), file=檔案表欄位['文本'])
         self._關檔案表的檔案(檔案表)
