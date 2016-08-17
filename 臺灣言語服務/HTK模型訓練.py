@@ -33,9 +33,9 @@ python manage.py 訓練全部語言
 class HTK模型訓練(程式腳本):
 
     @classmethod
-    def 走(cls):
+    def 走全部(cls):
         cls.輸出全部語料(翻譯語料資料夾)
-        cls.訓練全部摩西翻譯模型(翻譯語料資料夾, 翻譯模型資料夾)
+        cls.訓練全部辨識模型(翻譯語料資料夾, 翻譯模型資料夾)
 
     @classmethod
     def 輸出全部語料(cls, 語料資料夾):
@@ -43,7 +43,7 @@ class HTK模型訓練(程式腳本):
         語料.輸出翻譯語料(語料資料夾)
 
     @classmethod
-    def 訓練全部摩西翻譯模型(cls, 語料資料夾, 模型資料夾):
+    def 訓練全部辨識模型(cls, 語料資料夾, 模型資料夾):
         makedirs(模型資料夾, exist_ok=True)
         for 語言 in listdir(語料資料夾):
             try:
@@ -54,7 +54,7 @@ class HTK模型訓練(程式腳本):
                 print(file=stderr)
 
     @classmethod
-    def 訓練一个摩西翻譯模型(cls, 語料資料夾, 模型資料夾, 語言):
+    def 訓練一个辨識模型(cls, 語料資料夾, 模型資料夾, 語言):
         辨識語料資料夾 = join(語料資料夾, 語言)
         辨識模型資料夾路徑 = join(模型資料夾, 語言)
         makedirs(辨識模型資料夾路徑, exist_ok=True)
