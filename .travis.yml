@@ -29,6 +29,11 @@ addons:
     - libgoogle-perftools-dev
     - libxmlrpc-c++.*-dev
     - cmake
+    - libyaml-dev
+    - libxslt1-dev
+    - libav-tools  
+    - libmp3lame0
+    - libavcodec-extra-53
 install:
 - pip install flake8
 - pip install python-coveralls

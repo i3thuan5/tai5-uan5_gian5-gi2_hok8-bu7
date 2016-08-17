@@ -5,7 +5,7 @@ from sys import stderr
 import traceback
 
 
-from 臺灣言語資料庫.輸出 import 資料輸出工具
+from 臺灣言語服務.輸出 import 資料輸出工具
 from 臺灣言語工具.翻譯.摩西工具.摩西翻譯模型訓練 import 摩西翻譯模型訓練
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
