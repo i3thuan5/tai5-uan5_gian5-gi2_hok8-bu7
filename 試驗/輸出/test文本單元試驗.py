@@ -138,10 +138,11 @@ class 輸出文本單元試驗(TestCase):
 
     def test_無仝語言袂使出現(self):
         self.加一筆母語食飽未()
-        self.語料 = 資料輸出工具('臺語').輸出文本語料(self.目錄)
-        self.assertEqual(
-            self.得著檔案資料(join(self.目錄, '閩南語', '語句文本.txt.gz')),
-            []
+        self.資料內容['語言腔口'] = '臺語'
+        self.加一筆母語食飽未()
+        資料輸出工具('臺語').輸出文本語料(self.目錄)
+        self.assertFalse(
+            isfile(join(self.目錄, '閩南語', '語句文本.txt.gz'))
         )
 
     @patch('臺灣言語資料庫.資料模型.文本表.文本佮音標格式化資料')
