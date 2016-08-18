@@ -62,14 +62,14 @@ class HTK模型訓練(程式腳本):
         音檔 = join(辨識語料資料夾, '音檔')
         標仔 = join(辨識語料資料夾, '標仔')
         for 第幾个, 影音 in enumerate(影音表.objects.filter(影音文本__isnull=False)):
-            文本 = cls._揣上尾的文本(影音.來源文本.文本)
+            文本 = cls._揣上尾的文本(影音.來源文本.first().文本)
             標 = 漢語轉辨識標仔.物件轉音節標仔(
                 拆文分析器.分詞句物件(文本.文本佮音標格式化資料()),
                 臺灣閩南語羅馬字拼音
             )
-            with open(join(標仔, 'im{}.lab'.format(第幾个)), 'w') as 目標txt檔案:
+            with open(join(標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
                 print(標, file=目標txt檔案)
-            with open(join(音檔, 'im{}.wav'.format(第幾个)), 'wb') as 目標wav檔案:
+            with open(join(音檔, 'im{:07}.wav'.format(第幾个)), 'wb') as 目標wav檔案:
                 目標wav檔案.write(影音.音檔)
 
     @classmethod
@@ -88,3 +88,11 @@ class HTK模型訓練(程式腳本):
             辨識模型資料夾路徑
         )
         原本標音辨識模型.存資料佇(辨識模型資料夾路徑)
+
+    @classmethod
+    def _揣上尾的文本(cls, 文本):
+        try:
+            while True:
+                文本 = 文本.文本校對.first().新文本
+        except:
+            return 文本
