@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
-from os import listdir, makedirs
+from os import makedirs
 from os.path import join
-from sys import stderr
-import traceback
 
 
-from 臺灣言語服務.輸出 import 資料輸出工具
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
-from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
-from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語工具.語音辨識.HTK工具.HTK辨識模型訓練 import HTK辨識模型訓練
 from 臺灣言語工具.語音辨識.文本音值對照表.閩南語文本音值表 import 閩南語文本音值表
 from 臺灣言語資料庫.資料模型 import 影音表
@@ -20,30 +15,8 @@ from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 im
 class HTK模型訓練(程式腳本):
 
     @classmethod
-    def 走全部(cls):
-        cls.輸出全部語料(翻譯語料資料夾)
-        cls.訓練全部辨識模型(翻譯語料資料夾, 翻譯模型資料夾)
-
-    @classmethod
-    def 輸出全部語料(cls, 語料資料夾):
-        語料 = 資料輸出工具()
-        語料.輸出翻譯語料(語料資料夾)
-
-    @classmethod
-    def 訓練全部辨識模型(cls, 語料資料夾, 模型資料夾):
-        makedirs(模型資料夾, exist_ok=True)
-        for 語言 in listdir(語料資料夾):
-            try:
-                cls.訓練一个辨識模型(語料資料夾, 模型資料夾, 語言)
-            except:
-                print('{}的HTK辨識模型訓練失敗！！'.format(語言), file=stderr)
-                traceback.print_exc()
-                print(file=stderr)
-
-    @classmethod
-    def 輸出一種語言語料(cls, 語料資料夾, 語言):
+    def 輸出一種語言語料(cls, 辨識語料資料夾, 語言):
         音標系統 = 臺灣閩南語羅馬字拼音
-        辨識語料資料夾 = join(語料資料夾, 語言)
         音檔 = join(辨識語料資料夾, '音檔')
         標仔 = join(辨識語料資料夾, '標仔')
         makedirs(音檔, exist_ok=True)
@@ -76,9 +49,7 @@ class HTK模型訓練(程式腳本):
                 影音資料.close()
 
     @classmethod
-    def 訓練一个辨識模型(cls, 語料資料夾, 模型資料夾, 語言):
-        辨識語料資料夾 = join(語料資料夾, 語言)
-        辨識模型資料夾路徑 = join(模型資料夾, 語言)
+    def 訓練一个辨識模型(cls, 辨識語料資料夾, 辨識模型資料夾路徑, 語言):
         makedirs(辨識模型資料夾路徑, exist_ok=True)
         音節聲韻對照檔 = join(辨識模型資料夾路徑, '聲韻對照.dict')
         with open(音節聲韻對照檔, 'w') as 檔案:
