@@ -169,7 +169,7 @@ class 輸出文本單元試驗(TestCase):
             音檔.setframerate(16000)
             音檔.setsampwidth(2)
             音檔.writeframesraw(b'0' * 100)
-        影音內容 = {'原始影音資料': 影音資料}
+        影音內容 = {'影音資料': 影音資料}
         影音內容.update(self.資料內容)
         return 外語.錄母語(影音內容)
 
@@ -180,7 +180,7 @@ class 輸出文本單元試驗(TestCase):
             音檔.setframerate(16000)
             音檔.setsampwidth(2)
             音檔.writeframesraw(b'0' * 100)
-        影音內容 = {'原始影音資料': 影音資料}
+        影音內容 = {'影音資料': 影音資料}
         影音內容.update(self.資料內容)
         return 影音表.加資料(影音內容)
 

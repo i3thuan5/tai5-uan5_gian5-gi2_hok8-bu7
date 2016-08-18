@@ -40,7 +40,7 @@ class 輸出語料單元試驗(TestCase):
     def test_影音母語對應(self):
         影音 = self.加一筆影音食飽未()
         self.母語影音加一筆食飽未(影音)
-        HTK模型訓練._輸出一種語言語料(self.目錄, '閩南語')
+        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
         self.assertEqual(
             len(listdir(join(self.目錄, '閩南語', '標仔'))),
             1
@@ -54,7 +54,7 @@ class 輸出語料單元試驗(TestCase):
         影音 = self.加一筆影音食飽未()
         self.母語影音加一筆食飽未(影音)
         self.母語影音加一筆食飽未(影音)
-        HTK模型訓練._輸出一種語言語料(self.目錄, '閩南語')
+        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
         self.assertEqual(
             len(listdir(join(self.目錄, '閩南語', '標仔'))),
             1
@@ -66,7 +66,7 @@ class 輸出語料單元試驗(TestCase):
 
     def test_一个影音無對應(self):
         self.加一筆影音食飽未()
-        HTK模型訓練._輸出一種語言語料(self.目錄, '閩南語')
+        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
         self.assertEqual(
             len(listdir(join(self.目錄, '閩南語', '標仔'))),
             0
@@ -81,7 +81,7 @@ class 輸出語料單元試驗(TestCase):
         第一層文本 = self.母語影音加一筆食飽未(影音)
         self.母語文本加一筆斷詞食飽未(第一層文本)
         self.母語文本加一筆斷詞食飽未(第一層文本)
-        HTK模型訓練._輸出一種語言語料(self.目錄, '閩南語')
+        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
         self.assertEqual(
             len(listdir(join(self.目錄, '閩南語', '標仔'))),
             1
@@ -108,7 +108,7 @@ class 輸出語料單元試驗(TestCase):
             音檔.setframerate(16000)
             音檔.setsampwidth(2)
             音檔.writeframesraw(b'0' * 100)
-        影音內容 = {'原始影音資料': 影音資料}
+        影音內容 = {'影音資料': 影音資料}
         影音內容.update(self.資料內容)
         return 影音表.加資料(影音內容)
 

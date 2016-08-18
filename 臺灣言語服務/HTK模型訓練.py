@@ -70,7 +70,7 @@ class HTK模型訓練(程式腳本):
             with open(join(標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
                 print(標, file=目標txt檔案)
             with open(join(音檔, 'im{:07}.wav'.format(第幾个)), 'wb') as 目標wav檔案:
-                影音資料 = 影音.原始影音資料
+                影音資料 = 影音.影音資料
                 影音資料.open()
                 目標wav檔案.write(影音資料.read())
                 影音資料.close()
