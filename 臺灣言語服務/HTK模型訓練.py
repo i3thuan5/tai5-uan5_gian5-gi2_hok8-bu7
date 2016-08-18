@@ -1,36 +1,20 @@
 # -*- coding: utf-8 -*-
 from os import listdir, makedirs
-from os.path import join, basename
+from os.path import join
 from sys import stderr
 import traceback
 
 
 from 臺灣言語服務.輸出 import 資料輸出工具
-from 臺灣言語工具.翻譯.摩西工具.摩西翻譯模型訓練 import 摩西翻譯模型訓練
-from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
-from 臺灣言語工具.解析整理.物件譀鏡 import 物件譀鏡
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
-from 臺灣言語工具.基本物件.公用變數 import 標點符號
-from 臺灣言語工具.基本物件.公用變數 import 無音
-from 臺灣言語工具.辭典.型音辭典 import 型音辭典
-from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
-from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
-from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
-from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀集內組
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
-from 臺灣言語服務.語言判斷 import 語言判斷
-from 臺灣言語工具.語言模型.實際語言模型 import 實際語言模型
 from 臺灣言語工具.語音辨識.HTK工具.HTK辨識模型訓練 import HTK辨識模型訓練
 from 臺灣言語工具.語音辨識.文本音值對照表.閩南語文本音值表 import 閩南語文本音值表
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.語音辨識.漢語轉辨識標仔 import 漢語轉辨識標仔
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
-'''
-python manage.py 訓練一个語言 閩南語
-python manage.py 訓練全部語言
-'''
 
 
 class HTK模型訓練(程式腳本):
@@ -61,8 +45,15 @@ class HTK模型訓練(程式腳本):
         辨識語料資料夾 = join(語料資料夾, 語言)
         音檔 = join(辨識語料資料夾, '音檔')
         標仔 = join(辨識語料資料夾, '標仔')
-        for 第幾个, 影音 in enumerate(影音表.objects.filter(影音文本__isnull=False)):
-            文本 = cls._揣上尾的文本(影音.來源文本.first().文本)
+        makedirs(音檔, exist_ok=True)
+        makedirs(標仔, exist_ok=True)
+        for 第幾个, 影音 in enumerate(
+            影音表.objects
+            .distinct()
+            .filter(影音文本__isnull=False)
+            .filter(語言腔口__語言腔口=語言)
+        ):
+            文本 = cls._揣上尾的文本(影音.影音文本.first().文本)
             標 = 漢語轉辨識標仔.物件轉音節標仔(
                 拆文分析器.分詞句物件(文本.文本佮音標格式化資料()),
                 臺灣閩南語羅馬字拼音
@@ -70,7 +61,10 @@ class HTK模型訓練(程式腳本):
             with open(join(標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
                 print(標, file=目標txt檔案)
             with open(join(音檔, 'im{:07}.wav'.format(第幾个)), 'wb') as 目標wav檔案:
-                目標wav檔案.write(影音.音檔)
+                影音資料 = 影音.原始影音資料
+                影音資料.open()
+                目標wav檔案.write(影音資料.read())
+                影音資料.close()
 
     @classmethod
     def _訓練一个辨識模型(cls, 語料資料夾, 模型資料夾, 語言):
