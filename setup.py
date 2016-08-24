@@ -1,4 +1,5 @@
 from distutils.core import setup
+from os import walk
 import os
 import sys
 from 版本 import 版本
@@ -16,9 +17,18 @@ except ValueError:
 def 讀(檔名):
     return open(os.path.join(os.path.dirname(__file__), 檔名)).read()
 
+
+def 揣工具包(頭):
+    'setup的find_packages無支援windows中文檔案'
+    工具包 = []
+    for 目錄, _, 檔案 in walk(頭):
+        if '__init__.py' in 檔案:
+            工具包.append(目錄.replace('/', '.'))
+    return 工具包
+
 setup(
     name='tai5-uan5_gian5-gi2_hok8-bu7',
-    packages=['臺灣言語服務'],
+    packages=揣工具包('臺灣言語服務'),
     version=版本,
     description='臺灣語言服務',
     long_description=讀('README.md'),
