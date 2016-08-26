@@ -27,12 +27,17 @@ class Kaldi語料匯出(程式腳本):
     def 做辭典資料(cls, 語言文本, 語料資料夾):
         訓練語料資料夾 = join(語料資料夾, 'data', 'local', 'dict')
         makedirs(訓練語料資料夾, exist_ok=True)
-        with cls._寫檔(訓練語料資料夾, 'extra_questions.txt'):
-            pass
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
         cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL"])
-        聲韻類, 全部詞 = cls._辭典資料(語言文本)
+        聲類, 韻類, 調類, 全部詞 = cls._辭典資料(語言文本)
+        聲韻類 = 聲類
+        for 仝韻 in 韻類.values():
+            聲韻類.add(' '.join(sorted(仝韻)))
+        調問題 = []
+        for 仝調 in 調類.values():
+            調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'nonsilence_phones.txt'), sorted(聲韻類))
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'extra_questions.txt'), sorted(調問題))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'lexicon.txt'), sorted(全部詞))
 
     @classmethod
@@ -41,6 +46,7 @@ class Kaldi語料匯出(程式腳本):
         全部句 = []
         聲類 = set()
         韻類 = {}
+        調類 = {}
         with open(語言文本, 'r') as 檔案:
             for 一逝 in 檔案:
                 句物件 = 拆文分析器.分詞句物件(一逝.strip())
@@ -50,13 +56,18 @@ class Kaldi語料匯出(程式腳本):
                         聲韻陣列 = []
                         for 字物件 in 詞物件.轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
                             聲, 韻, 調 = 字物件.音
+                            韻調 = 韻 + 調
                             聲韻陣列.append(聲)
-                            聲韻陣列.append(韻 + 調)
+                            聲韻陣列.append(韻調)
                             聲類.add(聲)
                             try:
-                                韻類[韻].add(韻 + 調)
+                                韻類[韻].add(韻調)
                             except:
-                                韻類[韻] = {韻 + 調}
+                                韻類[韻] = {韻調}
+                            try:
+                                調類[調].add(韻調)
+                            except:
+                                調類[調] = {韻調}
                         分詞 = 詞物件.看分詞()
                         一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
                         if 'iauh' in 分詞 or 'er' in 分詞 or 'ir' in 分詞:
@@ -67,10 +78,7 @@ class Kaldi語料匯出(程式腳本):
                     except:
                         pass
                 全部句.append(' '.join(一句))
-        聲韻類 = 聲類
-        for 仝韻 in 韻類.values():
-            聲韻類.add(' '.join(sorted(仝韻)))
-        return 聲韻類, 全部詞
+        return 聲類, 韻類, 調類, 全部詞
 
     @classmethod
     def _揣影音輸出(cls, 語言, 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者):
