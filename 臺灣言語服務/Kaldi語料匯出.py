@@ -33,7 +33,7 @@ class Kaldi語料匯出(程式腳本):
         聲韻類 = 聲類
         for 仝韻 in 韻類.values():
             聲韻類.add(' '.join(sorted(仝韻)))
-        調問題 = []
+        調問題 = set()
         for 仝調 in 調類.values():
             調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'nonsilence_phones.txt'), sorted(聲韻類))
