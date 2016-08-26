@@ -59,37 +59,36 @@ class Kaldi語料匯出(程式腳本):
         聲類 = set()
         韻類 = {}
         調類 = {}
-        with open(語言文本, 'r') as 檔案:
-            for 一逝 in 檔案:
-                句物件 = 拆文分析器.分詞句物件(一逝.strip())
-                一句 = []
-                for 詞物件 in 句物件.網出詞物件():
-                    try:
-                        聲韻陣列 = []
-                        for 字物件 in 詞物件.轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
-                            聲, 韻, 調 = 字物件.音
-                            韻調 = 韻 + 調
-                            聲韻陣列.append(聲)
-                            聲韻陣列.append(韻調)
-                            聲類.add(聲)
-                            try:
-                                韻類[韻].add(韻調)
-                            except:
-                                韻類[韻] = {韻調}
-                            try:
-                                調類[調].add(韻調)
-                            except:
-                                調類[調] = {韻調}
-                        分詞 = 詞物件.看分詞()
-                        一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
-                        if 'iauh' in 分詞 or 'er' in 分詞 or 'ir' in 分詞:
-                            continue
-                        全部詞.add(一項)
-                        一句.append(分詞)
+        for 一逝 in cls._讀檔案(語言文本):
+            句物件 = 拆文分析器.分詞句物件(一逝)
+            一句 = []
+            for 詞物件 in 句物件.網出詞物件():
+                try:
+                    聲韻陣列 = []
+                    for 字物件 in 詞物件.轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
+                        聲, 韻, 調 = 字物件.音
+                        韻調 = 韻 + 調
+                        聲韻陣列.append(聲)
+                        聲韻陣列.append(韻調)
+                        聲類.add(聲)
+                        try:
+                            韻類[韻].add(韻調)
+                        except:
+                            韻類[韻] = {韻調}
+                        try:
+                            調類[調].add(韻調)
+                        except:
+                            調類[調] = {韻調}
+                    分詞 = 詞物件.看分詞()
+                    一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
+                    if 'iauh' in 分詞 or 'er' in 分詞 or 'ir' in 分詞:
+                        continue
+                    全部詞.add(一項)
+                    一句.append(分詞)
     #                     print(一項)
-                    except:
-                        pass
-                全部句.append(' '.join(一句))
+                except:
+                    pass
+            全部句.append(' '.join(一句))
         return 聲類, 韻類, 調類, 全部詞
 
     @classmethod
