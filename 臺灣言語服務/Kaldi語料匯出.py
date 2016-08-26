@@ -30,7 +30,11 @@ class Kaldi語料匯出():
             .filter(語言腔口__語言腔口=語言)
         ):
             音檔名 = 'tong{0:07}'.format(第幾个)
-            print(音檔名, 影音.影音所在(), file=音檔目錄)
+            print(
+                音檔名,
+                'sox {} -b 16 -c 1 -r 16k -t wav - | '.format(影音.影音所在()),
+                file=音檔目錄
+            )
 #             sw02001-A sw02001 A
             print(音檔名, 音檔名, 'A', file=音檔對應頻道)
             聽拍 = cls._揣上尾的聽拍(影音.影音聽拍.first().聽拍)
