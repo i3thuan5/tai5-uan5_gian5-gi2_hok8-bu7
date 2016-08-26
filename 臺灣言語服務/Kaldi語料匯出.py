@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
 from os import makedirs
-from os.path import join
+from os.path import join, isdir
+from shutil import rmtree
 
 
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
 
 
 class Kaldi語料匯出(程式腳本):
@@ -26,14 +28,16 @@ class Kaldi語料匯出(程式腳本):
     @classmethod
     def 做辭典資料(cls, 語言文本, 語料資料夾):
         訓練語料資料夾 = join(語料資料夾, 'data', 'local', 'dict')
+        if isdir(訓練語料資料夾):
+            rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
-        cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL"])
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL", "SPN", "NSN"])
         聲類, 韻類, 調類, 全部詞 = cls._辭典資料(語言文本)
         聲韻類 = 聲類
         for 仝韻 in 韻類.values():
             聲韻類.add(' '.join(sorted(仝韻)))
-        調問題 = set()
+        調問題 = {'SIL SPN NSN'}
         for 仝調 in 調類.values():
             調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'nonsilence_phones.txt'), sorted(聲韻類))
@@ -41,8 +45,16 @@ class Kaldi語料匯出(程式腳本):
         cls._陣列寫入檔案(join(訓練語料資料夾, 'lexicon.txt'), sorted(全部詞))
 
     @classmethod
+    def 做語言模型(cls, 語言文本, 語料資料夾):
+        訓練語料資料夾 = join(語料資料夾, 'data', 'lang')
+        if isdir(訓練語料資料夾):
+            rmtree(訓練語料資料夾)
+        makedirs(訓練語料資料夾, exist_ok=True)
+        KenLM語言模型訓練().訓練([語言文本], 訓練語料資料夾)
+
+    @classmethod
     def _辭典資料(cls, 語言文本):
-        全部詞 = {'SIL\tSIL'}
+        全部詞 = {'SIL\tSIL', '<UNK>\tSPN'}
         全部句 = []
         聲類 = set()
         韻類 = {}
