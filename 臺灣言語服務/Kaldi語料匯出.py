@@ -24,7 +24,19 @@ class Kaldi語料匯出(程式腳本):
                             cls._揣影音輸出(語言, 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者)
 
     @classmethod
-    def 做音韻資料(cls, 語言文本, 語料資料夾):
+    def 做辭典資料(cls, 語言文本, 語料資料夾):
+        訓練語料資料夾 = join(語料資料夾, 'data', 'local', 'dict')
+        makedirs(訓練語料資料夾, exist_ok=True)
+        with cls._寫檔(訓練語料資料夾, 'extra_questions.txt'):
+            pass
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL"])
+        聲韻類, 全部詞 = cls._辭典資料(語言文本)
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'nonsilence_phones.txt'), sorted(聲韻類))
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'lexicon.txt'), sorted(全部詞))
+
+    @classmethod
+    def _辭典資料(cls, 語言文本):
         全部詞 = {'SIL\tSIL'}
         全部句 = []
         聲類 = set()
@@ -55,7 +67,10 @@ class Kaldi語料匯出(程式腳本):
                     except:
                         pass
                 全部句.append(' '.join(一句))
-        return 全部詞, 全部句
+        聲韻類 = 聲類
+        for 仝韻 in 韻類.values():
+            聲韻類.add(' '.join(sorted(仝韻)))
+        return 聲韻類, 全部詞
 
     @classmethod
     def _揣影音輸出(cls, 語言, 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者):
