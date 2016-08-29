@@ -15,7 +15,7 @@ class 翻譯介面單元試驗(TestCase):
 
     @patch('Pyro4.Proxy')
     def test_正規化翻譯支援腔口(self, ProxyMock):
-        ProxyMock.return_value.支援腔口.return_value = ['臺語', '客話',  'Kaxabu']
+        ProxyMock.return_value.支援腔口.return_value = ['臺語', '客話', 'Kaxabu']
         服務功能 = Moses介面()
         要求 = self.工具.get('/正規化翻譯支援腔口')
         回應 = 服務功能.正規化翻譯支援腔口(要求)
@@ -26,6 +26,8 @@ class 翻譯介面單元試驗(TestCase):
 
     @patch('Pyro4.Proxy')
     def test_正規化翻譯get(self, ProxyMock):
+        ProxyMock.return_value.支援腔口.return_value = ['母語']
+        ProxyMock.return_value.正規化翻譯實作.return_value = {}
         服務功能 = Moses介面()
 
         要求 = self.工具.get('/正規化翻譯')
@@ -34,10 +36,12 @@ class 翻譯介面單元試驗(TestCase):
             '查詢語句': '你好'
         }
         服務功能.正規化翻譯(要求)
-        ProxyMock.return_value.正規化翻譯實作.assert_called_once_with('閩南語', '你好')
+        ProxyMock.return_value.正規化翻譯實作.assert_called_once_with('母語', '你好')
 
     @patch('Pyro4.Proxy')
     def test_正規化翻譯post(self, ProxyMock):
+        ProxyMock.return_value.支援腔口.return_value = ['母語']
+        ProxyMock.return_value.正規化翻譯實作.return_value = {}
         服務功能 = Moses介面()
 
         要求 = self.工具.post('/正規化翻譯')
@@ -46,4 +50,4 @@ class 翻譯介面單元試驗(TestCase):
             '查詢語句': '你好'
         }
         服務功能.正規化翻譯(要求)
-        ProxyMock.return_value.正規化翻譯實作.assert_called_once_with('閩南語', '你好')
+        ProxyMock.return_value.正規化翻譯實作.assert_called_once_with('母語', '你好')
