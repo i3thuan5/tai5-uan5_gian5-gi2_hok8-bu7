@@ -32,22 +32,25 @@ class 模型載入(AppConfig):
 
     def ready(self):
         try:
-            self.摩西模型()
+            全部翻譯母語模型 = self.摩西模型()
         except FileNotFoundError:
             pass
         try:
-            self.HTS模型()
+            全部合成母語模型 = self.HTS模型()
         except FileNotFoundError:
             pass
 
-    def 摩西模型(self):
+    @classmethod
+    def 摩西模型(cls):
+        翻譯母語模型 = {}
         for 第幾个, 母語腔口 in enumerate(sorted(listdir(翻譯模型資料夾))):
             摩西埠 = 8500 + 第幾个
             try:
-                全部翻譯母語模型[母語腔口] = self.摩西翻譯模型(翻譯模型資料夾, 母語腔口, 摩西埠)
+                翻譯母語模型[母語腔口] = cls.摩西翻譯模型(翻譯模型資料夾, 母語腔口, 摩西埠)
             except OSError as 錯誤:
                 print(錯誤)
                 continue
+        return 翻譯母語模型
 
     @classmethod
     def 摩西翻譯模型(cls, 翻譯模型資料夾, 母語腔口, 摩西埠):
@@ -73,9 +76,12 @@ class 模型載入(AppConfig):
         }
         return 母語模型
 
-    def HTS模型(self):
+    @classmethod
+    def HTS模型(cls):
+        合成母語模型 = {}
         for 母語腔口 in sorted(listdir(合成模型資料夾)):
-            全部合成母語模型[母語腔口] = self.HTS合成模型(合成模型資料夾, 母語腔口)
+            合成母語模型[母語腔口] = cls.HTS合成模型(合成模型資料夾, 母語腔口)
+        return 合成母語模型
 
     @classmethod
     def HTS合成模型(cls, 合成模型資料夾, 母語腔口):
