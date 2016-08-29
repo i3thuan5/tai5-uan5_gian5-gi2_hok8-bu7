@@ -46,14 +46,16 @@ class 模型訓練(程式腳本):
         for 語言 in listdir(資料路徑):
             if isdir(翻譯語料資料夾(語言)):
                 try:
-                    cls.訓練一个摩西翻譯模型(翻譯語料資料夾(語言), 翻譯模型資料夾(語言), 語言)
+                    cls.訓練一个摩西翻譯模型(語言)
                 except:
                     print('{}的摩西模型訓練失敗！！'.format(語言), file=stderr)
                     traceback.print_exc()
                     print(file=stderr)
 
     @classmethod
-    def 訓練一个摩西翻譯模型(cls, 語料資料夾, 模型資料夾, 語言):
+    def 訓練一个摩西翻譯模型(cls, 語言):
+        語料資料夾 = 翻譯語料資料夾(語言)
+        模型資料夾 = 翻譯模型資料夾(語言)
         makedirs(模型資料夾, exist_ok=True)
         if 語言判斷().是漢語(語言):
             平行華語, 平行母語, 母語文本 = cls._漢語語料訓練(語料資料夾, 模型資料夾)
