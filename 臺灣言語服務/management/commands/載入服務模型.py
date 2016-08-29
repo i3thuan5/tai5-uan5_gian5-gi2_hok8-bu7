@@ -1,6 +1,5 @@
 import Pyro4
 from django.core.management.base import BaseCommand
-from 臺灣言語服務.模型載入 import 模型載入
 from 臺灣言語服務.HTS服務 import HTS服務
 from 臺灣言語服務.Moses服務 import Moses服務
 
