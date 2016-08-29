@@ -38,8 +38,10 @@ class 翻譯試驗(TestCase):
         self.目錄 = 翻譯語料資料夾('閩南語')
 
     def tearDown(self):
-        if isdir(self.目錄):
-            rmtree(self.目錄)
+        if isdir(翻譯語料資料夾('閩南語')):
+            rmtree(翻譯語料資料夾('閩南語'))
+        if isdir(翻譯語料資料夾('臺語')):
+            rmtree(翻譯語料資料夾('臺語'))
 
     def test_無語料就啥物攏無(self):
         self.語料.輸出翻譯語料()
