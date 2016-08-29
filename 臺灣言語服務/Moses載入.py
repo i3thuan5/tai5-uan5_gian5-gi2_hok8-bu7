@@ -9,9 +9,10 @@ from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶端
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
+from 臺灣言語服務.公家載入 import 公家載入
 
 
-class Moses載入:
+class Moses載入(公家載入):
 
     @classmethod
     def 摩西模型(cls):

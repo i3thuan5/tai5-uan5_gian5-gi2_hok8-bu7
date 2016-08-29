@@ -42,7 +42,7 @@ class Moses服務:
             翻譯結果['綜合標音'] = 母語章物件.綜合標音(母語模型['字綜合標音'])
         except:
             pass
-        return self.json包做回應(翻譯結果)
+        return 翻譯結果
 
     @expose
     def 標漢字音標實作(self, 查詢腔口, 查詢語句):
@@ -66,4 +66,4 @@ class Moses服務:
             翻譯結果['綜合標音'] = 母語章物件.綜合標音(母語模型['字綜合標音'])
         except:
             pass
-        return self.json包做回應(翻譯結果)
+        return 翻譯結果

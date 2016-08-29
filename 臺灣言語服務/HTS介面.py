@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.http.response import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import Pyro4
+from django.http.response import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 class HTS介面:
@@ -10,11 +10,7 @@ class HTS介面:
         self.服務 = Pyro4.Proxy("PYRONAME:HTS服務")
 
     def 語音合成支援腔口(self, request):
-        return self.json包做回應({'腔口': self.服務.支援腔口()})
-
-    def json包做回應(self, json):
-        回應 = JsonResponse(json)
-        return 回應
+        return JsonResponse({'腔口': self.服務.支援腔口()})
 
     @csrf_exempt
     def 語音合成(self, request):

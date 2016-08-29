@@ -2,9 +2,10 @@
 from django.conf.urls import url
 from 臺灣言語服務.HTS介面 import HTS介面
 from 臺灣言語服務.Moses介面 import Moses介面
-print('XD2')
+
 _Moses = Moses介面()
 _HTS = HTS介面()
+
 urlpatterns = [
     url(r'^正規化翻譯支援腔口$', _Moses.正規化翻譯支援腔口),
     url(r'^正規化翻譯$', _Moses.正規化翻譯),
