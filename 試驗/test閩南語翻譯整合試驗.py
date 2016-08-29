@@ -20,10 +20,10 @@ class 閩南語翻譯整合試驗(TestCase):
     def setUpClass(cls):
         super(cls, cls).setUpClass()
         try:
-            cls.服務 = Moses服務({'閩南語':Moses載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)})
+            cls.服務 = Moses服務({'閩南語': Moses載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)})
         except:
             模型訓練.訓練一个摩西翻譯模型(翻譯語料資料夾, 翻譯模型資料夾, '閩南語')
-            cls.服務 = Moses服務({'閩南語':Moses載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)})
+            cls.服務 = Moses服務({'閩南語': Moses載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)})
         cls.ProxyPatch = patch('Pyro4.Proxy')
         ProxyMock = cls.ProxyPatch.start()
         ProxyMock.return_value = cls.服務
