@@ -10,6 +10,7 @@ from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶�
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.公家載入 import 公家載入
+from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
 class Moses載入(公家載入):
@@ -17,18 +18,18 @@ class Moses載入(公家載入):
     @classmethod
     def 摩西模型(cls):
         翻譯母語模型 = {}
-        for 第幾个, 母語腔口 in enumerate(sorted(listdir(翻譯模型資料夾))):
+        for 第幾个, 母語腔口 in enumerate(sorted(listdir(資料路徑))):
             摩西埠 = 8500 + 第幾个
             try:
-                翻譯母語模型[母語腔口] = cls.摩西翻譯模型(翻譯模型資料夾, 母語腔口, 摩西埠)
+                翻譯母語模型[母語腔口] = cls.摩西翻譯模型( 母語腔口, 摩西埠)
             except OSError as 錯誤:
                 print(錯誤)
                 continue
         return 翻譯母語模型
 
     @classmethod
-    def 摩西翻譯模型(cls, 翻譯模型資料夾, 母語腔口, 摩西埠):
-        母語翻譯模型資料夾 = join(翻譯模型資料夾, 母語腔口)
+    def 摩西翻譯模型(cls, 母語腔口, 摩西埠):
+        母語翻譯模型資料夾 = 翻譯模型資料夾(母語腔口)
         服務 = 摩西服務端(母語翻譯模型資料夾, 埠=摩西埠)
         服務.走()
 
