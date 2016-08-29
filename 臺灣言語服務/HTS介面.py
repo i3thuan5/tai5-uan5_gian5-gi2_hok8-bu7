@@ -10,7 +10,7 @@ class HTS介面:
         self.服務 = Pyro4.Proxy("PYRONAME:HTS服務")
 
     def 語音合成支援腔口(self, request):
-        return self.json包做回應(self.服務.支援腔口())
+        return self.json包做回應({'腔口': self.服務.支援腔口()})
 
     def json包做回應(self, json):
         回應 = JsonResponse(json)
@@ -31,7 +31,6 @@ class HTS介面:
             if 查詢腔口 not in self.服務.支援腔口():
                 raise RuntimeError()
         except:
-            查詢語句 = '你｜li2 好-無｜ho2-0bo5 ？｜? 我｜gua2 足｜tsiok4 好｜ho2 ！｜!'
             查詢腔口 = '閩南語'
         wav格式資料 = self.服務.語音合成實作(查詢腔口, 查詢語句)
         return self.音檔包做回應(wav格式資料)

@@ -13,7 +13,7 @@ class HTS服務:
 
     @Pyro4.expose
     def 支援腔口(self):
-        return {'腔口': sorted(self.全部合成母語模型.keys())}
+        return sorted(self.全部合成母語模型.keys())
 
     @Pyro4.expose
     def 語音合成實作(self, 查詢腔口, 查詢語句):
