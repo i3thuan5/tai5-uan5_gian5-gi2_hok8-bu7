@@ -1,3 +1,4 @@
+import io
 from time import sleep
 import wave
 
@@ -6,9 +7,9 @@ from django.test.testcases import TestCase
 
 
 from 臺灣言語服務.模型載入 import 模型載入
-from 臺灣言語服務.服務 import 服務
 from 臺灣言語服務.資料模型路徑 import 合成模型資料夾
-import io
+from 臺灣言語服務.HTS載入 import HTS載入
+from 臺灣言語服務.HTS服務 import HTS服務
 
 
 class 詔安腔合成整合試驗(TestCase):
@@ -16,7 +17,7 @@ class 詔安腔合成整合試驗(TestCase):
     @classmethod
     def setUpClass(cls):
         super(cls, cls).setUpClass()
-        cls.母語模型 = 模型載入.HTS合成模型(合成模型資料夾, '詔安腔')
+        cls.母語模型 = HTS載入.HTS合成模型(合成模型資料夾, '詔安腔')
         sleep(0.1)
 
     def setUp(self):
@@ -24,7 +25,7 @@ class 詔安腔合成整合試驗(TestCase):
         self.assertIn('拼音', self.母語模型)
         self.assertIn('變調', self.母語模型)
         self.assertIsNone(self.母語模型['變調'])
-        self.服務功能 = 服務(全部合成母語模型={'詔安腔': self.母語模型})
+        self.服務功能 = HTS服務(全部合成母語模型={'詔安腔': self.母語模型})
 
     def test_短詞合成(self):
         連線要求 = RequestFactory().get('/語音合成')

@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     '臺灣言語資料庫',
+    '臺灣言語服務',
 )
 
 MIDDLEWARE_CLASSES = (

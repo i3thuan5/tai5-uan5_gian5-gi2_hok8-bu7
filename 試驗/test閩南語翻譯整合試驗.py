@@ -9,7 +9,8 @@ from 臺灣言語服務.模型訓練 import 模型訓練
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.模型載入 import 模型載入
-from 臺灣言語服務.服務 import 服務
+from 臺灣言語服務.Moses載入 import Moses載入
+from 臺灣言語服務.Moses服務 import Moses服務
 
 
 class 閩南語翻譯整合試驗(TestCase):
@@ -18,10 +19,10 @@ class 閩南語翻譯整合試驗(TestCase):
     def setUpClass(cls):
         super(cls, cls).setUpClass()
         try:
-            cls.母語模型 = 模型載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)
+            cls.母語模型 = Moses載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)
         except:
             模型訓練.訓練摩西翻譯模型(翻譯語料資料夾, 翻譯模型資料夾, '閩南語')
-            cls.母語模型 = 模型載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)
+            cls.母語模型 = Moses載入.摩西翻譯模型(翻譯模型資料夾, '閩南語', 8500)
         sleep(60)
 
     @classmethod
@@ -34,7 +35,7 @@ class 閩南語翻譯整合試驗(TestCase):
         self.assertIn('語言模型', self.母語模型)
         self.assertIn('拼音', self.母語模型)
         self.assertIn('字綜合標音', self.母語模型)
-        self.服務功能 = 服務(全部翻譯母語模型={'閩南語': self.母語模型})
+        self.服務功能 = Moses服務(全部翻譯母語模型={'閩南語': self.母語模型})
 
     def test_短詞翻譯(self):
         連線要求 = RequestFactory().get('/正規化翻譯')

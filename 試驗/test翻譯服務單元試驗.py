@@ -5,7 +5,7 @@ from django.test.client import RequestFactory
 from django.test.testcases import TestCase
 
 
-from 臺灣言語服務.服務 import 服務
+from 臺灣言語服務.Moses服務 import Moses服務
 
 
 class 翻譯服務單元試驗(TestCase):
@@ -14,7 +14,7 @@ class 翻譯服務單元試驗(TestCase):
         self.工具 = RequestFactory()
 
     def test_正規化翻譯支援腔口(self):
-        服務功能 = 服務(全部翻譯母語模型={'臺語': {}, '客話': {}, 'Kaxabu': {}})
+        服務功能 = Moses服務(全部翻譯母語模型={'臺語': {}, '客話': {}, 'Kaxabu': {}})
         要求 = self.工具.get('/正規化翻譯支援腔口')
         回應 = 服務功能.正規化翻譯支援腔口(要求)
         回應資料 = json.loads(回應.content.decode("utf-8"))
@@ -31,7 +31,7 @@ class 翻譯服務單元試驗(TestCase):
             '拼音': None,
             '字綜合標音': None,
         }
-        服務功能 = 服務(全部翻譯母語模型={'母語': 母語模型}, 全部合成母語模型={})
+        服務功能 = Moses服務(全部翻譯母語模型={'母語': 母語模型}, 全部合成母語模型={})
 
         要求 = self.工具.get('/正規化翻譯')
         要求.GET = {
@@ -50,7 +50,7 @@ class 翻譯服務單元試驗(TestCase):
             '拼音': None,
             '字綜合標音': None,
         }
-        服務功能 = 服務(全部翻譯母語模型={'母語': 母語模型}, 全部合成母語模型={})
+        服務功能 = Moses服務(全部翻譯母語模型={'母語': 母語模型}, 全部合成母語模型={})
 
         要求 = self.工具.post('/正規化翻譯')
         要求.POST = {
