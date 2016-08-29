@@ -1,31 +1,27 @@
 import io
 from time import sleep
+from unittest.mock import patch
 import wave
 
 from django.test.client import RequestFactory
 from django.test.testcases import TestCase
 
 
-from 臺灣言語服務.模型載入 import 模型載入
-from 臺灣言語服務.資料模型路徑 import 合成模型資料夾
-from 臺灣言語服務.HTS載入 import HTS載入
 from 臺灣言語服務.HTS服務 import HTS服務
+from 臺灣言語服務.HTS介面 import HTS介面
 
 
 class 閩南語合成整合試驗(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        super(cls, cls).setUpClass()
-        cls.母語模型 = HTS載入.HTS合成模型(合成模型資料夾, '閩南語')
-        sleep(0.1)
-
     def setUp(self):
-        self.assertIn('模型', self.母語模型)
-        self.assertIn('拼音', self.母語模型)
-        self.assertIn('變調', self.母語模型)
-        self.assertIsNotNone(self.母語模型['變調'])
-        self.服務功能 = HTS服務(全部合成母語模型={'閩南語': self.母語模型})
+        self.ProxyPatch = patch('Pyro4.Proxy')
+        ProxyMock = self.ProxyPatch.start()
+        ProxyMock.return_value = HTS服務()
+        sleep(0.1)
+        self.服務功能 = HTS介面()
+
+    def tearDown(self):
+        self.ProxyPatch.stop()
 
     def test_短詞合成(self):
         連線要求 = RequestFactory().get('/語音合成')
