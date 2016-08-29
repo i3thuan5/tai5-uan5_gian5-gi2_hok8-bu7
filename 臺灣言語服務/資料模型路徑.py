@@ -10,4 +10,4 @@ except AttributeError:
 翻譯語料資料夾 = lambda 語言: join(資料路徑, 語言, '翻譯語料')
 翻譯模型資料夾 = lambda 語言: join(資料路徑, 語言, '翻譯模型')
 合成模型資料夾 = lambda 語言: join(資料路徑, 語言, '合成模型')
-合成模型路徑=lambda 語言:join(合成模型資料夾, 'Taiwanese.htsvoice')
+合成模型路徑 = lambda 語言: join(合成模型資料夾, 'Taiwanese.htsvoice')
