@@ -13,11 +13,14 @@ class 模型載入(AppConfig):
     verbose_name = "臺灣言語服務模型載入"
 
     def ready(self):
-        try:
-            全部翻譯母語模型 = Moses載入.摩西模型()
-        except FileNotFoundError:
-            pass
+#         try:
+#             全部翻譯母語模型 = Moses載入.摩西模型()
+#         except FileNotFoundError:
+#             pass
+        print('XD')
         try:
             全部合成母語模型 = HTS載入.HTS模型()
+            print('xx',全部合成母語模型)
         except FileNotFoundError:
+            raise
             pass
