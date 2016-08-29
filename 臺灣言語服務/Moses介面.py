@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+import Pyro4
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from Pyro4 import Proxy
 
 
 class Moses介面:
 
     def __init__(self):
-        self.服務 = Proxy("PYRONAME:Moses服務")
+        self.服務 = Pyro4.Proxy("PYRONAME:Moses服務")
 
     def 正規化翻譯支援腔口(self, request):
         return self.json包做回應({'腔口': self.服務.支援腔口()})
@@ -29,7 +29,7 @@ class Moses介面:
         except:
             查詢語句 = '你好嗎？我很好！'
         try:
-            return self._正規化翻譯實作(查詢腔口, 查詢語句)
+            return self.服務.正規化翻譯實作(查詢腔口, 查詢語句)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'})
 
@@ -50,7 +50,7 @@ class Moses介面:
         except:
             查詢語句 = '你好嗎？我很好！'
         try:
-            return self._標漢字音標實作(查詢腔口, 查詢語句)
+            return self.服務.標漢字音標實作(查詢腔口, 查詢語句)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'})
 
