@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from os import listdir, makedirs
-from os.path import join, basename
+from os.path import join, basename, isdir
 from sys import stderr
 import traceback
 
@@ -18,10 +18,11 @@ from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
 from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
 from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀集內組
-from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
-from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.語言判斷 import 語言判斷
 from 臺灣言語工具.語言模型.實際語言模型 import 實際語言模型
+from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
+from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
+from 臺灣言語服務.資料模型路徑 import 資料路徑
 '''
 python manage.py 訓練一个語言 閩南語
 python manage.py 訓練全部語言
@@ -32,39 +33,39 @@ class 模型訓練(程式腳本):
 
     @classmethod
     def 走(cls):
-        cls.輸出全部語料(翻譯語料資料夾)
-        cls.訓練全部摩西翻譯模型(翻譯語料資料夾, 翻譯模型資料夾)
+        cls.輸出全部語料()
+        cls.訓練全部摩西翻譯模型()
 
     @classmethod
-    def 輸出全部語料(cls, 語料資料夾):
+    def 輸出全部語料(cls):
         語料 = 資料輸出工具()
-        語料.輸出翻譯語料(語料資料夾)
+        語料.輸出翻譯語料()
 
     @classmethod
-    def 訓練全部摩西翻譯模型(cls, 語料資料夾, 模型資料夾):
+    def 訓練全部摩西翻譯模型(cls):
+        for 語言 in listdir(資料路徑):
+            if isdir(翻譯語料資料夾(語言)):
+                try:
+                    cls.訓練一个摩西翻譯模型(語言)
+                except:
+                    print('{}的摩西模型訓練失敗！！'.format(語言), file=stderr)
+                    traceback.print_exc()
+                    print(file=stderr)
+
+    @classmethod
+    def 訓練一个摩西翻譯模型(cls, 語言):
+        語料資料夾 = 翻譯語料資料夾(語言)
+        模型資料夾 = 翻譯模型資料夾(語言)
         makedirs(模型資料夾, exist_ok=True)
-        for 語言 in listdir(語料資料夾):
-            try:
-                cls.訓練一个摩西翻譯模型(語料資料夾, 模型資料夾, 語言)
-            except:
-                print('{}的摩西模型訓練失敗！！'.format(語言), file=stderr)
-                traceback.print_exc()
-                print(file=stderr)
-
-    @classmethod
-    def 訓練一个摩西翻譯模型(cls, 語料資料夾, 模型資料夾, 語言):
-        語言資料夾 = join(語料資料夾, 語言)
-        翻譯模型資料夾路徑 = join(模型資料夾, 語言)
-        makedirs(翻譯模型資料夾路徑, exist_ok=True)
         if 語言判斷().是漢語(語言):
-            平行華語, 平行母語, 母語文本 = cls._漢語語料訓練(語言資料夾, 翻譯模型資料夾路徑)
+            平行華語, 平行母語, 母語文本 = cls._漢語語料訓練(語料資料夾, 模型資料夾)
         else:
-            平行華語, 平行母語, 母語文本 = cls._南島語語料訓練(語言資料夾, 翻譯模型資料夾路徑)
+            平行華語, 平行母語, 母語文本 = cls._南島語語料訓練(語料資料夾, 模型資料夾)
 
         模型訓練 = 摩西翻譯模型訓練()
         模型訓練.訓練(
             平行華語, 平行母語, 母語文本,
-            翻譯模型資料夾路徑,
+            模型資料夾,
             連紲詞長度=2,
             編碼器=語句編碼器(),  # 若用著Unicdoe擴充就需要,
             刣掉暫存檔=True,

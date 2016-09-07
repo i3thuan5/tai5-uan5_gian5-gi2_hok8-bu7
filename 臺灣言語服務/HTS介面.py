@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from base64 import b64decode
+
 import Pyro4
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -29,7 +31,7 @@ class HTS介面:
         except:
             查詢腔口 = '閩南語'
         wav格式資料 = self.服務.語音合成實作(查詢腔口, 查詢語句)
-        return self.音檔包做回應(wav格式資料)
+        return self.音檔包做回應(b64decode(wav格式資料['data']))
 
     def 音檔包做回應(self, 音檔):
         回應 = HttpResponse()
