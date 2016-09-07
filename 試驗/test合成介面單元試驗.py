@@ -26,6 +26,9 @@ class 合成介面單元試驗(TestCase):
 
     @patch('Pyro4.Proxy')
     def test_get(self, ProxyMock):
+        ProxyMock.return_value.語音合成實作.return_value = {
+            'data': 'sui2', 'encoding': 'base64'
+        }
         服務功能 = HTS介面()
 
         要求 = self.工具.get('/語音合成')
@@ -38,6 +41,9 @@ class 合成介面單元試驗(TestCase):
 
     @patch('Pyro4.Proxy')
     def test_post(self, ProxyMock):
+        ProxyMock.return_value.語音合成實作.return_value = {
+            'data': 'sui2', 'encoding': 'base64'
+        }
         服務功能 = HTS介面()
 
         要求 = self.工具.post('/語音合成')
