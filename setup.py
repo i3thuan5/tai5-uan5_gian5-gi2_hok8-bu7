@@ -34,7 +34,7 @@ setup(
     long_description=讀('README.md'),
     author='薛丞宏',
     author_email='ihcaoe@gmail.com',
-    url='http://意傳.台灣/',
+    url='https://xn--v0qr21b.xn--kpry57d/',
     download_url='https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7',
     keywords=[
         '語料庫', '語言合成', '機器翻譯',
