@@ -21,7 +21,7 @@ class Moses載入(公家載入):
         for 第幾个, 母語腔口 in enumerate(sorted(listdir(資料路徑))):
             摩西埠 = 8500 + 第幾个
             try:
-                翻譯母語模型[母語腔口] = cls.摩西翻譯模型( 母語腔口, 摩西埠)
+                翻譯母語模型[母語腔口] = cls.摩西翻譯模型(母語腔口, 摩西埠)
             except OSError as 錯誤:
                 print(錯誤)
                 continue

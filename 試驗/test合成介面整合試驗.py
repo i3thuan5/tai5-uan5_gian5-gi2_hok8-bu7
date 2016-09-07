@@ -16,7 +16,7 @@ class 合成介面單元試驗(TestCase):
 
     @patch('Pyro4.Proxy')
     def test_支援腔口(self, ProxyMock):
-        ProxyMock.return_value=HTS服務()
+        ProxyMock.return_value = HTS服務()
         服務功能 = HTS介面()
         要求 = self.工具.get('/語音合成支援腔口')
         回應 = 服務功能.語音合成支援腔口(要求)
