@@ -99,6 +99,7 @@ class Kaldi語料匯出(程式腳本):
             .distinct()
             .filter(影音聽拍__isnull=False)
             .filter(語言腔口__語言腔口=語言)
+            .order_by('pk')
         ):
             音檔名 = 'tong{0:07}'.format(第幾个)
             print(
