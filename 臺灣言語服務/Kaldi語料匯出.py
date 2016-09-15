@@ -15,8 +15,8 @@ from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言�
 class Kaldi語料匯出(程式腳本):
 
     @classmethod
-    def 匯出一種語言語料(cls, 語言, 語料資料夾):
-        訓練語料資料夾 = join(語料資料夾, 'data', 'train')
+    def 匯出一種語言語料(cls, 語言, 語料資料夾, 資料夾名):
+        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'train')
         makedirs(訓練語料資料夾, exist_ok=True)
         with cls._寫檔(訓練語料資料夾, 'text') as 聽拍內容:
             with cls._寫檔(訓練語料資料夾, 'wav.scp') as 音檔目錄:
@@ -26,8 +26,8 @@ class Kaldi語料匯出(程式腳本):
                             cls._揣影音輸出(語言, 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者)
 
     @classmethod
-    def 做辭典資料(cls, 語言文本, 語料資料夾):
-        訓練語料資料夾 = join(語料資料夾, 'data', 'local', 'dict')
+    def 做辭典資料(cls, 語言文本, 語料資料夾, 資料夾名):
+        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 'dict')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
@@ -45,8 +45,8 @@ class Kaldi語料匯出(程式腳本):
         cls._陣列寫入檔案(join(訓練語料資料夾, 'lexicon.txt'), sorted(全部詞))
 
     @classmethod
-    def 做語言模型(cls, 語言文本, 語料資料夾):
-        訓練語料資料夾 = join(語料資料夾, 'data', 'lang')
+    def 做語言模型(cls, 語言文本, 語料資料夾, 資料夾名):
+        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'lang')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
