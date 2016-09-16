@@ -63,6 +63,7 @@ class Kaldi語料匯出(程式腳本):
             句物件 = 拆文分析器.分詞句物件(一逝)
             一句 = []
             for 詞物件 in 句物件.網出詞物件():
+                分詞 = 詞物件.看分詞()
                 try:
                     聲韻陣列 = []
                     for 字物件 in 詞物件.轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
@@ -79,15 +80,14 @@ class Kaldi語料匯出(程式腳本):
                             調類[調].add(韻調)
                         except:
                             調類[調] = {韻調}
-                    分詞 = 詞物件.看分詞()
                     一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
                     if 'iauh' in 分詞 or 'er' in 分詞 or 'ir' in 分詞:
                         continue
                     全部詞.add(一項)
-                    一句.append(分詞)
-    #                     print(一項)
                 except:
-                    pass
+                    一項 = '{}\tSPN'.format(分詞)
+                    全部詞.add(一項)
+                一句.append(分詞)
             全部句.append(' '.join(一句))
         return 聲類, 韻類, 調類, 全部詞
 
