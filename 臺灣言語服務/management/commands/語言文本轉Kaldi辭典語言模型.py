@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **參數):
         try:
-            Kaldi語料匯出.做語言模型(參數['語言文本'], 參數['匯出路徑'],參數['資料夾名'])
-            Kaldi語料匯出.做辭典資料(參數['語言文本'], 參數['匯出路徑'],參數['資料夾名'])
+            Kaldi語料匯出.做語言模型(參數['語言文本'], 參數['匯出路徑'], 參數['資料夾名'])
+            Kaldi語料匯出.做辭典資料(參數['語言文本'], 參數['匯出路徑'], 參數['資料夾名'])
         except FileNotFoundError:
             print('揣無「{}」的語料！！'.format(參數['語言文本']), file=stderr)

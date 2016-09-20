@@ -28,6 +28,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **參數):
         try:
-            Kaldi語料匯出.匯出一種語言語料(參數['語言'], 參數['匯出路徑'],參數['資料夾名'])
+            Kaldi語料匯出.匯出一種語言語料(參數['語言'], 參數['匯出路徑'], 參數['資料夾名'])
         except FileNotFoundError:
             print('資料庫無「{}」的語料！！'.format(參數['語言']), file=stderr)
