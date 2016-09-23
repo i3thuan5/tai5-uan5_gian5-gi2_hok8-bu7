@@ -11,6 +11,8 @@ from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
 from 臺灣言語服務.漢語語音處理 import 漢語語音處理
+from 臺灣言語工具.基本物件.公用變數 import 標點符號
+from 臺灣言語工具.基本物件.公用變數 import 無音
 
 
 class Kaldi語料匯出(程式腳本):
@@ -87,7 +89,15 @@ class Kaldi語料匯出(程式腳本):
                         continue
                     全部詞.add(一項)
                 except:
-                    一項 = '{}\tSPN'.format(分詞)
+                    字物件陣列 = 詞物件.篩出字物件()
+                    if (
+                        len(字物件陣列) == 1 and
+                        (字物件陣列[0].型 in 標點符號 or 字物件陣列[0].型 == "'") and
+                        (字物件陣列[0].音 in 標點符號 or 字物件陣列[0].音 in {無音, "'"})
+                    ):
+                        一項 = '{}\tSIL'.format(分詞)
+                    else:
+                        一項 = '{}\tSPN'.format(分詞)
                     全部詞.add(一項)
                 一句.append(分詞)
             全部句.append(' '.join(一句))
