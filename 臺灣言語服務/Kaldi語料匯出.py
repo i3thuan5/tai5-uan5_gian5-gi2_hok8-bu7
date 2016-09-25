@@ -20,6 +20,8 @@ class Kaldi語料匯出(程式腳本):
     @classmethod
     def 匯出一種語言語料(cls, 語言, 語料資料夾, 資料夾名):
         訓練語料資料夾 = join(語料資料夾, 資料夾名, 'train')
+        if isdir(訓練語料資料夾):
+            rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
         with cls._寫檔(訓練語料資料夾, 'text') as 聽拍內容:
             with cls._寫檔(訓練語料資料夾, 'wav.scp') as 音檔目錄:
