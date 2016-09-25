@@ -38,7 +38,7 @@ class Kaldi語料匯出(程式腳本):
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
         cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL", "SPN", "NSN"])
-        全部詞 = {'SIL\tSIL', '<UNK>\tSPN'}
+        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'NSN\tNSN'}
         全部句 = []
         聲類 = set()
         韻類 = {}
@@ -138,7 +138,10 @@ class Kaldi語料匯出(程式腳本):
                         語者 = '{}-{}'.format(音檔名, ''.join(一句聽拍['語者'].split()))
                     語句名 = '{0}-ku{1:07}'.format(音檔名, 第幾句)
                     語者 = 語句名
-                    print(語句名, 一句聽拍['內容'], file=聽拍內容)
+                    內容 = 一句聽拍['內容']
+                    if len(內容.strip()) == 0:
+                        內容 = 'NSN'
+                    print(語句名, 內容, file=聽拍內容)
     #                 sw02001-A_000098-001156 sw02001-A 0.98 11.56
                     print(語句名, 音檔名, 一句聽拍['開始時間'], 一句聽拍['結束時間'], file=語句目錄)
                     if 一句聽拍['語者'] == '無註明':
