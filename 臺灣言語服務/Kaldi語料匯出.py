@@ -46,7 +46,12 @@ class Kaldi語料匯出(程式腳本):
         for 一逝 in cls._讀檔案(語言文本):
             cls._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 一逝)
         for 一逝 in cls._讀檔案(join(語料資料夾, 資料夾名, 'train', 'text')):
-            cls._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 一逝.split(' ', 1)[-1])
+            try:
+                文本部份 = 一逝.split(' ', 1)[1]
+            except:
+                pass
+            else:
+                cls._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 文本部份)
         聲韻類 = 聲類
         for 仝韻 in 韻類.values():
             聲韻類.add(' '.join(sorted(仝韻)))
