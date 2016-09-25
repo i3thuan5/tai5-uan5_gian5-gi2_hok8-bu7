@@ -94,8 +94,6 @@ class Kaldi語料匯出(程式腳本):
                         except:
                             調類[調] = {一个音素調}
                 一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
-                if 'iauh' in 分詞 or 'er' in 分詞 or 'ir' in 分詞:
-                    continue
                 全部詞.add(一項)
             except:
                 字物件陣列 = 詞物件.篩出字物件()
