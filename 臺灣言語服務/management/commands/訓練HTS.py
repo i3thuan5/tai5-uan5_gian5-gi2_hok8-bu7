@@ -30,6 +30,6 @@ class Command(BaseCommand):
             語料資料夾 = join(資料路徑, 語言, '{}-HTS語料'.format(語者))
             模型資料夾 = join(資料路徑, 語言, '{}-HTS模型'.format(語者))
             HTS模型訓練.輸出一種語言語料(語料資料夾, 語言, 語者)
-            HTS模型訓練.訓練一个辨識模型(語料資料夾, 模型資料夾, 語言)
+            HTS模型訓練.對齊聲韻(語料資料夾, 模型資料夾, 語言)
         except FileNotFoundError:
             print('資料庫無「{}」的語料！！'.format(參數['語言']), file=stderr)
