@@ -16,5 +16,5 @@
 * [臺灣言語工具](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_kang1-ku7)
   * 母語parser、寫法轉換、…功能。
   * 翻譯、語音辨識、語音合成等工具整合。
-* [臺灣言語平臺](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_phing5-thai5)。
+* [臺灣言語平臺](https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_phing5-thai5)
   * 修改`臺灣言語資料庫`的網頁介面
