@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 
 from 臺灣言語服務.HTS模型訓練 import HTS模型訓練
 from 臺灣言語服務.資料模型路徑 import 資料路徑
+from 臺灣言語工具.語音合成.HTS工具.安裝HTS語音辨識程式 import 安裝HTS語音辨識程式
 
 
 class Command(BaseCommand):
@@ -24,6 +25,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **參數):
+        安裝HTS語音辨識程式.安裝htk()
+        安裝HTS語音辨識程式.安裝sptk()
+        安裝HTS語音辨識程式.安裝hts()
+        安裝HTS語音辨識程式.掠htsDemoScript()
         try:
             語言 = 參數['語言']
             語者 = 參數['語者']
