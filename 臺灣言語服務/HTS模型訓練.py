@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from os import makedirs
-from os.path import join, exists, basename
+from os.path import join, exists
 from posix import listdir
 import shutil
 
@@ -83,7 +83,7 @@ class HTS模型訓練(程式腳本):
         return 對齊聲韻
 
     @classmethod
-    def 輸出HTS標仔(cls, 合成語料資料夾, 對齊聲韻結果資料夾, 合成模型資料夾路徑):
+    def 輸出HTS標仔問題音檔而且訓練(cls, 合成語料資料夾, 對齊聲韻結果資料夾, 合成模型資料夾路徑):
         if True:
             語言拼音 = 臺灣閩南語羅馬字拼音
             文本音值表 = 閩南語文本音值表
