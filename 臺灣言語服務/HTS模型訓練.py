@@ -22,6 +22,7 @@ from 臺灣言語工具.語音辨識.文本音值對照表.官話文本音值表
 from 臺灣言語工具.語音合成.決策樹仔問題.官話決策樹仔 import 官話決策樹仔
 from 臺灣言語工具.語音合成.語音標仔轉換 import 語音標仔轉換
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
+from 臺灣言語工具.語音合成.HTS工具.訓練HTSengine模型 import 訓練HTSEngine模型
 
 
 class HTS模型訓練(程式腳本):
@@ -95,7 +96,8 @@ class HTS模型訓練(程式腳本):
             語言拼音 = 官話注音符號
             文本音值表 = 官話文本音值表
             決策樹仔 = 官話決策樹仔
-        HTS資料目錄 = cls._細項目錄(合成模型資料夾路徑, 'HTS訓練過程')
+        HTS訓練過程目錄 = cls._細項目錄(合成模型資料夾路徑, 'HTS訓練過程')
+        HTS資料目錄 = cls._細項目錄(HTS訓練過程目錄, 'data')
         HTS標仔目錄 = cls._細項目錄(HTS資料目錄, 'labels')
         HTS音值標仔目錄 = join(HTS標仔目錄, 'mono')
         HTS完整標仔目錄 = join(HTS標仔目錄, 'full')
@@ -136,29 +138,8 @@ class HTS模型訓練(程式腳本):
         if len(全部頻率) > 1:
             raise('音檔的取樣頻率愛仝款！！有{0}Hz'.format('、'.join(sorted(全部頻率))))
         頻率 = 全部頻率.pop()
-
-        '走HTS'
-        音框長度 = 頻率 // 40
-        音框移動 = 音框長度 // 5
-        if 頻率 < 20000:
-            參數量 = 24
-        else:
-            參數量 = 40
-        HTS設定指令 = (
-            '''LANG=C ./configure --with-sptk-search-path={0} \
---with-hts-search-path={1} \
---with-hts-engine-search-path={2} \
-LOWERF0=60 UPPERF0=500 SAMPFREQ={3} FRAMELEN={4} FRAMESHIFT={5} \
-USEGV=0\
-GAMMA=3 LNGAIN=1 MGCORDER={6} 
-'''
-        ).format(
-            SPTK執行檔路徑, HTS執行檔路徑, HTS_ENGINE執行檔路徑,
-            頻率, 音框長度, 音框移動, 參數量
-        )
-        cls._走指令(HTS設定指令)
-        HTS走指令 = 'LANG=C make all'
-        cls._走指令(HTS走指令)
+        return 訓練HTSEngine模型.訓練(HTS訓練過程目錄, 頻率)
+        
 
     @classmethod
     def _揣上尾的文本(cls, 文本):
