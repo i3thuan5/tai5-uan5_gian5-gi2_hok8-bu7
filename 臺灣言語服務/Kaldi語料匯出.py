@@ -103,9 +103,10 @@ class Kaldi語料匯出(程式腳本):
                     (字物件陣列[0].音 in 標點符號 or 字物件陣列[0].音 in {無音, "'"})
                 ):
                     一項 = '{}\tSIL'.format(分詞)
+                    全部詞.add(一項)
                 else:
                     一項 = '{}\tSPN'.format(分詞)
-                全部詞.add(一項)
+#                     全部詞.add(一項)
             一句.append(分詞)
         全部句.append(' '.join(一句))
 
