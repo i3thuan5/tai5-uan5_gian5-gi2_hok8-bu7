@@ -38,7 +38,7 @@ class Kaldi語料匯出(程式腳本):
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
         cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL", "SPN", "NSN"])
-        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'NSN\tNSN'}
+        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN', 'NSN\tNSN'}
         全部句 = []
         聲類 = set()
         韻類 = {}
@@ -103,9 +103,10 @@ class Kaldi語料匯出(程式腳本):
                     (字物件陣列[0].音 in 標點符號 or 字物件陣列[0].音 in {無音, "'"})
                 ):
                     一項 = '{}\tSIL'.format(分詞)
+                    全部詞.add(一項)
                 else:
                     一項 = '{}\tSPN'.format(分詞)
-                全部詞.add(一項)
+#                     全部詞.add(一項)
             一句.append(分詞)
         全部句.append(' '.join(一句))
 
@@ -127,9 +128,12 @@ class Kaldi語料匯出(程式腳本):
             )
 #             sw02001-A sw02001 A
             print(音檔名, 音檔名, 'A', file=音檔對應頻道)
+            音檔長度 = 影音.聲音檔().時間長度()
             聽拍 = cls._揣上尾的聽拍(影音.影音聽拍.first().聽拍)
             for 第幾句, 一句聽拍 in enumerate(json.loads(聽拍.聽拍資料)):
-                if float(一句聽拍['開始時間']) < float(一句聽拍['結束時間']):
+                開始 = float(一句聽拍['開始時間'])
+                結束 = float(一句聽拍['結束時間'])
+                if 0.0 <= 開始 and 開始 < 結束 and 結束 <= 音檔長度:
                     if 一句聽拍['語者'] == '無註明':
                         語者 = '{0}-無註明{1:07}'.format(音檔名, 第幾句)
                     else:
@@ -137,8 +141,17 @@ class Kaldi語料匯出(程式腳本):
                     語句名 = '{0}-ku{1:07}'.format(音檔名, 第幾句)
                     語者 = 語句名
                     內容 = 一句聽拍['內容']
+                    有音 = False
+                    for 字物件 in 拆文分析器.分詞句物件(內容).轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
+                        try:
+                            _聲, _韻, _調 = 字物件.音
+                            有音 = True
+                        except:
+                            pass
+                    if not 有音:
+                        continue
                     if len(內容.strip()) == 0:
-                        內容 = 'NSN'
+                        continue
                     print(語句名, 內容, file=聽拍內容)
     #                 sw02001-A_000098-001156 sw02001-A 0.98 11.56
                     print(語句名, 音檔名, 一句聽拍['開始時間'], 一句聽拍['結束時間'], file=語句目錄)
