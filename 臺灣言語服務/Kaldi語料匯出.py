@@ -38,7 +38,7 @@ class Kaldi語料匯出(程式腳本):
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
         cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL", "SPN", "NSN"])
-        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'NSN\tNSN'}
+        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN', 'NSN\tNSN'}
         全部句 = []
         聲類 = set()
         韻類 = {}
@@ -141,6 +141,15 @@ class Kaldi語料匯出(程式腳本):
                     語句名 = '{0}-ku{1:07}'.format(音檔名, 第幾句)
                     語者 = 語句名
                     內容 = 一句聽拍['內容']
+                    有音 = False
+                    for 字物件 in 拆文分析器.分詞句物件(內容).轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
+                        try:
+                            _聲, _韻, _調 = 字物件.音
+                            有音 = True
+                        except:
+                            pass
+                    if not 有音:
+                        continue
                     if len(內容.strip()) == 0:
                         continue
                     print(語句名, 內容, file=聽拍內容)
