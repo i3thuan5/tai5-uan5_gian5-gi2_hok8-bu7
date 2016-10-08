@@ -15,7 +15,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
     def tearDown(self):
         remove(self.檔案路徑)
 
-    def test_無合法拼音愛當做噪音(self):
+    def test_無合法拼音就莫愛(self):
         分詞 = 'la0123006｜la0123006'
 
         全部詞 = set()
@@ -27,9 +27,9 @@ class Kaldi匯出辭典單元試驗(TestCase):
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
-        self.assertEqual(len(全部詞), 1)
+        self.assertEqual(len(全部詞), 0)
 
-    def test_漢字無合法愛當做噪音(self):
+    def test_漢字無合法就莫愛(self):
         分詞 = '現｜現'
 
         全部詞 = set()
@@ -41,7 +41,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
-        self.assertEqual(len(全部詞), 1)
+        self.assertEqual(len(全部詞), 0)
 
     def test_單引號(self):
         分詞 = "'｜'"
