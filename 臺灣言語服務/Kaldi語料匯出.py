@@ -38,7 +38,7 @@ class Kaldi語料匯出(程式腳本):
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
         cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL", "SPN", "NSN"])
-        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN', 'NSN\tNSN'}
+        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN'}
         全部句 = []
         聲類 = set()
         韻類 = {}
@@ -98,6 +98,12 @@ class Kaldi語料匯出(程式腳本):
             except:
                 字物件陣列 = 詞物件.篩出字物件()
                 if (
+                    len(字物件陣列) == 1 and
+                    字物件陣列[0].型 == "NSN" and
+                    字物件陣列[0].音 == 無音
+                ):
+                    全部詞.add('NSN\tNSN')
+                elif (
                     len(字物件陣列) == 1 and
                     (字物件陣列[0].型 in 標點符號 or 字物件陣列[0].型 == "'") and
                     (字物件陣列[0].音 in 標點符號 or 字物件陣列[0].音 in {無音, "'"})
