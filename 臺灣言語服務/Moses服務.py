@@ -11,8 +11,11 @@ from 臺灣言語服務.Moses載入 import Moses載入
 
 class Moses服務:
 
-    def __init__(self, 全部翻譯母語模型=Moses載入.摩西模型()):
-        self.全部翻譯母語模型 = 全部翻譯母語模型
+    def __init__(self, 全部翻譯母語模型={}):
+        if len(全部翻譯母語模型) == 0:
+            self.全部翻譯母語模型 = Moses載入.摩西模型()
+        else:
+            self.全部翻譯母語模型 = 全部翻譯母語模型
 
     @expose
     def 支援腔口(self):
