@@ -106,3 +106,9 @@ TEMPLATES = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "資料庫影音檔案")
+
+MIDDLEWARE_CLASSES += (
+    'corsheaders.middleware.CorsMiddleware',
+)
+CORS_ORIGIN_REGEX_WHITELIST = ('^.*$', )
+CORS_ALLOW_CREDENTIALS = True
