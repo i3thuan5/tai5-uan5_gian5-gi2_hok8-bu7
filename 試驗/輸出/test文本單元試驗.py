@@ -29,17 +29,17 @@ class 輸出文本單元試驗(TestCase):
             '來源': Pigu.編號(),
             '版權': '會使公開',
             '種類': '語句',
-            '語言腔口': '閩南語',
+            '語言腔口': '臺灣話',
             '著作所在地': '花蓮',
             '著作年': '2015',
         }
 
         self.語料 = 資料輸出工具()
-        self.目錄 = 翻譯語料資料夾('閩南語')
+        self.目錄 = 翻譯語料資料夾('臺灣話')
 
     def tearDown(self):
-        if isdir(翻譯語料資料夾('閩南語')):
-            rmtree(翻譯語料資料夾('閩南語'))
+        if isdir(翻譯語料資料夾('臺灣話')):
+            rmtree(翻譯語料資料夾('臺灣話'))
         if isdir(翻譯語料資料夾('臺語')):
             rmtree(翻譯語料資料夾('臺語'))
 
@@ -56,19 +56,19 @@ class 輸出文本單元試驗(TestCase):
         外語 = self.加一筆外語你好嗎()
         self.外語加一筆母語食飽未(外語)
         self.語料.輸出文本語料()
-        self.assertTrue(isfile(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')))
-        self.assertTrue(isfile(join(翻譯語料資料夾('閩南語'), '字詞文本.txt.gz')))
+        self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')))
+        self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '字詞文本.txt.gz')))
 
     def test_外語母語語句對應檢查文本(self):
         外語 = self.加一筆外語你好嗎()
         self.外語加一筆母語食飽未(外語)
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽未？']
         )
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '字詞文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '字詞文本.txt.gz')),
             []
         )
 
@@ -78,11 +78,11 @@ class 輸出文本單元試驗(TestCase):
         self.外語加一筆母語食飽未(外語)
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             []
         )
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '字詞文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '字詞文本.txt.gz')),
             ['食飽未？'])
 
     def test_外語雙母語對應(self):
@@ -91,7 +91,7 @@ class 輸出文本單元試驗(TestCase):
         self.外語加一筆母語食飽未(外語)
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽未？', '食飽未？']
         )
 
@@ -101,7 +101,7 @@ class 輸出文本單元試驗(TestCase):
         self.影音加一筆母語食飽未(影音)
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽未？']
         )
 
@@ -110,7 +110,7 @@ class 輸出文本單元試驗(TestCase):
         self.影音加一筆母語食飽未(影音)
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽未？']
         )
 
@@ -120,7 +120,7 @@ class 輸出文本單元試驗(TestCase):
         self.母語文本加一筆斷詞食飽未(第一層文本)
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽 未？']
         )
 
@@ -128,7 +128,7 @@ class 輸出文本單元試驗(TestCase):
         self.加一筆母語食飽未()
         self.語料.輸出文本語料()
         self.assertEqual(
-            self.得著檔案資料(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz')),
+            self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽未？']
         )
 
@@ -138,7 +138,7 @@ class 輸出文本單元試驗(TestCase):
         self.加一筆母語食飽未()
         資料輸出工具('臺語').輸出文本語料()
         self.assertFalse(
-            isfile(join(翻譯語料資料夾('閩南語'), '語句文本.txt.gz'))
+            isfile(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz'))
         )
 
     @patch('臺灣言語資料庫.資料模型.文本表.文本佮音標格式化資料')
