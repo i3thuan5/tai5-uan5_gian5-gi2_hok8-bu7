@@ -64,7 +64,7 @@ class Kaldi語料匯出(程式腳本):
 
     @classmethod
     def 做語言模型(cls, 語言文本, 語料資料夾, 資料夾名):
-        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'lang')
+        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 'lm')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
