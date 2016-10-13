@@ -133,7 +133,7 @@ class Kaldi語料匯出(程式腳本):
             音檔名 = 'tong{0:07}'.format(第幾个)
             print(
                 音檔名,
-                'sox {} -b 16 -c 1 -r 16k -t wav - | '.format(影音.影音所在()),
+                'sox -G {} -b 16 -c 1 -r 16k -t wav - | '.format(影音.影音所在()),
                 file=音檔目錄
             )
 #             sw02001-A sw02001 A
