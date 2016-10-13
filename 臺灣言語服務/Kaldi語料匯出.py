@@ -16,6 +16,7 @@ from 臺灣言語工具.基本物件.公用變數 import 無音
 
 
 class Kaldi語料匯出(程式腳本):
+    環境噪音 = 'NSN\tNSN'
 
     @classmethod
     def 匯出一種語言語料(cls, 語言, 語料資料夾, 資料夾名):
@@ -37,7 +38,7 @@ class Kaldi語料匯出(程式腳本):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
-        cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), ["SIL", "SPN", "NSN"])
+        安靜噪音集 = ["SIL", "SPN"]
         全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN'}
         全部句 = []
         聲類 = set()
@@ -52,10 +53,13 @@ class Kaldi語料匯出(程式腳本):
                 pass
             else:
                 cls._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 文本部份)
+        if cls.環境噪音 in 全部詞:
+            安靜噪音集.append("NSN")
         聲韻類 = 聲類
         for 仝韻 in 韻類.values():
             聲韻類.add(' '.join(sorted(仝韻)))
-        調問題 = {'SIL SPN NSN'}
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), 安靜噪音集)
+        調問題 = {' '.join(安靜噪音集)}
         for 仝調 in 調類.values():
             調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'nonsilence_phones.txt'), sorted(聲韻類))
@@ -102,7 +106,7 @@ class Kaldi語料匯出(程式腳本):
                     字物件陣列[0].型 == "NSN" and
                     字物件陣列[0].音 == 無音
                 ):
-                    全部詞.add('NSN\tNSN')
+                    全部詞.add(cls.環境噪音)
                 elif (
                     len(字物件陣列) == 1 and
                     (字物件陣列[0].型 in 標點符號 or 字物件陣列[0].型 == "'") and

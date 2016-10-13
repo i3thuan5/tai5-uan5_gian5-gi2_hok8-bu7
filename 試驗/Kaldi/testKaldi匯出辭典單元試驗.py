@@ -70,3 +70,16 @@ class Kaldi匯出辭典單元試驗(TestCase):
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
         self.assertIn("﹔｜﹔\tSIL", 全部詞)
+
+    def test_環境噪音(self):
+        分詞 = "NSN"
+
+        全部詞 = set()
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, [], 分詞)
+        self.assertEqual(len(聲類), 0)
+        self.assertEqual(len(韻類), 0)
+        self.assertEqual(len(調類), 0)
+        self.assertIn("NSN\tNSN", 全部詞)
