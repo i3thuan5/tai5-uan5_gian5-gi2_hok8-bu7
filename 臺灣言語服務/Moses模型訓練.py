@@ -28,7 +28,7 @@ python manage.py 訓練全部語言
 '''
 
 
-class 模型訓練(程式腳本):
+class Moses模型訓練(程式腳本):
 
     @classmethod
     def 走(cls):
