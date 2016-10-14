@@ -2,8 +2,10 @@ from os.path import join
 from sys import stderr
 
 from django.core.management.base import BaseCommand
-from 臺灣言語服務.HTK模型訓練 import HTK模型訓練
-from 臺灣言語服務.資料模型路徑 import 資料模型路徑
+
+
+from 臺灣言語服務._HTK模型訓練 import HTK模型訓練
+from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
 class Command(BaseCommand):
@@ -19,8 +21,8 @@ class Command(BaseCommand):
     def handle(self, *args, **參數):
         try:
             語言 = 參數['語言']
-            語料資料夾 = join(資料模型路徑, 語言, 'HTK語料')
-            模型資料夾 = join(資料模型路徑, 語言, 'HTK模型')
+            語料資料夾 = join(資料路徑, 語言, 'HTK語料')
+            模型資料夾 = join(資料路徑, 語言, 'HTK模型')
             HTK模型訓練.輸出一種語言語料(語料資料夾, 語言)
             HTK模型訓練.訓練一个辨識模型(語料資料夾, 模型資料夾, 語言)
         except FileNotFoundError:
