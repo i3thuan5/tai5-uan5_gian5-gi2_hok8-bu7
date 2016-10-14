@@ -6,7 +6,7 @@ from django.test.client import RequestFactory
 from django.test.testcases import TestCase
 
 
-from 臺灣言語服務.模型訓練 import 模型訓練
+from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
 from 臺灣言語服務.Moses載入 import Moses載入
 from 臺灣言語服務.Moses服務 import Moses服務
 from 臺灣言語服務.Moses介面 import Moses介面
@@ -19,9 +19,8 @@ class 詔安腔翻譯整合試驗(TestCase):
         super(cls, cls).setUpClass()
         try:
             cls.服務 = Moses服務({'詔安腔': Moses載入.摩西翻譯模型('詔安腔', 8501)})
-        except Exception as 錯誤:
-            print(錯誤)
-            模型訓練.訓練一个摩西翻譯模型('詔安腔')
+        except Exception:
+            Moses模型訓練.訓練一个摩西翻譯模型('詔安腔')
             cls.服務 = Moses服務({'詔安腔': Moses載入.摩西翻譯模型('詔安腔', 8501)})
         cls.ProxyPatch = patch('Pyro4.Proxy')
         ProxyMock = cls.ProxyPatch.start()

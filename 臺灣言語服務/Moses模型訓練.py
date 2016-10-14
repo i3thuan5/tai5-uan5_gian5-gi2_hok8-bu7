@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from os import listdir, makedirs
-from os.path import join, basename, isdir
-from sys import stderr
-import traceback
+from os import makedirs
+from os.path import join, basename
 
 
 from 臺灣言語服務.輸出 import 資料輸出工具
@@ -21,35 +19,14 @@ from 臺灣言語服務.語言判斷 import 語言判斷
 from 臺灣言語工具.語言模型.實際語言模型 import 實際語言模型
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
-from 臺灣言語服務.資料模型路徑 import 資料路徑
-'''
-python manage.py 訓練一个語言 閩南語
-python manage.py 訓練全部語言
-'''
 
 
-class 模型訓練(程式腳本):
-
-    @classmethod
-    def 走(cls):
-        cls.輸出全部語料()
-        cls.訓練全部摩西翻譯模型()
+class Moses模型訓練(程式腳本):
 
     @classmethod
     def 輸出全部語料(cls):
         語料 = 資料輸出工具()
         語料.輸出翻譯語料()
-
-    @classmethod
-    def 訓練全部摩西翻譯模型(cls):
-        for 語言 in listdir(資料路徑):
-            if isdir(翻譯語料資料夾(語言)):
-                try:
-                    cls.訓練一个摩西翻譯模型(語言)
-                except:
-                    print('{}的摩西模型訓練失敗！！'.format(語言), file=stderr)
-                    traceback.print_exc()
-                    print(file=stderr)
 
     @classmethod
     def 訓練一个摩西翻譯模型(cls, 語言):
