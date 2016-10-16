@@ -10,6 +10,16 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音相容教會羅馬字音標 import 臺灣閩南語羅馬字拼音相容教會羅馬字音標
+from 臺灣言語工具.語音合成.閩南語變調 import 閩南語變調
+from 臺灣言語工具.語音辨識.文本音值對照表.閩南語文本音值表 import 閩南語文本音值表
+from 臺灣言語工具.語音合成.決策樹仔問題.閩南語決策樹仔 import 閩南語決策樹仔
+from 臺灣言語工具.音標系統.客話.臺灣客家話拼音 import 臺灣客家話拼音
+from 臺灣言語工具.語音辨識.文本音值對照表.客家話文本音值表 import 客家話文本音值表
+from 臺灣言語工具.語音合成.決策樹仔問題.客家話決策樹仔 import 客家話決策樹仔
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -115,6 +125,15 @@ CORS_ALLOW_CREDENTIALS = True
 
 HOK8_BU7_SIAT4_TING7 = {
     '閩南語': {
-        '解析拼音': 臺灣閩南語羅馬字拼音相容教會羅馬字音
+        '音標系統': 臺灣閩南語羅馬字拼音,
+        '解析拼音': 臺灣閩南語羅馬字拼音相容教會羅馬字音標,
+        '變調規則': 閩南語變調,
+        '文本音值表': 閩南語文本音值表,
+        '決策樹仔': 閩南語決策樹仔,
+    },
+    '詔安腔': {
+        '音標系統': 臺灣客家話拼音,
+        '文本音值表': 客家話文本音值表,
+        '決策樹仔': 客家話決策樹仔,
     },
 }
