@@ -112,3 +112,9 @@ MIDDLEWARE_CLASSES += (
 )
 CORS_ORIGIN_REGEX_WHITELIST = ('^.*$', )
 CORS_ALLOW_CREDENTIALS = True
+
+HOK8_BU7_SIAT4_TING7 = {
+    '閩南語': {
+        '解析拼音': 臺灣閩南語羅馬字拼音相容教會羅馬字音
+    },
+}

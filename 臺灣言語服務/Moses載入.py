@@ -3,17 +3,17 @@ from os import listdir
 from os.path import join
 
 
+from django.conf import settings
 from 臺灣言語工具.翻譯.摩西工具.摩西服務端 import 摩西服務端
 from 臺灣言語工具.辭典.型音辭典 import 型音辭典
 from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶端
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
-from 臺灣言語服務.公家載入 import 公家載入
 from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
-class Moses載入(公家載入):
+class Moses載入:
 
     @classmethod
     def 摩西模型(cls):
@@ -40,13 +40,18 @@ class Moses載入(公家載入):
 
         語言模型檔案 = join(母語翻譯模型資料夾, '加工語料', '語言模型資料夾', '語言模型.lm')
         母語語言模型 = KenLM語言模型(語言模型檔案)
-
+        
+        服務設定 = settings.HOK8_BU7_SIAT4_TING7[母語腔口]
+        try:
+            解析拼音=服務設定['解析拼音']
+        except:
+            解析拼音=服務設定['音標系統']
         母語模型 = {
             '摩西用戶端': 母語摩西用戶端,
             '辭典': 母語辭典,
             '語言模型': 母語語言模型,
-            '拼音': cls._語言解析拼音(母語腔口),
-            '字綜合標音': cls._語言字綜合標音(母語腔口),
+            '拼音': 解析拼音,
+            '字綜合標音': 服務設定['音標系統'],
             '摩西服務': 服務,
         }
         return 母語模型

@@ -3,13 +3,13 @@ from os import listdir
 from os.path import isfile
 
 
+from django.conf import settings
 from 臺灣言語工具.語音合成.HTS工具.HTS合成模型 import HTS合成模型
-from 臺灣言語服務.公家載入 import 公家載入
 from 臺灣言語服務.資料模型路徑 import 合成模型路徑
 from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
-class HTS載入(公家載入):
+class HTS載入:
 
     @classmethod
     def HTS模型(cls):
@@ -21,8 +21,13 @@ class HTS載入(公家載入):
 
     @classmethod
     def HTS合成模型(cls, 母語腔口):
+        服務設定 = settings.HOK8_BU7_SIAT4_TING7[母語腔口]
+        try:
+            變調規則 = 服務設定['變調規則']
+        except:
+            變調規則 = None
         return {
             '模型': HTS合成模型(合成模型路徑(母語腔口)),
-            '拼音': cls._語言拼音(母語腔口),
-            '變調': cls._語言變調(母語腔口),
+            '拼音': 服務設定['音標系統'],
+            '變調': 變調規則,
         }
