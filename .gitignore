@@ -62,3 +62,5 @@ venv
 文件/_*
 MANIFEST
 /node_modules/
+/資料庫影音檔案
+翻譯模型
