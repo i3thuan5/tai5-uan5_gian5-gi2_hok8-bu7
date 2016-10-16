@@ -45,6 +45,7 @@ branches:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
+- coverage run --source=臺灣言語服務 manage.py test -p "test*單元試驗.py"
 - echo $TEST_SUITE
 - $TEST_SUITE
 after_success:
