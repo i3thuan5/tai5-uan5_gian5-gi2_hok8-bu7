@@ -3,13 +3,13 @@ from posix import listdir
 from sys import stderr
 import traceback
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 
 from 臺灣言語工具.翻譯.摩西工具.安裝摩西翻譯佮相關程式 import 安裝摩西翻譯佮相關程式
 from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
-from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
@@ -52,7 +52,8 @@ class Command(BaseCommand):
         Moses模型訓練.輸出全部語料(翻譯語料資料夾)
         for 一个語言 in 語言陣列:
             try:
-                Moses模型訓練.訓練一个摩西翻譯模型(翻譯語料資料夾, 翻譯模型資料夾, 一个語言)
+                服務設定 = settings.HOK8_BU7_SIAT4_TING7[一个語言]
+                Moses模型訓練.訓練一个摩西翻譯模型(一个語言, 服務設定['語族'])
             except FileNotFoundError:
                 print('訓練「{}」時發生問題！！'.format(一个語言), file=stderr)
                 traceback.print_exc()
