@@ -31,7 +31,10 @@ class HTS介面:
         except:
             查詢腔口 = '閩南語'
         wav格式資料 = self.服務.語音合成實作(查詢腔口, 查詢語句)
-        return self.音檔包做回應(b64decode(wav格式資料['data']))
+        try:
+            return self.音檔包做回應(b64decode(wav格式資料['data']))
+        except:
+            return self.音檔包做回應(wav格式資料)
 
     @csrf_exempt
     def 文本直接合成(self, request):
@@ -50,7 +53,10 @@ class HTS介面:
         except:
             查詢腔口 = '閩南語'
         wav格式資料 = self.服務.文本直接合成(查詢腔口, 查詢語句)
-        return self.音檔包做回應(b64decode(wav格式資料['data']))
+        try:
+            return self.音檔包做回應(b64decode(wav格式資料['data']))
+        except:
+            return self.音檔包做回應(wav格式資料)
 
     def 音檔包做回應(self, 音檔):
         回應 = HttpResponse()

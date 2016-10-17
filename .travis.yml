@@ -4,7 +4,9 @@ python:
 - '3.4'
 - '3.5'
 env:
-  matrix: 
+- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*單元試驗.py'
+- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*合成整合試驗.py'
+- TEST_SUITE='flake8 --exclude=venv .'
 addons:
   apt:
     sources:
@@ -35,6 +37,7 @@ addons:
     - libmp3lame0
     - libavcodec-extra-53
 install:
+- pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3 pyro4
 - pip install flake8
 - pip install python-coveralls
 branches:
@@ -42,9 +45,8 @@ branches:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
-- pip install .
-- coverage run --source=臺灣言語服務 manage.py test -p 'test*單元試驗.py'
-- flake8 . --exclude=venv,文件 --count --show-source --ignore=E501
+- echo $TEST_SUITE
+- $TEST_SUITE
 after_success:
 - coverage report
 - coveralls

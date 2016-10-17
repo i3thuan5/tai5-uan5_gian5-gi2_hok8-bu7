@@ -26,6 +26,8 @@ def 揣工具包(頭):
             工具包.append(目錄.replace('/', '.'))
     return 工具包
 
+github網址 = 'https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7'
+
 setup(
     name='tai5-uan5_gian5-gi2_hok8-bu7',
     packages=揣工具包('臺灣言語服務'),
@@ -35,7 +37,7 @@ setup(
     author='薛丞宏',
     author_email='ihcaoe@gmail.com',
     url='https://xn--v0qr21b.xn--kpry57d/',
-    download_url='https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7',
+    download_url=github網址,
     keywords=[
         '語料庫', '語言合成', '機器翻譯',
         'Taiwan', 'Natural Language', 'Corpus',
