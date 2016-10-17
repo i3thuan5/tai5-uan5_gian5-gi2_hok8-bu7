@@ -4,8 +4,8 @@ python:
 - '3.4'
 - '3.5'
 env:
-- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p "test*單元試驗.py"'
-- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p "test*合成整合試驗.py"'
+- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*單元試驗.py'
+- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*合成整合試驗.py'
 - TEST_SUITE='flake8 --exclude=venv .'
 addons:
   apt:
@@ -45,8 +45,6 @@ branches:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
-- TT="'test*單元試驗.py'"
-- coverage run --source=臺灣言語服務 manage.py test -p $TT
 - echo $TEST_SUITE
 - $TEST_SUITE
 after_success:
