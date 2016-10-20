@@ -20,7 +20,7 @@ class 詔安腔翻譯整合試驗(TestCase):
         try:
             cls.服務 = Moses服務({'詔安腔': Moses載入.摩西翻譯模型('詔安腔', 8501)})
         except Exception:
-            Moses模型訓練.訓練一个摩西翻譯模型('詔安腔')
+            Moses模型訓練.訓練一个摩西翻譯模型('詔安腔', '漢語')
             cls.服務 = Moses服務({'詔安腔': Moses載入.摩西翻譯模型('詔安腔', 8501)})
         cls.ProxyPatch = patch('Pyro4.Proxy')
         ProxyMock = cls.ProxyPatch.start()
