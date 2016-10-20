@@ -5,6 +5,7 @@ from django.test.testcases import TestCase
 
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from os import remove
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 
 
 class Kaldi匯出辭典單元試驗(TestCase):
@@ -23,7 +24,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
         聲類 = set()
         韻類 = {}
         調類 = {}
-        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞)
+        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞, 臺灣閩南語羅馬字拼音)
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
@@ -37,7 +38,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
         聲類 = set()
         韻類 = {}
         調類 = {}
-        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞)
+        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞, 臺灣閩南語羅馬字拼音)
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
@@ -51,7 +52,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
         聲類 = set()
         韻類 = {}
         調類 = {}
-        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞)
+        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞, 臺灣閩南語羅馬字拼音)
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
@@ -65,7 +66,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
         聲類 = set()
         韻類 = {}
         調類 = {}
-        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞)
+        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 分詞, 臺灣閩南語羅馬字拼音)
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)
@@ -78,7 +79,7 @@ class Kaldi匯出辭典單元試驗(TestCase):
         聲類 = set()
         韻類 = {}
         調類 = {}
-        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, [], 分詞)
+        Kaldi語料匯出._資料加到辭典(聲類, 韻類, 調類, 全部詞, [], 分詞, 臺灣閩南語羅馬字拼音)
         self.assertEqual(len(聲類), 0)
         self.assertEqual(len(韻類), 0)
         self.assertEqual(len(調類), 0)

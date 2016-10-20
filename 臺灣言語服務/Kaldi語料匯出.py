@@ -8,7 +8,6 @@ from shutil import rmtree
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
-from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
 from 臺灣言語服務.漢語語音處理 import 漢語語音處理
 from 臺灣言語工具.基本物件.公用變數 import 標點符號
@@ -19,7 +18,17 @@ class Kaldi語料匯出(程式腳本):
     環境噪音 = 'NSN\tNSN'
 
     @classmethod
-    def 匯出一種語言語料(cls, 語言, 語料資料夾, 資料夾名):
+    def 初使化辭典資料(cls):
+        return {
+            '全部詞': {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN'},
+            '全部句': [],
+            '聲類': set(),
+            '韻類': {},
+            '調類': {},
+        }
+
+    @classmethod
+    def 匯出一種語言語料(cls, 語言, 音標系統, 輸出試驗音檔, 語料資料夾, 資料夾名, 辭典資料):
         訓練語料資料夾 = join(語料資料夾, 資料夾名, 'train')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
@@ -29,45 +38,44 @@ class Kaldi語料匯出(程式腳本):
                 with cls._寫檔(訓練語料資料夾, 'segments') as 語句目錄:
                     with cls._寫檔(訓練語料資料夾, 'reco2file_and_channel') as 音檔對應頻道:
                         with cls._寫檔(訓練語料資料夾, 'utt2spk') as 語句對應語者:
-                            cls._揣影音輸出(語言, 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者)
+                            cls._揣影音輸出(
+                                語言, 音標系統, 輸出試驗音檔,
+                                聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料
+                            )
 
     @classmethod
-    def 做辭典資料(cls, 語言文本, 語料資料夾, 資料夾名):
+    def 辭典資料載入語句文本(cls, 語言文本, 音標系統, 辭典資料):
+        for 一逝 in cls._讀檔案(語言文本):
+            這擺參數 = {'音標系統': 音標系統, '一逝': 一逝}
+            這擺參數.update(辭典資料)
+            cls._資料加到辭典(**這擺參數)
+
+    @classmethod
+    def 匯出辭典資料(cls, 辭典資料, 語料資料夾, 資料夾名):
         訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 'dict')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
         cls._陣列寫入檔案(join(訓練語料資料夾, 'optional_silence.txt'), ["SIL"])
+        cls._陣列寫入檔案(join(訓練語料資料夾, 'lexicon.txt'), sorted(辭典資料['全部詞']))
+
         安靜噪音集 = ["SIL", "SPN"]
-        全部詞 = {'SIL\tSIL', '<UNK>\tSPN', 'SPN\tSPN'}
-        全部句 = []
-        聲類 = set()
-        韻類 = {}
-        調類 = {}
-        for 一逝 in cls._讀檔案(語言文本):
-            cls._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 一逝)
-        for 一逝 in cls._讀檔案(join(語料資料夾, 資料夾名, 'train', 'text')):
-            try:
-                文本部份 = 一逝.split(' ', 1)[1]
-            except:
-                pass
-            else:
-                cls._資料加到辭典(聲類, 韻類, 調類, 全部詞, 全部句, 文本部份)
-        if cls.環境噪音 in 全部詞:
+        if cls.環境噪音 in 辭典資料['全部詞']:
             安靜噪音集.append("NSN")
-        聲韻類 = 聲類
-        for 仝韻 in 韻類.values():
-            聲韻類.add(' '.join(sorted(仝韻)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'silence_phones.txt'), 安靜噪音集)
-        調問題 = {' '.join(安靜噪音集)}
-        for 仝調 in 調類.values():
-            調問題.add(' '.join(sorted(仝調)))
+
+        聲韻類 = 辭典資料['聲類'].copy()
+        for 仝韻 in 辭典資料['韻類'].values():
+            聲韻類.add(' '.join(sorted(仝韻)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'nonsilence_phones.txt'), sorted(聲韻類))
+
+        調問題 = {' '.join(安靜噪音集)}
+        for 仝調 in 辭典資料['調類'].values():
+            調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'extra_questions.txt'), sorted(調問題))
-        cls._陣列寫入檔案(join(訓練語料資料夾, 'lexicon.txt'), sorted(全部詞))
 
     @classmethod
-    def 做語言模型(cls, 語言文本, 語料資料夾, 資料夾名):
+    def 匯出語言模型(cls, 語言文本, 語料資料夾, 資料夾名):
         訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 'lm')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
@@ -75,14 +83,15 @@ class Kaldi語料匯出(程式腳本):
         KenLM語言模型訓練().訓練([語言文本], 訓練語料資料夾)
 
     @classmethod
-    def _資料加到辭典(cls, 聲類, 韻類, 調類, 全部詞, 全部句, 一逝):
+    def _資料加到辭典(cls, 聲類, 韻類, 調類, 全部詞, 全部句, 一逝, 音標系統):
         句物件 = 拆文分析器.分詞句物件(一逝)
         一句 = []
+        外來語數量 = 0
         for 詞物件 in 句物件.網出詞物件():
             分詞 = 詞物件.看分詞()
             try:
                 聲韻陣列 = []
-                for 字物件 in 詞物件.轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
+                for 字物件 in 詞物件.轉音(音標系統, '音值').篩出字物件():
                     聲, 韻, 調 = 字物件.音
                     聲韻陣列.append(聲)
                     聲類.add(聲)
@@ -116,12 +125,15 @@ class Kaldi語料匯出(程式腳本):
                     全部詞.add(一項)
                 else:
                     一項 = '{}\tSPN'.format(分詞)
+                    外來語數量 += 1
 #                     全部詞.add(一項)
             一句.append(分詞)
         全部句.append(' '.join(一句))
+        return len(一句), 外來語數量
 
     @classmethod
-    def _揣影音輸出(cls, 語言, 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者):
+    def _揣影音輸出(cls, 語言, 音標系統, 輸出試驗音檔,
+               聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料):
         第幾个 = 0
         for 第幾个, 影音 in enumerate(
             影音表.objects
@@ -161,15 +173,11 @@ class Kaldi語料匯出(程式腳本):
                             語者名對應輸出名[語者名] = 語者
                     語句名 = '{0}-ku{1:07}'.format(語者, 第幾句)
                     內容 = 一句聽拍['內容']
-                    有音數量 = 0
-                    外來語數量 = 0
-                    for 字物件 in 拆文分析器.分詞句物件(內容).轉音(臺灣閩南語羅馬字拼音, '音值').篩出字物件():
-                        try:
-                            _聲, _韻, _調 = 字物件.音
-                            有音數量 += 1
-                        except:
-                            外來語數量 += 1
-                    if 有音數量 <= 外來語數量 * 2:
+                    這擺參數 = {'音標系統': 音標系統, '一逝': 內容}
+                    這擺參數.update(辭典資料)
+                    詞數量, 外來語數量 = cls._資料加到辭典(**這擺參數)
+#                     詞數量, 外來語數量 = cls._資料加到辭典(音標系統=音標系統,一逝=內容, **辭典資料,)
+                    if not 輸出試驗音檔 and 詞數量 <= 外來語數量 * 3:
                         continue
                     print(語句名, 內容, file=聽拍內容)
     #                 sw02001-A_000098-001156 sw02001-A 0.98 11.56
