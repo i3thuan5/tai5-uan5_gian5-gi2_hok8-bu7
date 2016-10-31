@@ -24,8 +24,7 @@ class Moses模型訓練(程式腳本):
 
     @classmethod
     def 輸出全部語料(cls):
-        語料 = 資料輸出工具()
-        語料.輸出翻譯語料()
+        資料輸出工具().輸出翻譯語料()
 
     @classmethod
     def 訓練一个摩西翻譯模型(cls, 語言, 語族):
