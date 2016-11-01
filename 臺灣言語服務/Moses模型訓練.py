@@ -60,7 +60,7 @@ class Moses模型訓練(程式腳本):
                         if 字物件.音 != 無音 and 字物件.型 not in 標點符號:
                             全部詞.add(詞物件)
                 except 解析錯誤 as 錯誤:
-                    print('{}\n{}\n{}'.format(錯誤,一逝,語言資料夾))
+                    print('{}\n{}\n{}'.format(錯誤, 一逝, 語言資料夾))
 
         母語辭典檔名 = join(翻譯模型資料夾, '母語辭典.txt.gz')
         詞文本 = []
