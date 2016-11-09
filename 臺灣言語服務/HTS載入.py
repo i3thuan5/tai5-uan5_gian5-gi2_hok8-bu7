@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-from os import listdir
 from os.path import isfile
 
 
 from django.conf import settings
 from 臺灣言語工具.語音合成.HTS工具.HTS合成模型 import HTS合成模型
 from 臺灣言語服務.資料模型路徑 import 合成模型路徑
-from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
 class HTS載入:
@@ -14,7 +12,7 @@ class HTS載入:
     @classmethod
     def HTS模型(cls):
         合成母語模型 = {}
-        for 母語腔口 in sorted(listdir(資料路徑)):
+        for 母語腔口 in sorted(settings.HOK8_BU7_SIAT4_TING7.keys()):
             if isfile(合成模型路徑(母語腔口)):
                 合成母語模型[母語腔口] = cls.HTS合成模型(母語腔口)
         return 合成母語模型
