@@ -2,8 +2,9 @@
 from os import listdir
 from os.path import join
 
-
 from django.conf import settings
+
+
 from 臺灣言語工具.翻譯.摩西工具.摩西服務端 import 摩西服務端
 from 臺灣言語工具.辭典.型音辭典 import 型音辭典
 from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
@@ -50,8 +51,9 @@ class Moses載入:
             '摩西用戶端': 母語摩西用戶端,
             '辭典': 母語辭典,
             '語言模型': 母語語言模型,
-            '拼音': 解析拼音,
-            '字綜合標音': 服務設定['音標系統'],
+            '解析拼音': 解析拼音,
+            '音標系統': 服務設定['音標系統'],
+            '字綜合標音': 服務設定['字綜合標音'],
             '摩西服務': 服務,
         }
         return 母語模型
