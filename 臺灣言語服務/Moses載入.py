@@ -17,7 +17,9 @@ class Moses載入:
     @classmethod
     def 摩西模型(cls):
         翻譯母語模型 = {}
-        for 第幾个, 母語腔口 in enumerate(sorted(settings.HOK8_BU7_SIAT4_TING7.keys())):
+        for 第幾个, 母語腔口 in enumerate(sorted(
+            settings.HOK8_BU7_SIAT4_TING7.keys()
+        )):
             摩西埠 = 8500 + 第幾个
             try:
                 翻譯母語模型[母語腔口] = cls.摩西翻譯模型(母語腔口, 摩西埠)
