@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from os import listdir
 from os.path import join
 
 from django.conf import settings
@@ -11,7 +10,6 @@ from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.翻譯.摩西工具.摩西用戶端 import 摩西用戶端
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
-from 臺灣言語服務.資料模型路徑 import 資料路徑
 
 
 class Moses載入:
@@ -19,7 +17,9 @@ class Moses載入:
     @classmethod
     def 摩西模型(cls):
         翻譯母語模型 = {}
-        for 第幾个, 母語腔口 in enumerate(sorted(listdir(資料路徑))):
+        for 第幾个, 母語腔口 in enumerate(sorted(
+            settings.HOK8_BU7_SIAT4_TING7.keys()
+        )):
             摩西埠 = 8500 + 第幾个
             try:
                 翻譯母語模型[母語腔口] = cls.摩西翻譯模型(母語腔口, 摩西埠)
