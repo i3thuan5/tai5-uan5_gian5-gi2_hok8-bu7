@@ -112,7 +112,7 @@ class Kaldi語料匯出(程式腳本):
                             except:
                                 調類[調] = {一个音素調}
                         else:
-                            if 一个音素 not in 韻類 or 調 not in 調類:
+                            if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
                                 raise RuntimeError('語料無這个韻抑是調')
                 一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
                 全部詞.add(一項)
