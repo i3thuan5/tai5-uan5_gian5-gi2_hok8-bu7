@@ -26,7 +26,9 @@ def 揣工具包(頭):
             工具包.append(目錄.replace('/', '.'))
     return 工具包
 
+
 github網址 = 'https://github.com/sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7'
+
 
 setup(
     name='tai5-uan5_gian5-gi2_hok8-bu7',
