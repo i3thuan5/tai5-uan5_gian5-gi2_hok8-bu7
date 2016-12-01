@@ -9,7 +9,6 @@ from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.語音辨識.HTK工具.HTK辨識模型訓練 import HTK辨識模型訓練
 from 臺灣言語資料庫.資料模型 import 影音表
-from 臺灣言語工具.語音辨識.漢語轉辨識標仔 import 漢語轉辨識標仔
 from 臺灣言語資料庫.資料模型 import 資料屬性表
 from 臺灣言語工具.語音合成.語音標仔轉換 import 語音標仔轉換
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
@@ -26,6 +25,7 @@ class HTS模型訓練(程式腳本):
         makedirs(音檔, exist_ok=True)
         makedirs(標仔, exist_ok=True)
         makedirs(合成標仔, exist_ok=True)
+        全部音值 = set()
         for 第幾个, 影音 in enumerate(
             影音表.objects
             .distinct()
@@ -42,9 +42,11 @@ class HTS模型訓練(程式腳本):
                 實際音句物件 = 音值句物件
 
             完整標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
-            標 = '\n'.join(語音標仔轉換.提出標仔陣列主要音值(完整標仔陣列))
+            主要音值陣列 = 語音標仔轉換.提出標仔陣列主要音值(完整標仔陣列)
+            標 = '\n'.join(主要音值陣列)
             合成標 = '\n'.join(完整標仔陣列)
-            
+            全部音值 |= set(主要音值陣列)
+
             with open(join(標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
                 print(標, file=目標txt檔案)
             with open(join(合成標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
@@ -54,13 +56,13 @@ class HTS模型訓練(程式腳本):
                 影音資料.open()
                 目標wav檔案.write(影音資料.read())
                 影音資料.close()
+        音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
+        cls._陣列寫入檔案(音節聲韻對照檔, sorted(全部音值))
 
     @classmethod
     def 對齊聲韻(cls, 合成語料資料夾, 辨識模型資料夾路徑, 文本音值表):
         makedirs(辨識模型資料夾路徑, exist_ok=True)
-        音節聲韻對照檔 = join(辨識模型資料夾路徑, '聲韻對照.dict')
-        with open(音節聲韻對照檔, 'w') as 檔案:
-            print('\n'.join(文本音值表.音節佮聲韻對照()), file=檔案)
+        音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
 
         對齊聲韻 = HTK辨識模型訓練.快速對齊聲韻(
             join(合成語料資料夾, '音檔'),
