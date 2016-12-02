@@ -23,8 +23,8 @@ class HTS模型訓練(程式腳本):
         孤音標仔資料夾 = join(合成語料資料夾, '孤音標仔')
         相依標仔資料夾 = join(合成語料資料夾, '相依標仔')
         makedirs(音檔, exist_ok=True)
-        makedirs(標仔, exist_ok=True)
-        makedirs(合成標仔, exist_ok=True)
+        makedirs(孤音標仔資料夾, exist_ok=True)
+        makedirs(相依標仔資料夾, exist_ok=True)
         全部音值 = set()
         for 第幾个, 影音 in enumerate(
             影音表.objects
