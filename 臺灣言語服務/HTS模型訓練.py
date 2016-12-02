@@ -53,7 +53,8 @@ class HTS模型訓練(程式腳本):
                 目標wav檔案.write(影音資料.read())
                 影音資料.close()
         音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
-        cls._陣列寫入檔案(音節聲韻對照檔, sorted(全部音值))
+        聲韻對照 = ['{0}\t{0}'.format(音值) for 音值 in sorted(全部音值)]
+        cls._陣列寫入檔案(音節聲韻對照檔, 聲韻對照)
 
     @classmethod
     def 對齊聲韻(cls, 合成語料資料夾, 辨識模型資料夾路徑, 文本音值表):
