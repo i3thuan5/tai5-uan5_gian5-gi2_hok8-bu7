@@ -9,7 +9,6 @@ from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.語音辨識.HTK工具.HTK辨識模型訓練 import HTK辨識模型訓練
 from 臺灣言語資料庫.資料模型 import 影音表
-from 臺灣言語工具.語音辨識.漢語轉辨識標仔 import 漢語轉辨識標仔
 from 臺灣言語資料庫.資料模型 import 資料屬性表
 from 臺灣言語工具.語音合成.語音標仔轉換 import 語音標仔轉換
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
@@ -21,11 +20,12 @@ class HTS模型訓練(程式腳本):
     @classmethod
     def 輸出一種語言語料(cls, 合成語料資料夾, 語言, 語者, 音標系統, 變調規則):
         音檔 = join(合成語料資料夾, '音檔')
-        標仔 = join(合成語料資料夾, '音值標仔')
-        合成標仔 = join(合成語料資料夾, '相依標仔')
+        孤音標仔資料夾 = join(合成語料資料夾, '孤音標仔')
+        相依標仔資料夾 = join(合成語料資料夾, '相依標仔')
         makedirs(音檔, exist_ok=True)
-        makedirs(標仔, exist_ok=True)
-        makedirs(合成標仔, exist_ok=True)
+        makedirs(孤音標仔資料夾, exist_ok=True)
+        makedirs(相依標仔資料夾, exist_ok=True)
+        全部音值 = set()
         for 第幾个, 影音 in enumerate(
             影音表.objects
             .distinct()
@@ -41,39 +41,30 @@ class HTS模型訓練(程式腳本):
             except:
                 實際音句物件 = 音值句物件
 
-            標 = '\n'.join(
-                漢語轉辨識標仔
-                .物件轉音節標仔(
-                    文本句物件,
-                    音標系統
-                )
-            )
-            合成標 = '\n'.join(
-                語音標仔轉換.物件轉完整合成標仔(
-                    實際音句物件
-                )
-            )
-            with open(join(標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
-                print(標, file=目標txt檔案)
-            with open(join(合成標仔, 'im{:07}.lab'.format(第幾个)), 'w') as 目標txt檔案:
-                print(合成標, file=目標txt檔案)
+            相依標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
+            孤音標仔陣列 = 語音標仔轉換.提出標仔陣列主要音值(相依標仔陣列)
+            全部音值 |= set(孤音標仔陣列)
+
+            cls._陣列寫入檔案(join(孤音標仔資料夾, 'im{:07}.lab'.format(第幾个)), 孤音標仔陣列)
+            cls._陣列寫入檔案(join(相依標仔資料夾, 'im{:07}.lab'.format(第幾个)), 相依標仔陣列)
             with open(join(音檔, 'im{:07}.wav'.format(第幾个)), 'wb') as 目標wav檔案:
                 影音資料 = 影音.影音資料
                 影音資料.open()
                 目標wav檔案.write(影音資料.read())
                 影音資料.close()
+        音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
+        聲韻對照 = ['{0}\t{0}'.format(音值) for 音值 in sorted(全部音值)]
+        cls._陣列寫入檔案(音節聲韻對照檔, 聲韻對照)
 
     @classmethod
     def 對齊聲韻(cls, 合成語料資料夾, 辨識模型資料夾路徑, 文本音值表):
         makedirs(辨識模型資料夾路徑, exist_ok=True)
-        音節聲韻對照檔 = join(辨識模型資料夾路徑, '聲韻對照.dict')
-        with open(音節聲韻對照檔, 'w') as 檔案:
-            print('\n'.join(文本音值表.音節佮聲韻對照()), file=檔案)
+        聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
 
         對齊聲韻 = HTK辨識模型訓練.快速對齊聲韻(
             join(合成語料資料夾, '音檔'),
-            join(合成語料資料夾, '音值標仔'),
-            音節聲韻對照檔,
+            join(合成語料資料夾, '孤音標仔'),
+            聲韻對照檔,
             join(辨識模型資料夾路徑, 'HTK對齊標仔過程'),
         )
         return 對齊聲韻
@@ -83,19 +74,19 @@ class HTS模型訓練(程式腳本):
         HTS訓練過程目錄 = cls._細項目錄(合成模型資料夾路徑, 'HTS訓練過程')
         HTS資料目錄 = cls._細項目錄(HTS訓練過程目錄, 'data')
         HTS標仔目錄 = cls._細項目錄(HTS資料目錄, 'labels')
-        HTS音值標仔目錄 = join(HTS標仔目錄, 'mono')
-        HTS完整標仔目錄 = join(HTS標仔目錄, 'full')
+        HTS孤音標仔目錄 = join(HTS標仔目錄, 'mono')
+        HTS相依標仔目錄 = join(HTS標仔目錄, 'full')
         for 來源, 目標 in [
-            (對齊聲韻結果資料夾, HTS音值標仔目錄),
-            (join(合成語料資料夾, '相依標仔'), HTS完整標仔目錄),
+            (對齊聲韻結果資料夾, HTS孤音標仔目錄),
+            (join(合成語料資料夾, '相依標仔'), HTS相依標仔目錄),
         ]:
             if exists(目標):
                 shutil.rmtree(目標)
             shutil.copytree(來源, 目標)
 
         HTS試驗標仔目錄 = cls._細項目錄(HTS標仔目錄, 'gen')
-        for 檔名 in listdir(HTS完整標仔目錄)[:10]:
-            來源完整標仔 = join(HTS完整標仔目錄, 檔名)
+        for 檔名 in listdir(HTS相依標仔目錄)[:10]:
+            來源完整標仔 = join(HTS相依標仔目錄, 檔名)
             目標完整標仔 = join(HTS試驗標仔目錄, 檔名)
             shutil.copy(來源完整標仔, 目標完整標仔)
 
