@@ -37,7 +37,7 @@ addons:
     - libmp3lame0
     - libavcodec-extra-53
 install:
-- pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3 pyro4
+- pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3 pyro4 django-ranged-fileresponse
 - pip install flake8
 - pip install python-coveralls
 branches:
