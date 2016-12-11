@@ -31,7 +31,7 @@ class 閩南語合成整合試驗(TestCase):
         }
         連線回應 = self.服務功能.語音合成(連線要求)
         self.assertEqual(連線回應.status_code, 200)
-        with io.BytesIO(連線回應.content) as 資料:
+        with io.BytesIO(連線回應.streaming_content) as 資料:
             with wave.open(資料, 'rb') as 聲音檔:
                 self.assertGreaterEqual(聲音檔.getframerate(), 16000)
 
@@ -43,7 +43,7 @@ class 閩南語合成整合試驗(TestCase):
         }
         連線回應 = self.服務功能.語音合成(連線要求)
         self.assertEqual(連線回應.status_code, 200)
-        with io.BytesIO(連線回應.content) as 資料:
+        with io.BytesIO(連線回應.streaming_content) as 資料:
             with wave.open(資料, 'rb') as 聲音檔:
                 self.assertGreaterEqual(聲音檔.getframerate(), 16000)
 
@@ -55,7 +55,7 @@ class 閩南語合成整合試驗(TestCase):
         }
         連線回應 = self.服務功能.語音合成(連線要求)
         self.assertEqual(連線回應.status_code, 200)
-        with io.BytesIO(連線回應.content) as 資料:
+        with io.BytesIO(連線回應.streaming_content) as 資料:
             with wave.open(資料, 'rb') as 聲音檔:
                 self.assertGreaterEqual(聲音檔.getframerate(), 16000)
                 self.assertGreater(聲音檔.getnframes(), 0)
@@ -74,7 +74,7 @@ class 閩南語合成整合試驗(TestCase):
         }
         連線回應 = self.服務功能.語音合成(連線要求)
         self.assertEqual(連線回應.status_code, 200)
-        self.assertEqual(連線回應.content, 原本連線回應.content)
+        self.assertEqual(連線回應.streaming_content, 原本連線回應.streaming_content)
 
     def test_無參數預設閩南語(self):
         連線要求 = RequestFactory().get('/語音合成')
@@ -88,4 +88,4 @@ class 閩南語合成整合試驗(TestCase):
         連線要求.GET = {}
         連線回應 = self.服務功能.語音合成(連線要求)
         self.assertEqual(連線回應.status_code, 200)
-        self.assertEqual(連線回應.content, 原本連線回應.content)
+        self.assertEqual(連線回應.streaming_content, 原本連線回應.streaming_content)
