@@ -34,9 +34,9 @@ class HTS介面:
             查詢腔口 = '閩南語'
         wav格式資料 = self.服務.語音合成實作(查詢腔口, 查詢語句)
         try:
-            return self.音檔包做回應(b64decode(wav格式資料['data']))
+            return self.音檔包做回應(request, b64decode(wav格式資料['data']))
         except:
-            return self.音檔包做回應(wav格式資料)
+            return self.音檔包做回應(request, wav格式資料)
 
     @csrf_exempt
     def 文本直接合成(self, request):
