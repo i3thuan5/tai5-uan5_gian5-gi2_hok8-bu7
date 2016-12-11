@@ -3,7 +3,7 @@ from base64 import b64decode
 import io
 
 import Pyro4
-from django.http.response import JsonResponse, HttpResponse
+from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ranged_fileresponse import RangedFileResponse
 
