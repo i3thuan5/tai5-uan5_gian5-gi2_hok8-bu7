@@ -60,5 +60,6 @@ setup(
         'tai5-uan5_gian5-gi2_tsu1-liau7-khoo3>=3.1.13',
         'pyro4',
         'gunicorn',
+        'django-ranged-fileresponse',
     ],
 )
