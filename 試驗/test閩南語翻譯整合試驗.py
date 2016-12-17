@@ -44,7 +44,7 @@ class 閩南語翻譯整合試驗(TestCase):
         連線回應 = self.服務功能.正規化翻譯(連線要求)
         self.assertEqual(連線回應.status_code, 200)
         回應物件 = json.loads(連線回應.content.decode("utf-8"))
-        self.assertIn('翻譯正規化結果', 回應物件)
+        self.assertIn('分詞', 回應物件)
         self.assertIn('綜合標音', 回應物件)
 
     def test_兩句翻譯(self):
@@ -56,7 +56,7 @@ class 閩南語翻譯整合試驗(TestCase):
         連線回應 = self.服務功能.正規化翻譯(連線要求)
         self.assertEqual(連線回應.status_code, 200)
         回應物件 = json.loads(連線回應.content.decode("utf-8"))
-        self.assertIn('翻譯正規化結果', 回應物件)
+        self.assertIn('分詞', 回應物件)
         self.assertIn('綜合標音', 回應物件)
 
     def test_無腔口預設閩南語(self):
