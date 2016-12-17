@@ -95,3 +95,15 @@ class 閩南語翻譯整合試驗(TestCase):
         self.assertEqual(連線回應.status_code, 200)
         回應物件 = json.loads(連線回應.content.decode("utf-8"))
         self.assertEqual(回應物件, 閩南語回應物件)
+
+    def test_一个空白(self):
+        連線要求 = RequestFactory().get('/正規化翻譯')
+        連線要求.GET = {
+            '查詢腔口': '閩南語',
+            '查詢語句': ' '
+        }
+        連線回應 = self.服務功能.正規化翻譯(連線要求)
+        self.assertEqual(連線回應.status_code, 200)
+        回應物件 = json.loads(連線回應.content.decode("utf-8"))
+        self.assertIn('分詞', 回應物件)
+        self.assertIn('綜合標音', 回應物件)
