@@ -45,7 +45,7 @@ class Moses模型訓練(程式腳本):
             模型資料夾,
             連紲詞長度=2,
             編碼器=語句編碼器(),  # 若用著Unicdoe擴充就需要,
-            刣掉暫存檔=True,
+            刣掉暫存檔=False,
         )
 
     @classmethod
