@@ -66,8 +66,11 @@ class Moses介面:
                 raise RuntimeError()
         except:
             查詢腔口 = '閩南語'
-        漢字 = 連線參數['漢字']
-        音標 = 連線參數['音標']
+        try:
+            漢字 = 連線參數['漢字']
+            音標 = 連線參數['音標']
+        except:
+            return JsonResponse({'失敗': '參數有三个：查詢腔口、漢字、音標'})
         try:
             return JsonResponse(self.服務.漢字音標對齊實作(查詢腔口, 漢字, 音標))
         except ConnectionRefusedError:
