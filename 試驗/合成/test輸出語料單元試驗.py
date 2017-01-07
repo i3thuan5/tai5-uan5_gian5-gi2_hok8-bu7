@@ -11,7 +11,6 @@ from 臺灣言語資料庫.資料模型 import 版權表
 from 臺灣言語資料庫.欄位資訊 import 會使公開
 from 臺灣言語資料庫.資料模型 import 來源表
 from 臺灣言語資料庫.資料模型 import 影音表
-from 臺灣言語服務._HTK模型訓練 import HTK模型訓練
 
 
 class 輸出語料單元試驗(TestCase):
