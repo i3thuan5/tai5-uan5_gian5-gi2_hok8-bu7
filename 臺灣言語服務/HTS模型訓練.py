@@ -111,7 +111,9 @@ class HTS模型訓練(程式腳本):
                     raise RuntimeError('音標愛單聲道，逐的點愛兩位元組的整數')
                 全部頻率.add(音檔.一秒幾點)
         if len(全部頻率) > 1:
-            raise('音檔的取樣頻率愛仝款！！有{0}Hz'.format('、'.join(sorted(全部頻率))))
+            raise RuntimeError('音檔的取樣頻率愛仝款！！有{0}Hz'.format(
+                '、'.join([str(頻率) for 頻率 in sorted(全部頻率)])
+            ))
         頻率 = 全部頻率.pop()
         return 訓練HTSEngine模型.訓練(HTS訓練過程目錄, 頻率)
 
