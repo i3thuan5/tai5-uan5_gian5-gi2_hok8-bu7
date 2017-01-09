@@ -11,7 +11,8 @@ from 臺灣言語資料庫.資料模型 import 版權表
 from 臺灣言語資料庫.欄位資訊 import 會使公開
 from 臺灣言語資料庫.資料模型 import 來源表
 from 臺灣言語資料庫.資料模型 import 影音表
-from 臺灣言語服務._HTK模型訓練 import HTK模型訓練
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語服務.HTS模型訓練 import HTS模型訓練
 
 
 class 輸出語料單元試驗(TestCase):
@@ -38,56 +39,28 @@ class 輸出語料單元試驗(TestCase):
     def test_影音母語對應(self):
         影音 = self.加一筆影音食飽未()
         self.母語影音加一筆食飽未(影音)
-        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
-        self.assertEqual(
-            len(listdir(join(self.目錄, '標仔'))),
-            1
-        )
-        self.assertEqual(
-            len(listdir(join(self.目錄, '音檔'))),
-            1
-        )
+        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None)
+        self.確定檔案數量(1)
 
     def test_兩个影音母語對應輸出其中一筆就好(self):
         影音 = self.加一筆影音食飽未()
         self.母語影音加一筆食飽未(影音)
         self.母語影音加一筆食飽未(影音)
-        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
-        self.assertEqual(
-            len(listdir(join(self.目錄, '標仔'))),
-            1
-        )
-        self.assertEqual(
-            len(listdir(join(self.目錄, '音檔'))),
-            1
-        )
+        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None)
+        self.確定檔案數量(1)
 
     def test_一个影音無對應(self):
         self.加一筆影音食飽未()
-        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
-        self.assertEqual(
-            len(listdir(join(self.目錄, '標仔'))),
-            0
-        )
-        self.assertEqual(
-            len(listdir(join(self.目錄, '音檔'))),
-            0
-        )
+        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None)
+        self.確定檔案數量(0)
 
     def test_兩層文本(self):
         影音 = self.加一筆影音食飽未()
         第一層文本 = self.母語影音加一筆食飽未(影音)
         self.母語文本加一筆斷詞食飽未(第一層文本)
         self.母語文本加一筆斷詞食飽未(第一層文本)
-        HTK模型訓練.輸出一種語言語料(self.目錄, '閩南語')
-        self.assertEqual(
-            len(listdir(join(self.目錄, '標仔'))),
-            1
-        )
-        self.assertEqual(
-            len(listdir(join(self.目錄, '音檔'))),
-            1
-        )
+        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None)
+        self.確定檔案數量(1)
 
     def test_無仝語言袂使出現(self):
         影音 = self.加一筆影音食飽未()
@@ -95,9 +68,8 @@ class 輸出語料單元試驗(TestCase):
         self.資料內容['語言腔口'] = '臺語'
         影音 = self.加一筆影音食飽未()
         self.母語影音加一筆食飽未(影音)
-        HTK模型訓練.輸出一種語言語料(self.目錄, '臺語')
-        self.assertEqual(len(listdir(join(self.目錄, '標仔'))), 1)
-        self.assertEqual(len(listdir(join(self.目錄, '音檔'))), 1)
+        HTS模型訓練.輸出一種語言語料(self.目錄, '臺語', '豬仔', 臺灣閩南語羅馬字拼音, None)
+        self.確定檔案數量(1)
 
     def 加一筆影音食飽未(self):
         影音資料 = io.BytesIO()
@@ -106,7 +78,7 @@ class 輸出語料單元試驗(TestCase):
             音檔.setframerate(16000)
             音檔.setsampwidth(2)
             音檔.writeframesraw(b'0' * 100)
-        影音內容 = {'影音資料': 影音資料}
+        影音內容 = {'影音資料': 影音資料, '屬性': {'語者': '豬仔'}}
         影音內容.update(self.資料內容)
         return 影音表.加資料(影音內容)
 
@@ -119,3 +91,10 @@ class 輸出語料單元試驗(TestCase):
         文本內容 = {'文本資料': '食飽 未？'}
         文本內容.update(self.資料內容)
         return 文本.校對做(文本內容)
+
+    def 確定檔案數量(self, 數量):
+        for 資料夾 in ['音檔', '孤音標仔', '相依標仔']:
+            self.assertEqual(
+                len(listdir(join(self.目錄, 資料夾))),
+                數量
+            )
