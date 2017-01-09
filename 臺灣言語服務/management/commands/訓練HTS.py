@@ -27,12 +27,20 @@ class Command(BaseCommand):
             type=str,
             help='發音人'
         )
+        parser.add_argument(
+            '--免確定HTS相關軟體有裝無',
+            dest='免確定',
+            default=False,
+            action='store_const',
+            const=True,
+        )
 
     def handle(self, *args, **參數):
-        安裝HTS語音辨識程式.安裝htk()
-        安裝HTS語音辨識程式.安裝sptk()
-        安裝HTS語音辨識程式.安裝hts()
-        安裝HTS語音辨識程式.掠htsDemoScript()
+        if not 參數['免確定']:
+            安裝HTS語音辨識程式.安裝htk()
+            安裝HTS語音辨識程式.安裝sptk()
+            安裝HTS語音辨識程式.安裝hts()
+            安裝HTS語音辨識程式.掠htsDemoScript()
         try:
             語言 = 參數['語言']
             服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
@@ -46,7 +54,8 @@ class Command(BaseCommand):
             HTS模型訓練.輸出一種語言語料(
                 語料資料夾, 語言, 語者,
                 服務設定['音標系統'],
-                變調規則
+                變調規則,
+                服務設定['語音標仔轉換']
             )
             對齊聲韻結果資料夾 = HTS模型訓練.對齊聲韻(語料資料夾, 模型資料夾)
             模型路徑 = HTS模型訓練.輸出HTS標仔問題音檔而且訓練(
