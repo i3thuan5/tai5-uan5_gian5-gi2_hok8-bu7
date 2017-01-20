@@ -54,3 +54,16 @@ class 閩南語對齊整合試驗(TestCase):
         回應物件 = json.loads(連線回應.content.decode("utf-8"))
         self.assertIn('分詞', 回應物件)
         self.assertIn('綜合標音', 回應物件)
+
+    def test_臺語濫華語(self):
+        連線要求 = RequestFactory().get('/漢字音標對齊')
+        連線要求.GET = {
+            '查詢腔口': '閩南語',
+            '漢字': '是華語叫做『陀螺』的「干樂」。',
+            '音標': 'sī huâ-gí kiò-tsò “陀螺” ê “kan-lo̍k”.',
+        }
+        連線回應 = self.服務功能.漢字音標對齊(連線要求)
+        self.assertEqual(連線回應.status_code, 200)
+        回應物件 = json.loads(連線回應.content.decode("utf-8"))
+        self.assertIn('分詞', 回應物件)
+        self.assertIn('綜合標音', 回應物件)
