@@ -34,7 +34,10 @@ class 閩南語對齊整合試驗(TestCase):
         連線要求.GET = {
             '查詢腔口': '閩南語',
             '漢字': '我愛佇公媽面頭前跪甲食暗才會使起來。',
-            '音標': 'guá ài tī kong-má bīn-thâu-tsîng kuī kah tsia̍h-àm tsiah ē-sái khí--lâi.',
+            '音標': (
+                'guá ài tī kong-má bīn-thâu-tsîng ' +
+                'kuī kah tsia̍h-àm tsiah ē-sái khí--lâi.'
+            ),
         }
         連線回應 = self.服務功能.漢字音標對齊(連線要求)
         self.assertEqual(連線回應.status_code, 200)
