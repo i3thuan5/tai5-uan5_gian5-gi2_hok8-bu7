@@ -4,6 +4,8 @@ from os import makedirs
 from os.path import join, isdir
 from shutil import rmtree
 
+from django.db.models.query_utils import Q
+
 
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
@@ -28,7 +30,7 @@ class Kaldi語料匯出(程式腳本):
         }
 
     @classmethod
-    def 匯出一種語言語料(cls, 語言, 音標系統, 輸出試驗音檔, 語料資料夾, 資料夾名, 辭典資料):
+    def 匯出一種語言語料(cls, 語言, 音標系統, 輸出試驗音檔, 語料資料夾, 資料夾名, 辭典資料,匯出條件=Q()):
         訓練語料資料夾 = join(語料資料夾, 資料夾名, 'train')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
@@ -40,7 +42,8 @@ class Kaldi語料匯出(程式腳本):
                         with cls._寫檔(訓練語料資料夾, 'utt2spk') as 語句對應語者:
                             cls._揣影音輸出(
                                 語言, 音標系統, 輸出試驗音檔,
-                                聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料
+                                聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料,
+                                匯出條件,
                             )
 
     @classmethod
@@ -142,7 +145,8 @@ class Kaldi語料匯出(程式腳本):
 
     @classmethod
     def _揣影音輸出(cls, 語言, 音標系統, 輸出試驗音檔,
-               聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料):
+               聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料,
+               匯出條件):
         第幾个人 = 0
         語者名對應輸出名 = {}
         for 第幾个, 影音 in enumerate(
@@ -150,6 +154,7 @@ class Kaldi語料匯出(程式腳本):
             .distinct()
             .filter(影音聽拍__isnull=False)
             .filter(語言腔口__語言腔口=語言)
+            .filter(匯出條件)
             .order_by('pk')
         ):
             音檔名 = 'tong{0:07}'.format(第幾个)
