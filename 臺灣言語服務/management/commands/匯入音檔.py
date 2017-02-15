@@ -5,7 +5,6 @@ from django.utils import timezone
 
 
 from 臺灣言語資料庫.資料模型 import 來源表
-from 臺灣言語資料庫.資料模型 import 聽拍規範表
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語資料庫.資料模型 import 版權表
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
@@ -37,7 +36,6 @@ class Command(BaseCommand):
             '著作所在地': '臺灣',
             '著作年': str(timezone.now().year),
         }
-        規範 = 聽拍規範表.objects.get_or_create(規範名='無規範', 範例='無', 說明='bo5')[0]
         for 音檔路徑 in 參數['音檔路徑']:
             with io.open(音檔路徑, 'rb') as 音檔:
                 音 = 聲音檔.對檔案讀(音檔路徑)
@@ -52,6 +50,6 @@ class Command(BaseCommand):
                         '結束時間': 音.時間長度()
                     }
                 ]
-                聽拍內容 = {'規範': 規範, '聽拍資料': 聽拍資料}
+                聽拍內容 = {'聽拍資料': 聽拍資料}
                 聽拍內容.update(公家內容)
                 影音.寫聽拍(聽拍內容)
