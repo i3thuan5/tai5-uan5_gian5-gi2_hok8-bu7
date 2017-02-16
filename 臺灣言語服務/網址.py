@@ -2,6 +2,8 @@
 from django.conf.urls import url
 from 臺灣言語服務.HTS介面 import HTS介面
 from 臺灣言語服務.Moses介面 import Moses介面
+from 臺灣言語服務.Kaldi介面 import 看辨識結果
+from 臺灣言語服務.Kaldi介面 import Kaldi辨識
 
 _Moses = Moses介面()
 _HTS = HTS介面()
@@ -14,4 +16,6 @@ urlpatterns = [
     url(r'^語音合成支援腔口$', _HTS.語音合成支援腔口),
     url(r'^語音合成$', _HTS.語音合成),
     url(r'^文本直接合成$', _HTS.文本直接合成),
+    url(r'^辦識音檔$', Kaldi辨識),
+    url(r'^辦識結果$', 看辨識結果),
 ]
