@@ -6,7 +6,7 @@ from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
 
 
 class Command(BaseCommand):
-    help = '照kaldi格式匯出語料'
+    help = '匯入準備愛予Kaldi辨識的音檔'
 
     def add_arguments(self, parser):
         parser.add_argument(

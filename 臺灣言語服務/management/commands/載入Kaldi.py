@@ -6,7 +6,7 @@ from 臺灣言語資料庫.資料模型 import 影音表
 
 
 class Command(BaseCommand):
-    help = '訓練一个語言的HTS模型'
+    help = '辨識一个影音檔'
 
     def add_arguments(self, parser):
         parser.add_argument(
