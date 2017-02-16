@@ -55,7 +55,7 @@ class Kaldi語料辨識(View):
             '著作所在地': '臺灣',
             '著作年': str(timezone.now().year),
         }
-        音檔 = io.BytesIO(聲音檔.wav音值資料())
+        音檔 = io.BytesIO(聲音檔.wav格式資料())
         影音內容 = {'影音資料': 音檔}
         影音內容.update(公家內容)
         影音 = 影音表.加資料(影音內容)
