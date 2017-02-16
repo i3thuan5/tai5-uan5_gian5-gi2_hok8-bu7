@@ -23,4 +23,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **參數):
         for 音檔路徑 in 參數['音檔路徑']:
-            Kaldi語料辨識.匯入音檔(參數['語言'],  聲音檔.對檔案讀(音檔路徑))
+            影音 = Kaldi語料辨識.匯入音檔(參數['語言'], '無註明', 聲音檔.對檔案讀(音檔路徑))
+            print(影音.編號())
