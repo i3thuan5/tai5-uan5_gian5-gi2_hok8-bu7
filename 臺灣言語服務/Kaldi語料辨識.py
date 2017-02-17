@@ -49,7 +49,8 @@ class Kaldi語料辨識:
         語言 = 影音.語言腔口.語言腔口
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
 
-        kaldi_eg目錄 = '/home/Ihc/git/kaldi/egs/taiwanese/s5c'
+        辨識設定 = 服務設定['辨識設定']
+        kaldi_eg目錄 = 辨識設定['腳本資料夾']
         影音編號 = 影音.編號()
 
         編號字串 = '{0:07}'.format(影音編號)
@@ -60,8 +61,8 @@ class Kaldi語料辨識:
             暫存目錄, 編號字串, Kaldi語料匯出.初使化辭典資料(),
             Q(pk=影音編號)
         )
-        模型目錄 = join(kaldi_eg目錄, 'exp', 'tri5.2')
-        路徑目錄 = join(模型目錄, 'graph_sp')
+        模型目錄 = join(kaldi_eg目錄, 'exp', 辨識設定['模型資料夾'])
+        路徑目錄 = join(模型目錄, 辨識設定['圖資料夾'])
         資料目錄 = join(暫存目錄, 編號字串, 'train')
         結果目錄 = join(模型目錄, 'decode_hok8bu7_{}'.format(編號字串))
         with 程式腳本._換目錄(kaldi_eg目錄):
@@ -72,6 +73,6 @@ class Kaldi語料辨識:
                 資料目錄,
                 結果目錄,
             ], 愛直接顯示輸出=True)
-        辨識文本檔案 = join(結果目錄 + '.si', 'scoring', '15.0.0.txt')
+        辨識文本檔案 = join(結果目錄 + '.si', 'scoring', 辨識設定['結果檔名'])
         辨識文本 = 程式腳本._讀檔案(辨識文本檔案)
         return 拆文分析器.分詞章物件(' '.join(辨識文本[-1].split(' ')[1:]))
