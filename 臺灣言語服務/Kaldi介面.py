@@ -11,7 +11,7 @@ from 臺灣言語服務.models import Kaldi辨識結果
 from 臺灣言語資料庫.資料模型 import 影音表
 
 
-def 看辨識結果(self, request):
+def 看辨識結果(request):
     結果 = []
     for 影音 in 影音表.objects.all().order_by('-pk')[:10]:
         這筆 = {
@@ -30,7 +30,7 @@ def 看辨識結果(self, request):
     return JsonResponse({'辨識結果': 結果})
 
 
-def Kaldi辨識(self, request):
+def Kaldi辨識(request):
     try:
         啥人唸的 = request.POST['啥人唸的'].strip()
     except:

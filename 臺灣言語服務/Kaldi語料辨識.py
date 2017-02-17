@@ -61,9 +61,9 @@ class Kaldi語料辨識:
             Q(pk=影音編號)
         )
         模型目錄 = join(kaldi_eg目錄, 'exp', 'tri5.2')
-        路徑目錄 = join(模型目錄, 'graph_format_lm')
+        路徑目錄 = join(模型目錄, 'graph_sp')
         資料目錄 = join(暫存目錄, 編號字串, 'train')
-        結果目錄 = join(模型目錄, 'decode_hok8bu7_{}.si'.format(編號字串))
+        結果目錄 = join(模型目錄, 'decode_hok8bu7_{}'.format(編號字串))
         with 程式腳本._換目錄(kaldi_eg目錄):
             程式腳本._走指令([
                 'bash', '-x',
@@ -72,6 +72,6 @@ class Kaldi語料辨識:
                 資料目錄,
                 結果目錄,
             ], 愛直接顯示輸出=True)
-        辨識文本檔案 = join(結果目錄, 'scoring', '15.0.0.txt')
+        辨識文本檔案 = join(結果目錄 + '.si', 'scoring', '15.0.0.txt')
         辨識文本 = 程式腳本._讀檔案(辨識文本檔案)
         return 拆文分析器.分詞章物件(' '.join(辨識文本[-1].split(' ')[1:]))
