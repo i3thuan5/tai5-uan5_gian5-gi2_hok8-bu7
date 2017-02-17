@@ -13,6 +13,7 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 
 
+@csrf_exempt
 def 看辨識結果(request):
     結果 = []
     for 影音 in 影音表.objects.all().order_by('-pk')[:100]:
