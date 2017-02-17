@@ -18,6 +18,7 @@ def 看辨識結果(request):
     for 影音 in 影音表.objects.all().order_by('-pk')[:100]:
         這筆 = {
             '編號': 影音.編號(),
+            '網址': 影音.影音資料.url
         }
         try:
             辨識結果 = 影音.Kaldi辨識結果
