@@ -16,7 +16,7 @@ from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 @csrf_exempt
 def 看辨識結果(request):
     結果 = []
-    for 影音 in 影音表.objects.all().order_by('-pk')[:100]:
+    for 影音 in 影音表.objects.all().order_by('-pk')[:300]:
         這筆 = {
             '編號': 影音.編號(),
             '網址': 影音.影音資料.url
