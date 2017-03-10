@@ -61,5 +61,6 @@ setup(
         'pyro4',
         'gunicorn',
         'django-ranged-fileresponse',
+        'celery',
     ],
 )

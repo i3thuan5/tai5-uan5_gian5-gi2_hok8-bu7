@@ -1,6 +1,8 @@
 from base64 import b64decode
 import json
 
+
+from celery import shared_task
 from django.conf import settings
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -56,17 +58,23 @@ def Kaldi辨識(request):
     ))
 
     影音 = Kaldi語料辨識.匯入音檔(語言, 啥人唸的, 聲音檔.對資料轉(資料陣列))
-    _辨識影音(影音)
+    Kaldi辨識影音.delay(影音.編號())
     return HttpResponse()
 
 
 def 無辨識過的重訓練一擺():
     for 影音 in 影音表.objects.filter(Kaldi辨識結果__isnull=True):
-        _辨識影音(影音)
+        _Kaldi辨識影音(影音)
     return JsonResponse({'成功': '成功'})
 
 
-def _辨識影音(影音):
+@shared_task
+def Kaldi辨識影音(影音編號):
+    _Kaldi辨識影音(影音表.objects.get(pk=影音編號))
+    return
+
+
+def _Kaldi辨識影音(影音):
     try:
         章物件 = Kaldi語料辨識.辨識音檔(影音)
         影音.Kaldi辨識結果 = Kaldi辨識結果.objects.create(
