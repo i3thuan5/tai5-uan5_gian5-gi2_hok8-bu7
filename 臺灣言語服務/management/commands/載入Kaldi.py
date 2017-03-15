@@ -16,5 +16,4 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **參數):
-        影音 = 影音表.objects.get(pk=參數['編號'])
-        Kaldi辨識影音.delay(影音)
+        Kaldi辨識影音.delay(參數['編號'])
