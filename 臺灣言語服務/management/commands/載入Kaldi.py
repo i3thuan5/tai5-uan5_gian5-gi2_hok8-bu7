@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 
 
-from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
 from 臺灣言語資料庫.資料模型 import 影音表
+from 臺灣言語服務.Kaldi介面 import Kaldi辨識影音
 
 
 class Command(BaseCommand):
@@ -17,6 +17,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **參數):
         影音 = 影音表.objects.get(pk=參數['編號'])
-        章物件 = Kaldi語料辨識.辨識音檔(影音)
-        print(章物件.看型())
-        print(章物件.看音())
+        Kaldi辨識影音.delay(影音)
