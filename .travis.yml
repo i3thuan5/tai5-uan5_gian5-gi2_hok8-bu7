@@ -1,4 +1,5 @@
 sudo: false
+dist: trusty
 language: python
 python:
 - '3.4'
@@ -6,6 +7,7 @@ python:
 env:
 - TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*單元試驗.py'
 - TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*合成整合試驗.py'
+- TEST_SUITE='python manage.py 牽Moses; coverage run --source=臺灣言語服務 manage.py test 試驗.test詔安腔翻譯整合試驗.詔安腔翻譯整合試驗'
 - TEST_SUITE='flake8 --exclude=venv .'
 addons:
   apt:
@@ -18,8 +20,6 @@ addons:
     - libc6-dev-i386
     - linux-libc-dev
     - gcc-multilib
-    - libx11-dev
-    - libx11-dev:i386
     - git
     - subversion
     - automake
