@@ -5,10 +5,10 @@ python:
 - '3.4'
 - '3.5'
 env:
-- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*單元試驗.py'
-- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*合成整合試驗.py'
-- TEST_SUITE='python manage.py 牽Moses; coverage run --source=臺灣言語服務 manage.py test 試驗.test詔安腔翻譯整合試驗.詔安腔翻譯整合試驗'
-- TEST_SUITE='flake8 --exclude=venv .'
+- TOX_ENV=tan1uan5
+- TOX_ENV=hap8sing5
+- TOX_ENV=huan1ik8
+- TOX_ENV=flake8
 addons:
   apt:
     sources:
@@ -44,8 +44,7 @@ branches:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
-- echo $TEST_SUITE
-- $TEST_SUITE
+- tox --
 after_success:
 - coverage report
 - coveralls
