@@ -1,28 +1,18 @@
 import io
 from itertools import chain
-from time import sleep
-from unittest.mock import patch
 import wave
 
 from django.test.client import RequestFactory
 from django.test.testcases import TestCase
 
 
-from 臺灣言語服務.HTS服務 import HTS服務
 from 臺灣言語服務.HTS介面 import HTS介面
 
 
 class 閩南語合成整合試驗(TestCase):
 
     def setUp(self):
-        self.ProxyPatch = patch('Pyro4.Proxy')
-        ProxyMock = self.ProxyPatch.start()
-        ProxyMock.return_value = HTS服務()
-        sleep(0.1)
         self.服務功能 = HTS介面()
-
-    def tearDown(self):
-        self.ProxyPatch.stop()
 
     def test_短詞合成(self):
         連線要求 = RequestFactory().get('/語音合成')
