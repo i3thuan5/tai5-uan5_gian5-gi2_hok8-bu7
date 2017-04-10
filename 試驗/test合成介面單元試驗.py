@@ -8,6 +8,7 @@ from django.test.utils import override_settings
 
 from 臺灣言語服務.HTS介面 import HTS介面
 
+
 @override_settings(HTS_PYRO4=True)
 class 合成介面單元試驗(TestCase):
 
