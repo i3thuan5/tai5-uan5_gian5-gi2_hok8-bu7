@@ -3,15 +3,27 @@ from base64 import b64decode
 import io
 
 import Pyro4
+from django.conf import settings
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from ranged_fileresponse import RangedFileResponse
+from 臺灣言語服務.HTS服務 import HTS服務
 
 
 class HTS介面:
 
     def __init__(self):
-        self.服務 = Pyro4.Proxy("PYRONAME:HTS服務")
+        用pyro4 = False
+        try:
+            if settings.HTS_PYRO4:
+                用pyro4 = True
+        except AttributeError:
+            pass
+        if 用pyro4:
+            self.服務 = Pyro4.Proxy("PYRONAME:HTS服務")
+        else:
+            self.服務 = HTS服務()
 
     def 語音合成支援腔口(self, request):
         return JsonResponse({'腔口': self.服務.支援腔口()})

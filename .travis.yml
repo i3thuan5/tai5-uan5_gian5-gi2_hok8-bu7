@@ -1,12 +1,14 @@
 sudo: false
+dist: trusty
 language: python
 python:
 - '3.4'
 - '3.5'
 env:
-- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*單元試驗.py'
-- TEST_SUITE='coverage run --source=臺灣言語服務 manage.py test -p test*合成整合試驗.py'
-- TEST_SUITE='flake8 --exclude=venv .'
+- TOX_ENV=tan1uan5
+- TOX_ENV=hap8sing5
+- TOX_ENV=huan1ik8
+- TOX_ENV=flake8
 addons:
   apt:
     sources:
@@ -18,8 +20,6 @@ addons:
     - libc6-dev-i386
     - linux-libc-dev
     - gcc-multilib
-    - libx11-dev
-    - libx11-dev:i386
     - git
     - subversion
     - automake
@@ -35,18 +35,16 @@ addons:
     - libxslt1-dev
     - libav-tools  
     - libmp3lame0
-    - libavcodec-extra-53
 install:
 - pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3 pyro4 django-ranged-fileresponse
-- pip install flake8
+- pip install tox
 - pip install python-coveralls
 branches:
   only:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
-- echo $TEST_SUITE
-- $TEST_SUITE
+- tox -e $TOX_ENV
 after_success:
 - coverage report
 - coveralls
