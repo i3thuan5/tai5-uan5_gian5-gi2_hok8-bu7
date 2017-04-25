@@ -137,7 +137,7 @@ HOK8_BU7_SIAT4_TING7 = {
         '語音標仔轉換': 漢語語音標仔轉換,
         '決策樹仔': 閩南語決策樹仔,
         '辨識設定': {
-              '腳本資料夾': '/home/ciciw/git/kaldi/egs/taiwanese/s5c',
+              '腳本資料夾': os.path.join(BASE_DIR, 'kaldi/egs/taiwanese/s5c'),
               '模型資料夾': 'tri5.2',
               '圖資料夾': 'graph_sp',
               '結果檔名': '7.0.0.txt',
@@ -158,14 +158,9 @@ HOK8_BU7_SIAT4_TING7 = {
     },
 }
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = None
+# 上傳的音檔上大100M
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
 
 # For better celery performance
 CELERY_IGNORE_RESULT = True
-CELERY_DISABLE_RATE_LIMITS = True
-# Only accept json for safety and upcoming celery version default setting
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
 CELERY_TIMEZONE = TIME_ZONE
