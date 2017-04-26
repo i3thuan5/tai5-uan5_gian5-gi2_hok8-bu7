@@ -12,12 +12,13 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
+from 臺灣言語服務.models import Kaldi辨識結果
 
 
 class Kaldi語料辨識:
 
     @classmethod
-    def 匯入音檔(cls, 語言, 啥人唸的, 聲音檔):
+    def 匯入音檔(cls, 語言, 啥人唸的, 聲音檔, 內容):
         公家內容 = {
             '收錄者': 來源表.objects.get_or_create(名='系統管理員')[0].編號(),
             '來源': 來源表.objects.get_or_create(名=啥人唸的)[0].編號(),
@@ -33,8 +34,8 @@ class Kaldi語料辨識:
         影音 = 影音表.加資料(影音內容)
         聽拍資料 = [
             {
-                '語者': '無註明',
-                '內容': '',
+                '語者': 啥人唸的,
+                '內容': 內容,
                 '開始時間': 0.3,
                 '結束時間': 聲音檔.時間長度()
             }
@@ -42,6 +43,7 @@ class Kaldi語料辨識:
         聽拍內容 = {'聽拍資料': 聽拍資料}
         聽拍內容.update(公家內容)
         影音.寫聽拍(聽拍內容)
+        Kaldi辨識結果.準備辨識(影音)
         return 影音
 
     @classmethod
@@ -57,7 +59,7 @@ class Kaldi語料辨識:
         暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
 
         Kaldi語料匯出.匯出一種語言語料(
-            語言, 服務設定['音標系統'], True,
+            語言, 服務設定['音標系統'],
             暫存目錄, 編號字串, Kaldi語料匯出.初使化辭典資料(),
             Q(pk=影音編號)
         )
