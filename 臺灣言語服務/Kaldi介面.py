@@ -10,7 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
-from 臺灣言語服務.models import Kaldi辨識結果
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 
@@ -77,12 +76,6 @@ def Kaldi辨識影音(影音編號):
 def _Kaldi辨識影音(影音):
     try:
         章物件 = Kaldi語料辨識.辨識音檔(影音)
-        影音.Kaldi辨識結果 = Kaldi辨識結果.objects.create(
-            影音=影音, 辨識出問題=False, 分詞=章物件.看分詞()
-        )
-        影音.save()
+        影音.Kaldi辨識結果.辨識好矣(章物件.看分詞())
     except:
-        影音.Kaldi辨識結果 = Kaldi辨識結果.objects.create(
-            影音=影音, 辨識出問題=True, 分詞=''
-        )
-        影音.save()
+        影音.Kaldi辨識結果.辨識失敗()

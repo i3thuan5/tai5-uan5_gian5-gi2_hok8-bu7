@@ -12,6 +12,7 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
+from 臺灣言語服務.models import Kaldi辨識結果
 
 
 class Kaldi語料辨識:
@@ -42,6 +43,7 @@ class Kaldi語料辨識:
         聽拍內容 = {'聽拍資料': 聽拍資料}
         聽拍內容.update(公家內容)
         影音.寫聽拍(聽拍內容)
+        Kaldi辨識結果.準備辨識(影音)
         return 影音
 
     @classmethod
