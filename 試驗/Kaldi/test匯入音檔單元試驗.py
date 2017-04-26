@@ -27,7 +27,7 @@ class Kaldi匯入音檔單元試驗(TestCase):
             '閩南語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
-        聽拍=影音.影音聽拍.get().聽拍
+        聽拍 = 影音.影音聽拍.get().聽拍
         try:
             聽拍資料 = 聽拍.聽拍內容()
         except:
