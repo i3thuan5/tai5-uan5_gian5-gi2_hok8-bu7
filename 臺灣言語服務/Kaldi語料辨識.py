@@ -57,7 +57,7 @@ class Kaldi語料辨識:
         暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
 
         Kaldi語料匯出.匯出一種語言語料(
-            語言, 服務設定['音標系統'], True,
+            語言, 服務設定['音標系統'],
             暫存目錄, 編號字串, Kaldi語料匯出.初使化辭典資料(),
             Q(pk=影音編號)
         )

@@ -48,7 +48,7 @@ class Command(BaseCommand):
             try:
                 服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
                 Kaldi語料匯出.匯出一種語言語料(
-                    語言, 服務設定['音標系統'], 參數['輸出試驗音檔'],
+                    語言, 服務設定['音標系統'],
                     參數['匯出路徑'], 參數['資料夾名'], 辭典資料
                 )
             except FileNotFoundError:
