@@ -57,7 +57,7 @@ def Kaldi辨識(request):
         '[' + b64decode(request.POST['blob']).decode('utf-8') + ']'
     ))
 
-    影音 = Kaldi語料辨識.匯入音檔(語言, 啥人唸的, 聲音檔.對資料轉(資料陣列))
+    影音 = Kaldi語料辨識.匯入音檔(語言, 啥人唸的, 聲音檔.對資料轉(資料陣列), '')
     Kaldi辨識影音.delay(影音.編號())
     return HttpResponse()
 

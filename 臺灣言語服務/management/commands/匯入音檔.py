@@ -20,8 +20,14 @@ class Command(BaseCommand):
             type=str,
             help='要匯入的音檔'
         )
+        parser.add_argument(
+            '--分詞',
+            dest='分詞',
+            type=str,
+            default='',
+        )
 
     def handle(self, *args, **參數):
         for 音檔路徑 in 參數['音檔路徑']:
-            影音 = Kaldi語料辨識.匯入音檔(參數['語言'], '無註明', 聲音檔.對檔案讀(音檔路徑))
+            影音 = Kaldi語料辨識.匯入音檔(參數['語言'], '無註明', 聲音檔.對檔案讀(音檔路徑), 參數['分詞'])
             print(影音.編號())
