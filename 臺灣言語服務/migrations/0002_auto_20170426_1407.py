@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='kaldi辨識結果',
-            name='辨識好矣猶未',
+            name='辨識好猶未',
             field=models.BooleanField(default=True),
             preserve_default=False,
         ),
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='kaldi辨識結果',
-            name='辨識好矣猶未',
+            name='辨識好猶未',
             field=models.BooleanField(default=False),
         ),
     ]
