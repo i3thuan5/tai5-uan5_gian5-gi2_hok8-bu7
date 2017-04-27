@@ -63,9 +63,9 @@ class Kaldi語料對齊(Kaldi對齊結果):
             raise
         self.對齊成功(ctm資料)
         with TemporaryDirectory() as 暫存資料夾路徑:
-            wav路徑 = join(暫存資料夾路徑, 'wav')
+            wav路徑 = join(暫存資料夾路徑, '切好的音檔')
             self.產生音檔(wav路徑)
-            tar路徑 = join(暫存資料夾路徑, 'tar')
+            tar路徑 = join(暫存資料夾路徑, '切好的音檔.tar')
             self.壓縮音檔(wav路徑, tar路徑)
             self.存壓縮檔(tar路徑)
 
@@ -140,7 +140,7 @@ class Kaldi語料對齊(Kaldi對齊結果):
                     '結束時間': 這段資訊[-1]['開始'] + 這段資訊[-1]['長度'],
                 }
             )
-            ctm所在 = +這段長度
+            ctm所在 += 這段長度
         聽拍內容 = {'聽拍資料': 聽拍資料}
         聽拍內容.update(公家內容)
         self.切好的聽拍 = self.欲切開的聽拍.校對做(聽拍內容)
