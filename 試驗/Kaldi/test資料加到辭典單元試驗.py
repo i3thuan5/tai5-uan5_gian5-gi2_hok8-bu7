@@ -142,6 +142,18 @@ class 資料加到辭典單元試驗(TestCase):
         self.assertEqual(len(調類), 1)
         self.assertEqual(len(全部詞), 1)
 
+    def test_有換逝無要緊(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '\n我｜gua2\n是｜si7\n你｜li2', 臺灣閩南語羅馬字拼音,
+            加語料=True,
+        )
+        self.assertEqual(len(全部詞), 3)
+
     def test_調無仝就袂使(self):
         全部詞 = set()
         全部句 = []
