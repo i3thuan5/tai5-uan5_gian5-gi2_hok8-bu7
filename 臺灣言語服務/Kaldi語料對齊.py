@@ -60,7 +60,7 @@ class Kaldi語料對齊(Kaldi對齊結果):
             ctm資料 = self._對齊()
         except:
             self.對齊失敗()
-            return    
+            raise
         self.對齊成功(ctm資料)
         with TemporaryDirectory() as 暫存資料夾路徑:
             wav路徑 = join(暫存資料夾路徑, 'wav')
