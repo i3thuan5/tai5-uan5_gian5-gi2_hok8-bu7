@@ -165,7 +165,7 @@ class Kaldi語料對齊(Kaldi對齊結果):
     def 存壓縮檔(self, tar路徑):
         with open(tar路徑, 'rb') as tar檔案:
             self.壓縮檔.save(
-                name='壓縮檔{0:07}.tar.gz'.format(self.影音編號()),
+                name='壓縮檔{0:07}.tar.gz'.format(self.影音.編號()),
                 content=File(tar檔案),
                 save=True
             )

@@ -13,6 +13,7 @@ from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.Kaldi語料對齊 import Kaldi語料對齊
+from 臺灣言語服務.models import Kaldi對齊結果
 
 
 @csrf_exempt
@@ -96,6 +97,32 @@ def Kaldi對齊(request):
     影音 = Kaldi語料辨識.匯入音檔(語言,  '無註明', 聲音檔.對資料轉(資料陣列), '')
     Kaldi對齊影音.delay(影音.編號())
     return HttpResponse()
+
+
+@csrf_exempt
+def 看對齊結果(request):
+    結果 = []
+    for 對齊結果 in (
+        Kaldi對齊結果.objects
+        .filter()
+        .select_related('影音__語言腔口')
+        .order_by('-pk')[:300]
+    ):
+        這筆 = {
+            '編號': 對齊結果.pk,
+        }
+        if not 對齊結果.對齊好猶未:
+            這筆['狀態'] = '對齊中…'
+        elif 對齊結果.對齊出問題:
+            這筆['狀態'] = '對齊出問題'
+        elif not 對齊結果.壓縮檔.name:
+            這筆['狀態'] = '佇產生壓縮檔…'
+        else:
+            這筆['狀態'] = '成功'
+            這筆['壓縮檔網址'] = 對齊結果.壓縮檔.url
+
+        結果.append(這筆)
+    return JsonResponse({'對齊結果': 結果})
 
 
 @shared_task
