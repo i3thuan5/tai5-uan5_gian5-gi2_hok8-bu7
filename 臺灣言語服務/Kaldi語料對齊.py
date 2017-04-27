@@ -128,6 +128,8 @@ class Kaldi語料對齊(Kaldi對齊結果):
         ]
         ctm所在 = 0
         for 一段 in self.欲切開的聽拍.聽拍內容()[0]['內容'].split('\n'):
+            if len(一段.strip()) == 0:
+                continue
             這段長度 = len(一段.split())
             這段資訊 = ctm時間[ctm所在:ctm所在 + 這段長度]
             聽拍資料.append(
