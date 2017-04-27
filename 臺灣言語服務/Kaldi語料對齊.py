@@ -1,5 +1,6 @@
 import io
-from os.path import join
+from os.path import join, basename
+import tarfile
 
 from django.conf import settings
 from django.db.models.query_utils import Q
@@ -12,6 +13,7 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語服務.models import Kaldi對齊結果
+from os import makedirs
 
 
 class Kaldi語料對齊(Kaldi對齊結果):
@@ -130,3 +132,16 @@ class Kaldi語料對齊(Kaldi對齊結果):
         self.對齊好猶未 = True
         self.對齊出問題 = True
         self.save()
+
+    def 產生音檔(self, wav資料夾路徑):
+        makedirs(wav資料夾路徑, exist_ok=True)
+        音檔 = self.影音.聲音檔()
+        for 第幾段, 一段 in enumerate(self.切好的聽拍.聽拍內容(), start=1):
+            這段音檔 = 音檔.照秒數切出音檔(一段['開始時間'], 一段['結束時間'])
+            音檔路徑 = join(wav資料夾路徑, '{}.wav'.format(第幾段))
+            with open(音檔路徑, 'wb') as 檔案:
+                檔案.write(這段音檔.wav格式資料())
+
+    def 壓縮音檔(self, wav資料夾路徑,tar路徑):
+        with tarfile.open(tar路徑, "w:gz") as tar檔案:
+            tar檔案.add(wav資料夾路徑, arcname=basename(wav資料夾路徑))
