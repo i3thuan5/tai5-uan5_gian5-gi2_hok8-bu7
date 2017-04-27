@@ -1,8 +1,5 @@
 from django.db import models
-from django.utils import timezone
 from 臺灣言語資料庫.資料模型 import 影音表
-from 臺灣言語資料庫.資料模型 import 來源表
-from 臺灣言語資料庫.資料模型 import 版權表
 from 臺灣言語資料庫.資料模型 import 聽拍表
 
 
@@ -35,46 +32,3 @@ class Kaldi對齊結果(models.Model):
     欲切開的聽拍 = models.OneToOneField(聽拍表, related_name='+')
     切好的聽拍 = models.OneToOneField(聽拍表, null=True, related_name='+')
 
-    @classmethod
-    def 準備對齊(cls, 影音, 聽拍):
-        return cls.objects.create(影音=影音, 欲切開的聽拍=聽拍)
-
-    def 對齊成功(self, ctm時間):
-        self.對齊好猶未 = True
-        self.對齊出問題 = False
-        self.save()
-
-        公家內容 = {
-            '收錄者': 來源表.objects.get_or_create(名='系統管理員')[0].編號(),
-            '來源': 來源表.objects.get_or_create(名='系統管理員')[0].編號(),
-            '版權': 版權表.objects.get_or_create(版權='會使公開')[0].pk,
-            '種類': '語句',
-            '語言腔口': self.欲切開的聽拍.語言腔口.語言腔口,
-            '著作所在地': '臺灣',
-            '著作年': str(timezone.now().year),
-        }
-
-        聽拍資料 = [
-        ]
-        ctm所在 = 0
-        for 一段 in self.欲切開的聽拍.聽拍內容()[0]['內容'].split('\n'):
-            這段長度 = len(一段.split())
-            這段資訊 = ctm時間[ctm所在:ctm所在 + 這段長度]
-            聽拍資料.append(
-                {
-                    '語者': '媠媠',
-                    '內容': 一段,
-                    '開始時間': 這段資訊[0]['開始'],
-                    '結束時間': 這段資訊[-1]['開始'] + 這段資訊[-1]['長度'],
-                }
-            )
-            ctm所在 = +這段長度
-        聽拍內容 = {'聽拍資料': 聽拍資料}
-        聽拍內容.update(公家內容)
-        self.切好的聽拍 = self.欲切開的聽拍.校對做(聽拍內容)
-        self.save()
-
-    def 對齊失敗(self):
-        self.對齊好猶未 = True
-        self.對齊出問題 = True
-        self.save()
