@@ -1,5 +1,3 @@
-import json
-
 from django.test.testcases import TestCase
 
 
@@ -39,12 +37,8 @@ class 對齊狀態單元試驗(TestCase):
         self.assertTrue(語料對齊.對齊好猶未)
         self.assertFalse(語料對齊.對齊出問題)
         聽拍 = 語料對齊.影音.影音聽拍.get().聽拍.聽拍校對.get().新聽拍
-        try:
-            聽拍資料 = 聽拍.聽拍內容()
-        except:
-            聽拍資料 = json.loads(聽拍.聽拍資料)
         self.assertEqual(
-            聽拍資料,
+            聽拍.聽拍內容(),
             [
                 {
                     '語者': '媠媠',
