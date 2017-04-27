@@ -90,13 +90,14 @@ def _Kaldi辨識影音(影音):
 @csrf_exempt
 def Kaldi對齊(request):
     語言 = request.POST['語言']
-    資料陣列 = bytes(json.loads(
-        '[' + b64decode(request.POST['blob']).decode('utf-8') + ']'
-    ))
-
-    影音 = Kaldi語料辨識.匯入音檔(語言,  '無註明', 聲音檔.對資料轉(資料陣列), '')
-    Kaldi對齊影音.delay(影音.編號())
-    return HttpResponse()
+    文本 = request.POST['文本']
+    語料對齊 = Kaldi語料對齊.匯入音檔(
+        語言, '無註明',
+        聲音檔.對資料轉(request.FILES['原始wav檔'].read()),
+        文本.replace('\r\n', '\n').replace('\r', '\n')
+    )
+    Kaldi對齊影音.delay(語料對齊.pk)
+    return JsonResponse({'狀況': '成功'})
 
 
 @csrf_exempt
