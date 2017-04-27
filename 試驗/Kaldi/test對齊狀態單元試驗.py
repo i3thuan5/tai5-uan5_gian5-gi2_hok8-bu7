@@ -16,12 +16,15 @@ class 對齊狀態單元試驗(TestCase):
         )
         self.assertFalse(影音.Kaldi對齊結果.對齊好猶未)
 
-    def test_對齊前無分詞成功(self):
+    def test_對齊前就有聽拍(self):
         影音 = Kaldi語料對齊.匯入音檔(
             '閩南語', '媠媠',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5\nkhiau2',
         )
-        self.assertFalse(影音.影音聽拍.exists())
+        self.assertEqual(
+            影音.影音聽拍.get().聽拍.聽拍內容()[0]['內容'],
+            'tsiang5 tsiang5\nkhiau2'
+        )
 
     def test_對齊成功(self):
         影音 = Kaldi語料對齊.匯入音檔(
@@ -35,7 +38,7 @@ class 對齊狀態單元試驗(TestCase):
         ])
         self.assertTrue(影音.Kaldi對齊結果.對齊好猶未)
         self.assertFalse(影音.Kaldi對齊結果.對齊出問題)
-        聽拍 = 影音.影音聽拍.get().聽拍
+        聽拍 = 影音.影音聽拍.get().聽拍.聽拍校對.get().新聽拍
         try:
             聽拍資料 = 聽拍.聽拍內容()
         except:
