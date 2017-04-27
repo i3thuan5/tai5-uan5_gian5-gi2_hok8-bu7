@@ -12,6 +12,7 @@ from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
+from 臺灣言語服務.Kaldi語料對齊 import Kaldi語料對齊
 
 
 @csrf_exempt
@@ -83,3 +84,21 @@ def _Kaldi辨識影音(影音):
         影音.Kaldi辨識結果.辨識成功(章物件.看分詞())
     except:
         影音.Kaldi辨識結果.辨識失敗()
+
+
+@csrf_exempt
+def Kaldi對齊(request):
+    語言 = request.POST['語言']
+    資料陣列 = bytes(json.loads(
+        '[' + b64decode(request.POST['blob']).decode('utf-8') + ']'
+    ))
+
+    影音 = Kaldi語料辨識.匯入音檔(語言,  '無註明', 聲音檔.對資料轉(資料陣列), '')
+    Kaldi對齊影音.delay(影音.編號())
+    return HttpResponse()
+
+
+@shared_task
+def Kaldi對齊影音(對齊編號):
+    語料對齊 = Kaldi語料對齊.objects.get(pk=對齊編號)
+    語料對齊.對齊音檔()

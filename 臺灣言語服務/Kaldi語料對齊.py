@@ -1,8 +1,10 @@
 import io
+from os import makedirs
 from os.path import join, basename
 import tarfile
 
 from django.conf import settings
+from django.core.files.base import File
 from django.db.models.query_utils import Q
 from django.utils import timezone
 
@@ -13,7 +15,7 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語服務.models import Kaldi對齊結果
-from os import makedirs
+from tempfile import TemporaryDirectory
 
 
 class Kaldi語料對齊(Kaldi對齊結果):
@@ -54,6 +56,20 @@ class Kaldi語料對齊(Kaldi對齊結果):
         return cls.objects.create(影音=影音, 欲切開的聽拍=聽拍)
 
     def 對齊音檔(self):
+        try:
+            ctm資料 = self._對齊()
+        except:
+            self.對齊失敗()
+            return    
+        self.對齊成功(ctm資料)
+        with TemporaryDirectory() as 暫存資料夾路徑:
+            wav路徑 = join(暫存資料夾路徑, 'wav')
+            self.產生音檔(wav路徑)
+            tar路徑 = join(暫存資料夾路徑, 'tar')
+            self.壓縮音檔(wav路徑, tar路徑)
+            self.存壓縮檔(tar路徑)
+
+    def _對齊(self):
         語言 = self.影音.語言腔口.語言腔口
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
 
@@ -142,6 +158,14 @@ class Kaldi語料對齊(Kaldi對齊結果):
             with open(音檔路徑, 'wb') as 檔案:
                 檔案.write(這段音檔.wav格式資料())
 
-    def 壓縮音檔(self, wav資料夾路徑,tar路徑):
+    def 壓縮音檔(self, wav資料夾路徑, tar路徑):
         with tarfile.open(tar路徑, "w:gz") as tar檔案:
             tar檔案.add(wav資料夾路徑, arcname=basename(wav資料夾路徑))
+
+    def 存壓縮檔(self, tar路徑):
+        with open(tar路徑, 'rb') as tar檔案:
+            self.壓縮檔.save(
+                name='壓縮檔{0:07}.tar.gz'.format(self.影音編號()),
+                content=File(tar檔案),
+                save=True
+            )
