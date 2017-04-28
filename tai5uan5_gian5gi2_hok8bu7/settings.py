@@ -159,8 +159,8 @@ HOK8_BU7_SIAT4_TING7 = {
     },
 }
 
-# 上傳的音檔上大100M
-DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
+# 上傳的音檔上大1G
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
 
 # For better celery performance
 CELERY_IGNORE_RESULT = True
