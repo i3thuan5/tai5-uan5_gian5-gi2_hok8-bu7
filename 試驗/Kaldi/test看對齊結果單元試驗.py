@@ -83,3 +83,23 @@ class 看對齊結果單元試驗(TestCase):
         回應資料 = self.client.get('/對齊結果').json()
         self.assertIn('成功', 回應資料['對齊結果'][0]['狀態'])
         self.assertIn('壓縮檔網址', 回應資料['對齊結果'][0])
+
+    def test_有原始檔案(self):
+        Kaldi語料對齊.匯入音檔(
+            '閩南語', '啥人唸的',
+            聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
+        )
+
+        回應資料 = self.client.get('/對齊結果').json()
+        self.assertEqual(len(回應資料['對齊結果']), 1)
+        self.assertIn('原始wav檔網址', 回應資料['對齊結果'][0])
+
+    def test_有原始文本(self):
+        Kaldi語料對齊.匯入音檔(
+            '閩南語', '啥人唸的',
+            聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), '\ntsiang5\ntsiang5',
+        )
+
+        回應資料 = self.client.get('/對齊結果').json()
+        self.assertEqual(len(回應資料['對齊結果']), 1)
+        self.assertIn(回應資料['對齊結果'][0]['分詞文本'], '\ntsiang5\ntsiang5')

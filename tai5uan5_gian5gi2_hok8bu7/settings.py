@@ -120,6 +120,7 @@ TEMPLATES = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "資料庫影音檔案")
+MEDIA_URL = "/資料庫影音檔案/"
 
 MIDDLEWARE_CLASSES += (
     'corsheaders.middleware.CorsMiddleware',
