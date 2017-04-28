@@ -120,6 +120,7 @@ TEMPLATES = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "資料庫影音檔案")
+MEDIA_URL = "/資料庫影音檔案/"
 
 MIDDLEWARE_CLASSES += (
     'corsheaders.middleware.CorsMiddleware',
@@ -138,6 +139,7 @@ HOK8_BU7_SIAT4_TING7 = {
         '決策樹仔': 閩南語決策樹仔,
         '辨識設定': {
               '腳本資料夾': os.path.join(BASE_DIR, 'kaldi/egs/taiwanese/s5c'),
+              '語料資料夾': 'data',
               '模型資料夾': 'tri5.2',
               '圖資料夾': 'graph_sp',
               '結果檔名': '7.0.0.txt',
@@ -158,8 +160,8 @@ HOK8_BU7_SIAT4_TING7 = {
     },
 }
 
-# 上傳的音檔上大100M
-DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
+# 上傳的音檔上大1G
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
 
 # For better celery performance
 CELERY_IGNORE_RESULT = True

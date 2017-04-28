@@ -245,6 +245,21 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 ['0000000媠巧-tong0000000-ku0000000 0000000媠巧']
             )
 
+    def test_一條內底有換逝(self):
+        Kaldi語料辨識.匯入音檔(
+            '閩南語', '媠巧',
+            聲音檔.對參數轉(2, 16, 1, b'sui2khiau2' * 160), '\ntsiang5\ntsiang5\n',
+        )
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '閩南語', 臺灣閩南語羅馬字拼音,
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'text'),
+                ['0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
+            )
+
     def 比較檔案(self, 檔名, 資料):
         with open(檔名) as 檔案:
             self.assertEqual(檔案.read(), '\n'.join(資料) + '\n')

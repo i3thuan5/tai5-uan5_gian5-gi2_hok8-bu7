@@ -6,6 +6,8 @@ from 臺灣言語服務.HTS介面 import HTS介面
 from 臺灣言語服務.Moses介面 import Moses介面
 from 臺灣言語服務.Kaldi介面 import 看辨識結果
 from 臺灣言語服務.Kaldi介面 import Kaldi辨識
+from 臺灣言語服務.Kaldi介面 import 看對齊結果
+from 臺灣言語服務.Kaldi介面 import Kaldi對齊
 
 _Moses = Moses介面()
 _HTS = HTS介面()
@@ -21,6 +23,8 @@ urlpatterns = [
 
     url(r'^辦識音檔$', Kaldi辨識),
     url(r'^辦識結果$', 看辨識結果),
+    url(r'^對齊音檔$', Kaldi對齊),
+    url(r'^對齊結果$', 看對齊結果),
     url(r'^資料庫影音檔案/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT, 'show_indexes': False
     }),

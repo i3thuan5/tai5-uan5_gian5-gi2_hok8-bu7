@@ -12,6 +12,8 @@ from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
+from 臺灣言語服務.Kaldi語料對齊 import Kaldi語料對齊
+from 臺灣言語服務.models import Kaldi對齊結果
 
 
 @csrf_exempt
@@ -83,3 +85,50 @@ def _Kaldi辨識影音(影音):
         影音.Kaldi辨識結果.辨識成功(章物件.看分詞())
     except:
         影音.Kaldi辨識結果.辨識失敗()
+
+
+@csrf_exempt
+def Kaldi對齊(request):
+    語言 = request.POST['語言']
+    文本 = request.POST['文本']
+    語料對齊 = Kaldi語料對齊.匯入音檔(
+        語言, '無註明',
+        聲音檔.對資料轉(request.FILES['原始wav檔'].read()),
+        文本.replace('\r\n', '\n').replace('\r', '\n')
+    )
+    Kaldi對齊影音.delay(語料對齊.pk)
+    return JsonResponse({'狀況': '成功'})
+
+
+@csrf_exempt
+def 看對齊結果(request):
+    結果 = []
+    for 對齊結果 in (
+        Kaldi對齊結果.objects
+        .filter()
+        .select_related('影音__語言腔口', '欲切開的聽拍')
+        .order_by('-pk')[:300]
+    ):
+        這筆 = {
+            '編號': 對齊結果.pk,
+            '原始wav檔網址': 對齊結果.影音.影音資料.url,
+            '分詞文本': 對齊結果.欲切開的聽拍.聽拍內容()[0]['內容']
+        }
+        if not 對齊結果.對齊好猶未:
+            這筆['狀態'] = '對齊中…'
+        elif 對齊結果.對齊出問題:
+            這筆['狀態'] = '對齊出問題'
+        elif not 對齊結果.壓縮檔.name:
+            這筆['狀態'] = '佇產生壓縮檔…'
+        else:
+            這筆['狀態'] = '成功'
+            這筆['壓縮檔網址'] = 對齊結果.壓縮檔.url
+
+        結果.append(這筆)
+    return JsonResponse({'對齊結果': 結果})
+
+
+@shared_task
+def Kaldi對齊影音(對齊編號):
+    語料對齊 = Kaldi語料對齊.objects.get(pk=對齊編號)
+    語料對齊.對齊音檔()

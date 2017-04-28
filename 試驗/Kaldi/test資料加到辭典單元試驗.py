@@ -1,6 +1,3 @@
-from os import remove
-from tempfile import mkstemp
-
 from django.test.testcases import TestCase
 
 
@@ -8,13 +5,7 @@ from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 
 
-class Kaldi匯出辭典單元試驗(TestCase):
-
-    def setUp(self):
-        _資源, self.檔案路徑 = mkstemp(suffix='分詞')
-
-    def tearDown(self):
-        remove(self.檔案路徑)
+class 資料加到辭典單元試驗(TestCase):
 
     def test_無合法拼音就莫愛(self):
         分詞 = 'la0123006｜la0123006'
@@ -150,6 +141,18 @@ class Kaldi匯出辭典單元試驗(TestCase):
         self.assertEqual(len(韻類), 1)
         self.assertEqual(len(調類), 1)
         self.assertEqual(len(全部詞), 1)
+
+    def test_有換逝無要緊(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '\n我｜gua2\n是｜si7\n你｜li2', 臺灣閩南語羅馬字拼音,
+            加語料=True,
+        )
+        self.assertEqual(len(全部詞), 3)
 
     def test_調無仝就袂使(self):
         全部詞 = set()
