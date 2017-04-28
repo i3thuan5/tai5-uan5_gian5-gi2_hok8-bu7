@@ -64,7 +64,7 @@ def Kaldi辨識(request):
 
     影音 = Kaldi語料辨識.匯入音檔(語言, 啥人唸的, 聲音檔.對資料轉(資料陣列), '')
     Kaldi辨識影音.delay(影音.編號())
-    return HttpResponse()
+    return HttpResponse('上傳成功！！')
 
 
 def 無辨識過的重訓練一擺():
@@ -97,7 +97,7 @@ def Kaldi對齊(request):
         文本.replace('\r\n', '\n').replace('\r', '\n')
     )
     Kaldi對齊影音.delay(語料對齊.pk)
-    return JsonResponse({'狀況': '成功'})
+    return HttpResponse('上傳成功！！')
 
 
 @csrf_exempt
