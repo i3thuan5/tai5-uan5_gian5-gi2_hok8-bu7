@@ -32,4 +32,3 @@ class Kaldi對齊結果(models.Model):
     欲切開的聽拍 = models.OneToOneField(聽拍表, related_name='+')
     切好的聽拍 = models.OneToOneField(聽拍表, null=True, related_name='+')
     壓縮檔 = models.FileField(blank=True)
-
