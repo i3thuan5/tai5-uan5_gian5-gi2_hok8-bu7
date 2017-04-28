@@ -78,7 +78,7 @@ class Kaldi語料對齊(Kaldi對齊結果):
         影音編號 = self.影音.編號()
 
         編號字串資料夾名 = '{0:07}'.format(影音編號)
-        暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
+        暫存目錄 = join(settings.BASE_DIR, 'kaldi-data')
 
         辭典資料 = Kaldi語料匯出.初使化辭典資料()
         Kaldi語料匯出.匯出一種語言語料(
