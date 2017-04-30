@@ -31,7 +31,7 @@ class Moses介面:
         try:
             return JsonResponse(self.服務.正規化翻譯實作(查詢腔口, 查詢語句))
         except Pyro4.errors.NamingError:
-            return JsonResponse({'失敗': '服務無啟動，請通知咱！'}, status=503)
+            return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'}, status=503)
 
@@ -54,7 +54,7 @@ class Moses介面:
         try:
             return JsonResponse(self.服務.標漢字音標實作(查詢腔口, 查詢語句))
         except Pyro4.errors.NamingError:
-            return JsonResponse({'失敗': '服務無啟動，請通知咱！'}, status=503)
+            return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'}, status=503)
 
@@ -78,6 +78,6 @@ class Moses介面:
         try:
             return JsonResponse(self.服務.漢字音標對齊實作(查詢腔口, 漢字, 音標))
         except Pyro4.errors.NamingError:
-            return JsonResponse({'失敗': '服務無啟動，請通知咱！'}, status=503)
+            return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'}, status=503)

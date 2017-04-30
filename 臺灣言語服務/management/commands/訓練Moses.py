@@ -5,8 +5,8 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 
-from 臺灣言語工具.翻譯.摩西工具.安裝摩西翻譯佮相關程式 import 安裝摩西翻譯佮相關程式
 from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
+from django.core.management import call_command
 
 
 class Command(BaseCommand):
@@ -38,8 +38,7 @@ class Command(BaseCommand):
             語言陣列 = sorted(settings.HOK8_BU7_SIAT4_TING7.keys())
         else:
             語言陣列 = 參數['語言']
-        安裝摩西翻譯佮相關程式.安裝gizapp()
-        安裝摩西翻譯佮相關程式.安裝moses(編譯CPU數=4)
+        call_command('牽Moses')
         Moses模型訓練.輸出全部語料()
         for 一个語言 in 語言陣列:
             try:
