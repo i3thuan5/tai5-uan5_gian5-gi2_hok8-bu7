@@ -32,6 +32,7 @@ addons:
     - libgoogle-perftools-dev
     - libxmlrpc-c++.*-dev
     - cmake
+    - csh
     - libyaml-dev
     - libxslt1-dev
     - libav-tools  
