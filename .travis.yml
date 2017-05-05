@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 dist: trusty
 language: python
 python:
@@ -6,7 +6,8 @@ python:
 - '3.5'
 env:
 - TOX_ENV=tan1uan5
-- TOX_ENV=hap8sing5
+- TOX_ENV=hap8sing5-tsih3giam7
+- TOX_ENV=hap8sing5-hun3lian7
 - TOX_ENV=huan1ik8
 - TOX_ENV=flake8
 addons:
@@ -31,12 +32,13 @@ addons:
     - libgoogle-perftools-dev
     - libxmlrpc-c++.*-dev
     - cmake
+    - csh
     - libyaml-dev
     - libxslt1-dev
     - libav-tools  
     - libmp3lame0
 install:
-- pip install tai5-uan5_gian5-gi2_tsu1-liau7-khoo3 pyro4 django-ranged-fileresponse
+- sudo apt-get install -y libavcodec-extra-54 libx11-dev libx11-dev:i386
 - pip install tox
 - pip install python-coveralls
 branches:
