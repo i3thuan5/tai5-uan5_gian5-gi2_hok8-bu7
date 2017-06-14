@@ -28,7 +28,6 @@ class Command(BaseCommand):
             default='3',
             help='語言文本的連紲詞長度(n-grams)'
         )
-        
         parser.add_argument(
             '匯出路徑',
             type=str,
