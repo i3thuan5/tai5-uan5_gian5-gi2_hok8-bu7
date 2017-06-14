@@ -24,6 +24,12 @@ class Command(BaseCommand):
             help='選擇語料的語言文本'
         )
         parser.add_argument(
+            '--連紲詞長度',
+            type=int,
+            default='3',
+            help='語言文本的連紲詞長度(n-grams)'
+        )
+        parser.add_argument(
             '匯出路徑',
             type=str,
             help='kaldi的egs內底的s5資料夾'
@@ -51,5 +57,5 @@ class Command(BaseCommand):
             call_command('牽Moses')
             服務設定 = settings.HOK8_BU7_SIAT4_TING7[參數['語言'][0]]
             Kaldi語料匯出.辭典資料載入語句文本(參數['語言文本'], 服務設定['音標系統'], 辭典資料)
-            Kaldi語料匯出.匯出語言模型(參數['語言文本'], 參數['匯出路徑'], 參數['資料夾名'])
+            Kaldi語料匯出.匯出語言模型(參數['語言文本'], 參數['連紲詞長度'], 參數['匯出路徑'], 參數['資料夾名'])
         Kaldi語料匯出.匯出辭典資料(辭典資料, 參數['匯出路徑'], 參數['資料夾名'])

@@ -79,12 +79,12 @@ class Kaldi語料匯出(程式腳本):
         cls._陣列寫入檔案(join(訓練語料資料夾, 'extra_questions.txt'), sorted(調問題))
 
     @classmethod
-    def 匯出語言模型(cls, 語言文本, 語料資料夾, 資料夾名):
+    def 匯出語言模型(cls, 語言文本, 連紲詞長度, 語料資料夾, 資料夾名):
         訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 'lm')
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
-        KenLM語言模型訓練().訓練([語言文本], 訓練語料資料夾)
+        KenLM語言模型訓練().訓練([語言文本], 訓練語料資料夾, 連紲詞長度=連紲詞長度)
 
     @classmethod
     def _資料加到辭典(cls, 聲類, 韻類, 調類, 全部詞, 全部句, 一逝, 音標系統, 加語料):
