@@ -7,11 +7,12 @@ from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 class Kaldi語料處理():
 
     @classmethod
-    def 揣出漢語音節種類(cls, 語句陣列):
+    def 揣出漢語音節種類(cls, 音標系統, 語句陣列):
         音 = set()
         for 逝 in 語句陣列:
             for 字物件 in 拆文分析器.分詞句物件(逝.strip()).篩出字物件():
-                音.add(字物件.看音())
+                if 音標系統(字物件.看音()).音標:
+                    音.add(字物件.看音())
         return 音
 
     @classmethod

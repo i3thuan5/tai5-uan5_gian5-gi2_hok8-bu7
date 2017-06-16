@@ -38,7 +38,7 @@ class Command(BaseCommand, 程式腳本):
 
     def handle(self, *args, **參數):
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[參數['語言']]
-        漢語音節 = Kaldi語料處理.揣出漢語音節種類(self._讀檔案(參數['語言文本']))
+        漢語音節 = Kaldi語料處理.揣出漢語音節種類(服務設定['音標系統'], self._讀檔案(參數['語言文本']))
         資料夾 = join(參數['匯出路徑'], 參數['資料夾名'], 'local', 'free-syllable')
         makedirs(資料夾, exist_ok=True)
         self._陣列寫入檔案(
