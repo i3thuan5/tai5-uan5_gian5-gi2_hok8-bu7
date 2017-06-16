@@ -41,7 +41,7 @@ class Kaldi語料匯出(程式腳本):
                 with cls._寫檔(訓練語料資料夾, 'segments') as 語句目錄:
                     with cls._寫檔(訓練語料資料夾, 'reco2file_and_channel') as 音檔對應頻道:
                         with cls._寫檔(訓練語料資料夾, 'utt2spk') as 語句對應語者:
-                            cls._揣影音輸出(
+                            return cls._揣影音輸出(
                                 語言, 音標系統,
                                 聽拍內容, 音檔目錄, 語句目錄, 音檔對應頻道, 語句對應語者, 辭典資料,
                                 匯出條件,
@@ -153,7 +153,8 @@ class Kaldi語料匯出(程式腳本):
                匯出條件):
         第幾个人 = 0
         語者名對應輸出名 = {}
-        for 第幾个, 影音 in enumerate(
+        第幾个 = 0
+        for 影音 in (
             影音表.objects
             .distinct()
             .filter(影音聽拍__isnull=False)
@@ -172,15 +173,17 @@ class Kaldi語料匯出(程式腳本):
                     一句聽拍['開始時間'], 一句聽拍['結束時間'], 一句聽拍['語者'], 一句聽拍['內容'],
                     聽拍內容, 語句目錄, 語句對應語者
                 )
-        for 第幾个, 影音 in enumerate(
+            第幾个 += 1
+        for 影音 in (
             影音表.objects
             .distinct()
             .filter(影音聽拍__isnull=True)
             .filter(影音文本__isnull=False)
-            .filter(語言腔口__語言腔口=語言),
-            start=第幾个
+            .filter(語言腔口__語言腔口=語言)
         ):
             cls._揣上尾的文本(影音.影音文本.first().文本)
+            第幾个 += 1
+        return 第幾个
 
     @classmethod
     def _音檔資訊(cls, 影音, 音檔名, 音檔目錄, 音檔對應頻道):
