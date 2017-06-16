@@ -36,6 +36,21 @@ class 匯出漢語音節fst單元試驗(TestCase):
             ]
         )
 
+    def test_轉辭典檔(self):
+        fst = Kaldi語料處理.轉辭典檔(
+            {'kan2', 'na2', 'san3', 'poo7', 'leh4'}
+        )
+        self.assertEqual(
+            fst,
+            [
+                'kan2｜kan2\tk- a2 n2',
+                'leh4｜leh4\tl- e4 ʔ4',
+                'na2｜na2\tn- a2',
+                'poo7｜poo7\tp- o7',
+                'san3｜san3\ts- a3 n3'
+            ]
+        )
+
     @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.揣出漢語音節種類')
     def test_指令有讀(self, 揣出漢語音節種類mock):
         揣出漢語音節種類mock.return_value = {'kan2', 'na2', 'san3', 'poo7', 'leh4'}

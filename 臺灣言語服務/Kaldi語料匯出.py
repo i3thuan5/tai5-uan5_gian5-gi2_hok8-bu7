@@ -96,34 +96,10 @@ class Kaldi語料匯出(程式腳本):
             # 換逝符號
             if len(分詞.strip()) == 0:
                 continue
-            try:
-                聲韻陣列 = []
-                for 字物件 in 詞物件.轉音(音標系統, '音值').篩出字物件():
-                    原聲, 韻, 調 = 字物件.音
-                    聲 = 原聲 + '-'
-                    聲韻陣列.append(聲)
-                    if 加語料:
-                        聲類.add(聲)
-                    else:
-                        if 聲 not in 聲類:
-                            raise RuntimeError('語料無這个音')
-                    for 一个音素 in 漢語語音處理.切漢語韻(韻):
-                        一个音素調 = 一个音素 + 調
-                        聲韻陣列.append(一个音素調)
-                        if 加語料:
-                            try:
-                                韻類[一个音素].add(一个音素調)
-                            except:
-                                韻類[一个音素] = {一个音素調}
-                            try:
-                                調類[調].add(一个音素調)
-                            except:
-                                調類[調] = {一个音素調}
-                        else:
-                            if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
-                                raise RuntimeError('語料無這个韻抑是調')
-                一項 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
-                全部詞.add(一項)
+            try:                
+                全部詞.add(
+cls.音節轉辭典格式(聲類, 韻類, 調類,詞物件, 音標系統, 加語料 )
+)
             except:
                 字物件陣列 = 詞物件.篩出字物件()
                 if (
@@ -146,6 +122,36 @@ class Kaldi語料匯出(程式腳本):
             一句.append(分詞)
         全部句.append(' '.join(一句))
         return len(一句), 外來語數量
+
+    @classmethod
+    def 音節轉辭典格式(cls,聲類, 韻類, 調類, 物件, 音標系統, 加語料):
+        分詞 = 物件.看分詞()
+        聲韻陣列 = []
+        for 字物件 in 物件.轉音(音標系統, '音值').篩出字物件():
+            原聲, 韻, 調 = 字物件.音
+            聲 = 原聲 + '-'
+            聲韻陣列.append(聲)
+            if 加語料:
+                聲類.add(聲)
+            else:
+                if 聲 not in 聲類:
+                    raise RuntimeError('語料無這个音')
+            for 一个音素 in 漢語語音處理.切漢語韻(韻):
+                一个音素調 = 一个音素 + 調
+                聲韻陣列.append(一个音素調)
+                if 加語料:
+                    try:
+                        韻類[一个音素].add(一个音素調)
+                    except:
+                        韻類[一个音素] = {一个音素調}
+                    try:
+                        調類[調].add(一个音素調)
+                    except:
+                        調類[調] = {一个音素調}
+                else:
+                    if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
+                        raise RuntimeError('語料無這个韻抑是調')
+        return '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
 
     @classmethod
     def _揣影音輸出(cls, 語言, 音標系統,
