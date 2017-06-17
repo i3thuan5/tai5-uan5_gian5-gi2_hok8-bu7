@@ -2,6 +2,7 @@
 
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
+from 臺灣言語工具.基本物件.公用變數 import 分型音符號
 
 
 class Kaldi語料處理():
@@ -19,7 +20,7 @@ class Kaldi語料處理():
     def 轉fst格式(cls, 音陣列):
         資料 = []
         for 音節 in sorted(音陣列):
-            資料.append('0\t0\t{0}｜{0}\t0'.format(音節))
+            資料.append('0\t0\t{0}{1}{0}\t{0}{1}{0}'.format(音節,分型音符號))
         資料.append('0\t1')
         return 資料
 

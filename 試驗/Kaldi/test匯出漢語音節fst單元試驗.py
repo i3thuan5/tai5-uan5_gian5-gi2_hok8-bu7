@@ -39,11 +39,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                '0\t0\tkan2｜kan2\t0',
-                '0\t0\tleh4｜leh4\t0',
-                '0\t0\tna2｜na2\t0',
-                '0\t0\tpoo7｜poo7\t0',
-                '0\t0\tsan3｜san3\t0',
+                '0\t0\tkan2｜kan2\tkan2｜kan2',
+                '0\t0\tleh4｜leh4\tleh4｜leh4',
+                '0\t0\tna2｜na2\tna2｜na2',
+                '0\t0\tpoo7｜poo7\tpoo7｜poo7',
+                '0\t0\tsan3｜san3\tsan3｜san3',
                 '0\t1',
             ]
         )
@@ -82,11 +82,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
     @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.轉fst格式')
     def test_指令有輸出fst(self, 轉fst格式mock):
         轉fst格式mock.return_value = [
-            '0 0 leh4｜leh4 0',
-            '0 0 kan2｜kan2 0',
-            '0 0 na2｜na2 0',
-            '0 0 poo7｜poo7 0',
-            '0 0 san3｜san3 0',
+            '0 0 leh4｜leh4 leh4｜leh4',
+            '0 0 kan2｜kan2 kan2｜kan2',
+            '0 0 na2｜na2 na2｜na2',
+            '0 0 poo7｜poo7 poo7｜poo7',
+            '0 0 san3｜san3 san3｜san3',
             '0 1',
         ]
         with TemporaryDirectory() as 資料夾路徑:
@@ -99,11 +99,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
             self.比較檔案(
                 join(資料夾路徑, 'data', 'local', 'free-syllable', 'uniform.fst'),
                 [
-                    '0 0 leh4｜leh4 0',
-                    '0 0 kan2｜kan2 0',
-                    '0 0 na2｜na2 0',
-                    '0 0 poo7｜poo7 0',
-                    '0 0 san3｜san3 0',
+                    '0 0 leh4｜leh4 leh4｜leh4',
+                    '0 0 kan2｜kan2 kan2｜kan2',
+                    '0 0 na2｜na2 na2｜na2',
+                    '0 0 poo7｜poo7 poo7｜poo7',
+                    '0 0 san3｜san3 san3｜san3',
                     '0 1',
                 ]
             )
