@@ -40,10 +40,11 @@ class Kaldi語料處理():
         切text = re.compile(r'([^ ]*) (.*)\Z')
         結果 = []
         for 逝 in 語句陣列:
-            切開結果 = 切text.match(逝)
-            音節逝 = [切開結果.group(1)]
-            for 字物件 in 拆文分析器.分詞句物件(切開結果.group(2).strip()).篩出字物件():
-                if 音標系統(字物件.看音()).音標:
-                    音節逝.append('{0}{1}{0}'.format(字物件.看音(), 分型音符號))
-            結果.append(' '.join(音節逝))
+            if 逝.strip():
+                切開結果 = 切text.match(逝)
+                音節逝 = [切開結果.group(1)]
+                for 字物件 in 拆文分析器.分詞句物件(切開結果.group(2).strip()).篩出字物件():
+                    if 音標系統(字物件.看音()).音標:
+                        音節逝.append('{0}{1}{0}'.format(字物件.看音(), 分型音符號))
+                結果.append(' '.join(音節逝))
         return 結果
