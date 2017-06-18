@@ -105,6 +105,36 @@ class 匯出漢語音節fst單元試驗(TestCase):
             ]
         )
 
+    def test_輕聲佮原本音攏仝款(self):
+        fst = Kaldi語料處理.轉辭典檔(
+            臺灣閩南語羅馬字拼音,
+            {'khiau2','0sui2','sui1', 'sui2', 'sui3'}
+        )
+        self.assertEqual(
+            fst,
+            [
+                'khiau｜khiau\tkʰ- i2 a2 u2',
+                'sui｜sui\ts- u0 i0',
+                'sui｜sui\ts- u1 i1',
+                'sui｜sui\ts- u2 i2',
+                'sui｜sui\ts- u3 i3',
+            ]
+        )
+    def test_外來詞佮原本音攏仝款(self):
+        fst = Kaldi語料處理.轉辭典檔(
+            臺灣閩南語羅馬字拼音,
+            {'khiau2','1sui2','sui1', 'sui2', 'sui3'}
+        )
+        self.assertEqual(
+            fst,
+            [
+                'khiau｜khiau\tkʰ- i2 a2 u2',
+                'sui｜sui\ts- u1 i1',
+                'sui｜sui\ts- u2 i2',
+                'sui｜sui\ts- u3 i3',
+            ]
+        )
+
     def test_單元音(self):
         fst = Kaldi語料處理.轉辭典檔(
             臺灣閩南語羅馬字拼音,

@@ -32,16 +32,16 @@ class Kaldi語料處理():
 
     @classmethod
     def 轉辭典檔(cls, 音標系統, 音陣列):
-        資料 = []
+        資料 = set()
         for 音節 in sorted(音陣列):
-            資料.append(
+            資料.add(
                 Kaldi語料匯出.音節轉辭典格式(
                     set(), {}, {},
                     拆文分析器.對齊字物件(音節, 音節), 音標系統, True
                 )
                 .replace(音節, cls._漢字聲韻(音標系統, 音節), 2)
             )
-        return 資料
+        return sorted(資料)
 
     @classmethod
     def 轉音節text格式(cls, 音標系統, 語句陣列):
