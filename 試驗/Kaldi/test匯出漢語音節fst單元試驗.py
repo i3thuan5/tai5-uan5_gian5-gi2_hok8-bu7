@@ -22,6 +22,16 @@ class 匯出漢語音節fst單元試驗(TestCase):
             {'kan2', 'na2', 'san3', 'poo7', 'leh4'}
         )
 
+    def test_揣出有音檔名嘛無要緊(self):
+        音節 = Kaldi語料處理.揣出漢語音節種類(
+            臺灣閩南語羅馬字拼音,
+            ['tong0000000-0000000無註明-ku0000000 敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4']
+        )
+        self.assertEqual(
+            音節,
+            {'kan2', 'na2', 'san3', 'poo7', 'leh4'}
+        )
+
     def test_無法度解析的免插(self):
         音節 = Kaldi語料處理.揣出漢語音節種類(
             臺灣閩南語羅馬字拼音,
