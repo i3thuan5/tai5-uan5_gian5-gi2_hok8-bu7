@@ -43,7 +43,7 @@ class Command(BaseCommand, 程式腳本):
         makedirs(資料夾, exist_ok=True)
         self._陣列寫入檔案(
             join(資料夾, 'uniform.fst'),
-            Kaldi語料處理.轉fst格式(漢語音節)
+            Kaldi語料處理.轉fst格式(服務設定['音標系統'], 漢語音節)
         )
         self._陣列寫入檔案(
             join(資料夾, 'lexicon.txt'),

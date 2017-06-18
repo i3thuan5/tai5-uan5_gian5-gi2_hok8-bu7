@@ -18,10 +18,15 @@ class Kaldi語料處理():
         return 音
 
     @classmethod
-    def 轉fst格式(cls, 音陣列):
+    def 轉fst格式(cls, 音標系統, 音陣列):
         資料 = []
         for 音節 in sorted(音陣列):
-            資料.append('0\t0\t{0}{1}{0}\t{0}{1}{0}'.format(音節, 分型音符號))
+            音標物件 = 音標系統(音節)
+            資料.append(
+                '0\t0\t{0}{1}{0}\t{2}{1}{2}'.format(
+                    音節, 分型音符號, 音標物件.聲 + 音標物件.韻
+                )
+            )
         資料.append('0\t1')
         return 資料
 
@@ -44,7 +49,8 @@ class Kaldi語料處理():
                 切開結果 = 切text.match(逝)
                 音節逝 = [切開結果.group(1)]
                 for 字物件 in 拆文分析器.分詞句物件(切開結果.group(2).strip()).篩出字物件():
-                    if 音標系統(字物件.看音()).音標:
-                        音節逝.append('{0}{1}{0}'.format(字物件.看音(), 分型音符號))
+                    音標物件 = 音標系統(字物件.看音())
+                    if 音標物件.音標:
+                        音節逝.append('{0}{1}{0}'.format(音標物件.聲 + 音標物件.韻, 分型音符號))
                 結果.append(' '.join(音節逝))
         return 結果

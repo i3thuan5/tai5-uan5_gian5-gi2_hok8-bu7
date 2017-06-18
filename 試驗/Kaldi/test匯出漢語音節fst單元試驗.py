@@ -47,16 +47,17 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_轉fst(self):
         fst = Kaldi語料處理.轉fst格式(
+            臺灣閩南語羅馬字拼音,
             {'kan2', 'na2', 'san3', 'poo7', 'leh4'}
         )
         self.assertEqual(
             fst,
             [
-                '0\t0\tkan2｜kan2\tkan2｜kan2',
-                '0\t0\tleh4｜leh4\tleh4｜leh4',
-                '0\t0\tna2｜na2\tna2｜na2',
-                '0\t0\tpoo7｜poo7\tpoo7｜poo7',
-                '0\t0\tsan3｜san3\tsan3｜san3',
+                '0\t0\tkan2｜kan2\tkan｜kan',
+                '0\t0\tleh4｜leh4\tleh｜leh',
+                '0\t0\tna2｜na2\tna｜na',
+                '0\t0\tpoo7｜poo7\tpoo｜poo',
+                '0\t0\tsan3｜san3\tsan｜san',
                 '0\t1',
             ]
         )
