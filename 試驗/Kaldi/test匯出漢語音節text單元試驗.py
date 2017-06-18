@@ -8,6 +8,8 @@ from django.test.testcases import TestCase
 
 from 臺灣言語服務.Kaldi語料處理 import Kaldi語料處理
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
+from os import makedirs
 
 
 class 匯出漢語音節text單元試驗(TestCase):
@@ -52,6 +54,7 @@ class 匯出漢語音節text單元試驗(TestCase):
         ]
         with TemporaryDirectory() as 資料夾路徑:
             原本語料 = join(資料夾路徑, 'train_dev')
+            makedirs(原本語料)
             with open(join(原本語料, 'text'), 'w') as 檔案:
                 print(
                     'tong0000000-0000000無註明-ku0000000 '
@@ -60,10 +63,10 @@ class 匯出漢語音節text單元試驗(TestCase):
                 )
             結果語料 = join(資料夾路徑, 'train_dev_free')
 
-            call_command('轉Kaldi音節fst', '閩南語', 原本語料, 結果語料)
+            call_command('轉Kaldi音節text', '閩南語', 原本語料, 結果語料)
 
-            self.fail(
-                join(結果語料, 'text'),
+            self.assertEqual(
+                程式腳本._讀檔案(join(結果語料, 'text')),
                 [
                     'tong0000000-0000000無註明-ku0000000 '
                     'kan2｜kan2 na2｜na2 san3｜san3 poo7｜poo7'
