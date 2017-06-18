@@ -37,7 +37,7 @@ class Kaldi語料處理():
 
     @classmethod
     def 轉音節text格式(cls, 音標系統, 語句陣列):
-        切text = re.compile(r'([^ ]*) (.*)\Z')
+        切text = re.compile(r'([^ ]*)(.*)\Z')
         結果 = []
         for 逝 in 語句陣列:
             if 逝.strip():

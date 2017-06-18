@@ -45,6 +45,21 @@ class 匯出漢語音節text單元試驗(TestCase):
                 'kan2｜kan2 na2｜na2 san3｜san3 poo7｜poo7'
             ]
         )
+
+    def test_無講話無要緊(self):
+        音節 = Kaldi語料處理.轉音節text格式(
+            臺灣閩南語羅馬字拼音,
+            [
+                'tong0000000-0000000無註明-ku0000000'
+            ]
+        )
+        self.assertEqual(
+            音節,
+            [
+                'tong0000000-0000000無註明-ku0000000'
+            ]
+        )
+
     def test_有空逝無要緊(self):
         音節 = Kaldi語料處理.轉音節text格式(
             臺灣閩南語羅馬字拼音,
