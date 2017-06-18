@@ -19,13 +19,14 @@ class Kaldi語料處理():
 
     @classmethod
     def 轉fst格式(cls, 音標系統, 音陣列):
-        資料 = []
-        for 音節 in sorted(音陣列):
-            資料.append(
+        路 = set()
+        for 音節 in 音陣列:
+            路.add(
                 '0\t0\t{2}{1}{2}\t{2}{1}{2}'.format(
                     音節, 分型音符號, cls._漢字聲韻(音標系統, 音節)
                 )
             )
+        資料 = sorted(路)
         資料.append('0\t1')
         return 資料
 
@@ -38,7 +39,7 @@ class Kaldi語料處理():
                     set(), {}, {},
                     拆文分析器.對齊字物件(音節, 音節), 音標系統, True
                 )
-                .replace(音節, cls._漢字聲韻(音標系統, 音節))
+                .replace(音節, cls._漢字聲韻(音標系統, 音節), 2)
             )
         return 資料
 

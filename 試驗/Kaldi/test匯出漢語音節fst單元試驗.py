@@ -62,6 +62,19 @@ class 匯出漢語音節fst單元試驗(TestCase):
             ]
         )
 
+    def test_fst仝調一條路就好(self):
+        fst = Kaldi語料處理.轉fst格式(
+            臺灣閩南語羅馬字拼音,
+            {'sui1', 'sui2', 'sui3'}
+        )
+        self.assertEqual(
+            fst,
+            [
+                '0\t0\tsui｜sui\tsui｜sui',
+                '0\t1',
+            ]
+        )
+
     def test_轉辭典檔(self):
         fst = Kaldi語料處理.轉辭典檔(
             臺灣閩南語羅馬字拼音,
@@ -77,6 +90,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
                 'san｜san\ts- a3 n3'
             ]
         )
+
     def test_仝音攏出現(self):
         fst = Kaldi語料處理.轉辭典檔(
             臺灣閩南語羅馬字拼音,
@@ -85,9 +99,21 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'sui｜sui\ts- u1 i1', 
-                'sui｜sui\ts- u2 i2', 
+                'sui｜sui\ts- u1 i1',
+                'sui｜sui\ts- u2 i2',
                 'sui｜sui\ts- u3 i3',
+            ]
+        )
+
+    def test_單元音(self):
+        fst = Kaldi語料處理.轉辭典檔(
+            臺灣閩南語羅馬字拼音,
+            {'i1'}
+        )
+        self.assertEqual(
+            fst,
+            [
+                'i｜i\tʔ- i1',
             ]
         )
 
