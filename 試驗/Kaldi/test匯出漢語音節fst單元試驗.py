@@ -53,11 +53,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                '0\t0\tkan2｜kan2\tkan2｜kan2',
-                '0\t0\tleh4｜leh4\tleh4｜leh4',
-                '0\t0\tna2｜na2\tna2｜na2',
-                '0\t0\tpoo7｜poo7\tpoo7｜poo7',
-                '0\t0\tsan3｜san3\tsan3｜san3',
+                '0\t0\tkan｜kan\tkan｜kan',
+                '0\t0\tleh｜leh\tleh｜leh',
+                '0\t0\tna｜na\tna｜na',
+                '0\t0\tpoo｜poo\tpoo｜poo',
+                '0\t0\tsan｜san\tsan｜san',
                 '0\t1',
             ]
         )
@@ -70,11 +70,24 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'kan2｜kan2\tk- a2 n2',
-                'leh4｜leh4\tl- e4 ʔ4',
-                'na2｜na2\tn- a2',
-                'poo7｜poo7\tp- o7',
-                'san3｜san3\ts- a3 n3'
+                'kan｜kan\tk- a2 n2',
+                'leh｜leh\tl- e4 ʔ4',
+                'na｜na\tn- a2',
+                'poo｜poo\tp- o7',
+                'san｜san\ts- a3 n3'
+            ]
+        )
+    def test_仝音攏出現(self):
+        fst = Kaldi語料處理.轉辭典檔(
+            臺灣閩南語羅馬字拼音,
+            {'sui1', 'sui2', 'sui3'}
+        )
+        self.assertEqual(
+            fst,
+            [
+                'sui｜sui\ts- u1 i1', 
+                'sui｜sui\ts- u2 i2', 
+                'sui｜sui\ts- u3 i3',
             ]
         )
 
