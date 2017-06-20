@@ -103,3 +103,22 @@ class 匯出漢語音節text單元試驗(TestCase):
                     'kan｜kan na｜na san｜san poo｜poo leh｜leh'
                 ]
             )
+
+    def test_有khok4pi3檔案(self):
+        with TemporaryDirectory() as 資料夾路徑:
+            原本語料 = join(資料夾路徑, 'train_dev')
+            makedirs(原本語料)
+            程式腳本._字串寫入檔案(
+                join(原本語料, 'text'),
+                'tong0000000-0000000無註明-ku0000000 '
+                '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4'
+            )
+            程式腳本._字串寫入檔案(join(原本語料, 'utt2spk'), 'kiann5')
+            結果語料 = join(資料夾路徑, 'train_dev_free')
+
+            call_command('轉Kaldi音節text', '閩南語', 原本語料, 結果語料)
+
+            self.assertEqual(
+                程式腳本._讀檔案(join(結果語料, 'utt2spk')),
+                程式腳本._讀檔案(join(原本語料, 'utt2spk'))
+            )
