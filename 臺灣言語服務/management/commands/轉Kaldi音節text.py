@@ -1,6 +1,6 @@
 from os import makedirs
-from os.path import join, isfile
-from shutil import copyfile
+from os.path import join, isfile, isdir
+from shutil import copyfile, rmtree
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -36,7 +36,9 @@ class Command(BaseCommand, 程式腳本):
             服務設定['音標系統'],
             self._讀檔案(join(參數['原本資料'], 'text'))
         )
-        makedirs(參數['結果資料夾'], exist_ok=True)
+        if isdir(參數['結果資料夾']):
+            rmtree(參數['結果資料夾'])
+        makedirs(參數['結果資料夾'])
         self._陣列寫入檔案(
             join(參數['結果資料夾'], 'text'),
             新文本
