@@ -8,6 +8,7 @@ from 臺灣言語服務.Kaldi介面 import 看辨識結果
 from 臺灣言語服務.Kaldi介面 import Kaldi辨識
 from 臺灣言語服務.Kaldi介面 import 看對齊結果
 from 臺灣言語服務.Kaldi介面 import Kaldi對齊
+from 臺灣言語服務.文本介面 import 文本介面
 
 _Moses = Moses介面()
 _HTS = HTS介面()
@@ -16,7 +17,7 @@ urlpatterns = [
     url(r'^正規化翻譯支援腔口$', _Moses.正規化翻譯支援腔口),
     url(r'^正規化翻譯$', _Moses.正規化翻譯),
     url(r'^標漢字音標$', _Moses.標漢字音標),
-    url(r'^漢字音標對齊$', _Moses.漢字音標對齊),
+    url(r'^漢字音標對齊$', 文本介面.漢字音標對齊),
     url(r'^語音合成支援腔口$', _HTS.語音合成支援腔口),
     url(r'^語音合成$', _HTS.語音合成),
     url(r'^文本直接合成$', _HTS.文本直接合成),

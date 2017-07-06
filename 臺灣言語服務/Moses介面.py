@@ -57,27 +57,3 @@ class Moses介面:
             return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
         except ConnectionRefusedError:
             return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'}, status=503)
-
-    @csrf_exempt
-    def 漢字音標對齊(self, request):
-        if request.method == 'GET':
-            連線參數 = request.GET
-        else:
-            連線參數 = request.POST
-        try:
-            查詢腔口 = 連線參數['查詢腔口']
-            if 查詢腔口 not in self.服務.支援腔口():
-                raise RuntimeError()
-        except:
-            查詢腔口 = '閩南語'
-        try:
-            漢字 = 連線參數['漢字']
-            音標 = 連線參數['音標']
-        except:
-            return JsonResponse({'失敗': '參數有三个：查詢腔口、漢字、音標'}, status=403)
-        try:
-            return JsonResponse(self.服務.漢字音標對齊實作(查詢腔口, 漢字, 音標))
-        except Pyro4.errors.NamingError:
-            return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
-        except ConnectionRefusedError:
-            return JsonResponse({'失敗': '服務啟動中，一分鐘後才試'}, status=503)
