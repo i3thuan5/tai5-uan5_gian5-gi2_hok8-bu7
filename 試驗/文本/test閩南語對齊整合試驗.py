@@ -70,3 +70,33 @@ class 閩南語對齊整合試驗(TestCase):
         回應物件 = json.loads(連線回應.content.decode("utf-8"))
         self.assertIn('分詞', 回應物件)
         self.assertIn('綜合標音', 回應物件)
+
+    def test_分詞愛數字調(self):
+        連線要求 = RequestFactory().get('/漢字音標對齊')
+        連線要求.GET = {
+            '查詢腔口': '閩南語',
+            '漢字': '媠媠的姑娘',
+            '音標': 'sui2--Sui2 E5 koo-niû',
+        }
+        連線回應 = self.服務功能.漢字音標對齊(連線要求)
+        self.assertEqual(連線回應.status_code, 200)
+        回應物件 = json.loads(連線回應.content.decode("utf-8"))
+        self.assertEqual(
+            回應物件['分詞'],
+            '媠｜sui2 媠｜0sui2 的｜e5 姑-娘｜koo1-niu5'
+        )
+
+    def test_閏號保持大小寫(self):
+        連線要求 = RequestFactory().get('/漢字音標對齊')
+        連線要求.GET = {
+            '查詢腔口': '閩南語',
+            '漢字': '媠媠的姑娘',
+            '音標': 'sui2--Sui2 E5 koo-niû',
+        }
+        連線回應 = self.服務功能.漢字音標對齊(連線要求)
+        self.assertEqual(連線回應.status_code, 200)
+        回應物件 = json.loads(連線回應.content.decode("utf-8"))
+        self.assertEqual(
+            回應物件['綜合標音'][0]['臺羅閏號調'],
+            'suí--Suí Ê koo-niû'
+        )
