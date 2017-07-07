@@ -65,16 +65,3 @@ class 翻譯介面單元試驗(TestCase):
         self.assertNotEqual(回應.status_code, 200)
         回應資料 = json.loads(回應.content.decode("utf-8"))
         self.assertIn('失敗', 回應資料)
-
-    def test_對齊參數無夠(self):
-        服務功能 = Moses介面()
-
-        要求 = self.工具.get('/漢字音標對齊')
-        要求.POST = {
-            '查詢腔口': '母語'
-        }
-
-        回應 = 服務功能.漢字音標對齊(要求)
-        回應資料 = json.loads(回應.content.decode("utf-8"))
-        self.assertNotEqual(回應.status_code, 200)
-        self.assertIn('失敗', 回應資料)
