@@ -7,7 +7,7 @@ from django.conf import settings
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ranged_fileresponse import RangedFileResponse
+from ranged_response import RangedFileResponse
 from 臺灣言語服務.HTS服務 import HTS服務
 
 
