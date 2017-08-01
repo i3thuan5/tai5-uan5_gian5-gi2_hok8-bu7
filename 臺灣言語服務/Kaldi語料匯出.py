@@ -124,8 +124,7 @@ class Kaldi語料匯出(程式腳本):
         return len(一句), 外來語數量
 
     @classmethod
-    def 音節轉辭典格式(cls, 聲類, 韻類, 調類, 加語料, 物件, 音標系統):
-        分詞 = 物件.看分詞()
+    def 音節轉辭典格式(cls, 聲類, 韻類, 調類, 加語料, 物件, 音標系統, 詞條=None):
         聲韻陣列 = []
         for 字物件 in 物件.轉音(音標系統, '音值').篩出字物件():
             原聲, 韻, 調 = 字物件.音
@@ -151,6 +150,9 @@ class Kaldi語料匯出(程式腳本):
                 else:
                     if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
                         raise RuntimeError('語料無這个韻抑是調')
+        if 詞條:
+            return '{}\t{}'.format(詞條, ' '.join(聲韻陣列))
+        分詞 = 物件.看分詞()
         return '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
 
     @classmethod
