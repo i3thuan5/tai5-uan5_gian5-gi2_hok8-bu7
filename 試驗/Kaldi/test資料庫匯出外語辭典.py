@@ -3,6 +3,11 @@ from 臺灣言語資料庫.資料模型 import 來源表
 from 臺灣言語資料庫.資料模型 import 版權表
 from 臺灣言語資料庫.資料模型 import 外語表
 from 臺灣言語服務.Kaldi語料處理 import Kaldi語料處理
+from unittest.mock import patch
+from tempfile import TemporaryDirectory
+from os.path import join
+from django.core.management import call_command
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 
 
 #   /\      /\
@@ -12,10 +17,8 @@ from 臺灣言語服務.Kaldi語料處理 import Kaldi語料處理
 #  ------------
 class 資料庫匯出外語辭典試驗(TestCase):
 
-    def setUp(self):
-        self.在外語表塞一個例()
-
     def test匯出一個詞(self):
+        self._在外語表塞一個例()
         fst = Kaldi語料處理.資料庫匯出外語辭典檔()
         self.assertEqual(
             fst,
@@ -25,7 +28,8 @@ class 資料庫匯出外語辭典試驗(TestCase):
         )
 
     def test不匯出重複的詞(self):
-        self.在外語表塞一個例()
+        self._在外語表塞一個例()
+        self._在外語表塞一個例()
         fst = Kaldi語料處理.資料庫匯出外語辭典檔()
         self.assertEqual(
             fst,
@@ -34,7 +38,20 @@ class 資料庫匯出外語辭典試驗(TestCase):
             ]
         )
 
-    def 在外語表塞一個例(self):
+    @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.資料庫匯出外語辭典檔')
+    def test指令匯出辭典檔(self, 資料庫匯出外語辭典檔mock):
+        資料庫匯出外語辭典檔mock.return_value = [
+            '母親\tʔ- a1 b- ə2',
+        ]
+        with TemporaryDirectory() as 資料夾路徑:
+            call_command('匯出華台辭典', 資料夾路徑)
+
+            self.比較檔案(
+                join(資料夾路徑, 'lexicon.txt'),
+                資料庫匯出外語辭典檔mock.return_value
+            )
+        
+    def _在外語表塞一個例(self):
         公家 = {
             '收錄者': 來源表.objects.get_or_create(名='系統管理員')[0].編號(),
             '來源': 來源表.objects.get_or_create(名='台文華文線頂辭典')[0].編號(),
