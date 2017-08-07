@@ -20,7 +20,7 @@ class 資料庫匯出外語辭典試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                '母親\tʔ- a1 b- o2',
+                '母親\tʔ- a1 b- ə2',
             ]
         )
     
