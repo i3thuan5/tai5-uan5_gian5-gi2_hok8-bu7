@@ -69,15 +69,18 @@ class Kaldi語料處理():
         輸出 = set()
         for 一外語 in 外語表.objects.all():
             for 一文本 in 一外語.翻譯文本.all():
-                輸出.add(
-                    Kaldi語料匯出.音節轉辭典格式(
-                        set(), {}, {}, True,
-                        拆文分析器.對齊句物件(
-                            一文本.文本.文本資料, 一文本.文本.音標資料
-                        ),
-                        臺灣閩南語羅馬字拼音, 一外語.外語資料
+                try:
+                    輸出.add(
+                        Kaldi語料匯出.音節轉辭典格式(
+                            set(), {}, {}, True,
+                            拆文分析器.對齊句物件(
+                                一文本.文本.文本資料, 一文本.文本.音標資料
+                            ),
+                            臺灣閩南語羅馬字拼音, 一外語.外語資料
+                        )
                     )
-                )
+                except ValueError:
+                    pass
         return sorted(輸出)
 
     @classmethod
