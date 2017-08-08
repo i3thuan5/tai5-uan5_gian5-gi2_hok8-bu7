@@ -43,6 +43,12 @@ class 資料庫匯出外語辭典試驗(TestCase):
         fst = Kaldi語料處理.資料庫匯出外語辭典檔()
         self.assertEqual(fst, [])
 
+    def test不合法的文本(self):
+        #6397,chhiah-chang,,赤&#399,;赤&#39918;;,,472,
+        self._在外語表塞一個例('隨便', '赤&#39918', 'chhiah-chang')
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        self.assertEqual(fst, [])
+
     @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.資料庫匯出外語辭典檔')
     def test指令匯出辭典檔(self, 資料庫匯出外語辭典檔mock):
         資料庫匯出外語辭典檔mock.return_value = [

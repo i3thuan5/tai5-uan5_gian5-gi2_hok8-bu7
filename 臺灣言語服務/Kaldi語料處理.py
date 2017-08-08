@@ -6,6 +6,7 @@ from 臺灣言語工具.基本物件.公用變數 import 分型音符號
 import re
 from 臺灣言語資料庫.資料模型 import 外語表
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 
 
 class Kaldi語料處理():
@@ -80,6 +81,8 @@ class Kaldi語料處理():
                         )
                     )
                 except ValueError:
+                    pass
+                except 解析錯誤:
                     pass
         return sorted(輸出)
 
