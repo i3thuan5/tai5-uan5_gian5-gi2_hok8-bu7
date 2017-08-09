@@ -4,6 +4,9 @@ from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.基本物件.公用變數 import 分型音符號
 import re
+from 臺灣言語資料庫.資料模型 import 外語表
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 
 
 class Kaldi語料處理():
@@ -59,6 +62,29 @@ class Kaldi語料處理():
                         ))
                 結果.append(' '.join(音節逝))
         return 結果
+
+    @classmethod
+    def 資料庫匯出外語辭典檔(cls):
+        # 匯出華字台音的lexicon
+        # 母親    ʔ- a1 b- o2
+        輸出 = set()
+        for 一外語 in 外語表.objects.all():
+            for 一文本 in 一外語.翻譯文本.all():
+                try:
+                    輸出.add(
+                        Kaldi語料匯出.音節轉辭典格式(
+                            set(), {}, {}, True,
+                            拆文分析器.對齊句物件(
+                                一文本.文本.文本資料, 一文本.文本.音標資料
+                            ),
+                            臺灣閩南語羅馬字拼音, 一外語.外語資料
+                        )
+                    )
+                except ValueError:
+                    pass
+                except 解析錯誤:
+                    pass
+        return sorted(輸出)
 
     @classmethod
     def _漢字聲韻(cls, 音標系統, 音節):
