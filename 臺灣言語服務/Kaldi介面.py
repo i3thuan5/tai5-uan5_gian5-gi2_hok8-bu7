@@ -76,7 +76,6 @@ def 無辨識過的重訓練一擺():
 @shared_task
 def Kaldi辨識影音(影音編號):
     _Kaldi辨識影音(影音表.objects.get(pk=影音編號))
-    return
 
 
 def _Kaldi辨識影音(影音):
@@ -85,6 +84,7 @@ def _Kaldi辨識影音(影音):
         影音.Kaldi辨識結果.辨識成功(章物件.看分詞())
     except:
         影音.Kaldi辨識結果.辨識失敗()
+        raise
 
 
 @csrf_exempt
