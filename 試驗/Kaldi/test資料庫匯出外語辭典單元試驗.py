@@ -18,7 +18,7 @@ class 資料庫匯出外語辭典試驗(TestCase):
 
     def test匯出一個詞(self):
         self._在外語表塞一個例()
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
         self.assertEqual(
             fst,
             [
@@ -29,7 +29,7 @@ class 資料庫匯出外語辭典試驗(TestCase):
     def test不匯出重複的詞(self):
         self._在外語表塞一個例()
         self._在外語表塞一個例()
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
         self.assertEqual(
             fst,
             [
@@ -39,7 +39,7 @@ class 資料庫匯出外語辭典試驗(TestCase):
 
     def test外語空白愛提掉(self):
         self._在外語表塞一個例('母 親', '阿母', 'a-bo2')
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
         self.assertEqual(
             fst,
             [
@@ -49,26 +49,45 @@ class 資料庫匯出外語辭典試驗(TestCase):
 
     def test不合法的音標(self):
         self._在外語表塞一個例('隨', '便', 'min2')
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
         self.assertEqual(fst, [])
 
     def test不合法的文本(self):
         # 6397,chhiah-chang,,赤&#399,;赤&#39918;;,,472,
         self._在外語表塞一個例('隨便', '赤&#39918', 'chhiah-chang')
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
         self.assertEqual(fst, [])
 
+    def test預設詞(self):
+        self._在外語表塞一個例()
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔({'漂亮 s u i'})
+        self.assertEqual(
+            fst,
+            sorted([
+                '漂亮 s u i',
+                '母親\tʔ- a1 b- ə2'
+            ])
+        )
+
     @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.資料庫匯出外語辭典檔')
-    def test指令匯出辭典檔(self, 資料庫匯出外語辭典檔mock):
-        資料庫匯出外語辭典檔mock.return_value = [
+    def test指令匯出辭典檔愛有通用的符號(self, 資料庫匯出外語辭典檔mock):
+        資料庫匯出外語辭典檔mock.return_value = sorted([
+            'SIL\tSIL',
+            '<UNK>\tSPN',
+            'SPN\tSPN',
             '母親\tʔ- a1 b- ə2',
-        ]
+        ])
         with TemporaryDirectory() as 資料夾路徑:
             call_command('匯出華台辭典', 資料夾路徑)
 
             self.比較檔案(
                 join(資料夾路徑, 'lexicon.txt'),
-                資料庫匯出外語辭典檔mock.return_value
+                sorted([
+                    'SIL\tSIL',
+                    '<UNK>\tSPN',
+                    'SPN\tSPN',
+                    '母親\tʔ- a1 b- ə2',
+                ])
             )
 
     def _在外語表塞一個例(self, 外語資料='母親', 文本資料='阿母', 音標資料='a-bo2'):
