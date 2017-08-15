@@ -37,6 +37,16 @@ class 資料庫匯出外語辭典試驗(TestCase):
             ]
         )
 
+    def test外語空白愛提掉(self):
+        self._在外語表塞一個例('母 親', '阿母', 'a-bo2')
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔()
+        self.assertEqual(
+            fst,
+            [
+                '母親\tʔ- a1 b- ə2',
+            ]
+        )
+
     def test不合法的音標(self):
         self._在外語表塞一個例('隨', '便', 'min2')
         fst = Kaldi語料處理.資料庫匯出外語辭典檔()

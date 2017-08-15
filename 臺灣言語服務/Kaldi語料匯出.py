@@ -151,7 +151,7 @@ class Kaldi語料匯出(程式腳本):
                     if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
                         raise RuntimeError('語料無這个韻抑是調')
         if 詞條:
-            return '{}\t{}'.format(詞條, ' '.join(聲韻陣列))
+            return '{}\t{}'.format(''.join(詞條.split()), ' '.join(聲韻陣列))
         分詞 = 物件.看分詞()
         return '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
 
