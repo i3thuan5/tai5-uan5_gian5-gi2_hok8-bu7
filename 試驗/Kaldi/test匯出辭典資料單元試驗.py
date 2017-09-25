@@ -121,6 +121,48 @@ class Kaldi匯出辭典資料單元試驗(TestCase):
                 '就-是｜to7-si7\tt- ə7 s- i7'
             )
 
+    def test_檢查lexicon_標點符號(self):
+        辭典資料 = Kaldi語料匯出.初使化辭典資料()
+        這擺參數 = {
+            '音標系統': 臺灣閩南語羅馬字拼音,
+            '一逝': 'gua2 to7-si7 你 ！',
+            '加語料': True
+        }
+        這擺參數.update(辭典資料)
+        Kaldi語料匯出._資料加到辭典(**這擺參數)
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出辭典資料(
+                辭典資料, 資料夾路徑, '語料資料夾'
+            )
+            辭典路徑 = join(資料夾路徑, '語料資料夾', 'local', 'dict')
+            self.檔案內底有(
+                join(辭典路徑, 'lexicon.txt'),
+                '！\tSIL'
+            )
+
+    def test_檢查lexicon_全羅文(self):
+        辭典資料 = Kaldi語料匯出.初使化辭典資料()
+        這擺參數 = {
+            '音標系統': 臺灣閩南語羅馬字拼音,
+            '一逝': 'gua2 to7-si7 li2 ！',
+            '加語料': True
+        }
+        這擺參數.update(辭典資料)
+        Kaldi語料匯出._資料加到辭典(**這擺參數)
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出辭典資料(
+                辭典資料, 資料夾路徑, '語料資料夾'
+            )
+            辭典路徑 = join(資料夾路徑, '語料資料夾', 'local', 'dict')
+            self.檔案內底有(
+                join(辭典路徑, 'lexicon.txt'),
+                'gua2\tg- u2 a2'
+            )
+            self.檔案內底有(
+                join(辭典路徑, 'lexicon.txt'),
+                'to7-si7\tt- ə7 s- i7'
+            )
+
     def 比較檔案(self, 檔名, 資料):
         with open(檔名) as 檔案:
             self.assertEqual(檔案.read(), '\n'.join(資料) + '\n')
