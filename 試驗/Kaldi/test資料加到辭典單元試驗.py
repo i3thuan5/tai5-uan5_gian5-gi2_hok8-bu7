@@ -212,5 +212,5 @@ class 資料加到辭典單元試驗(TestCase):
             加語料=True,
         )
         self.assertEqual(聲類, {})
-        self.assertEqual(韻類,  {'sui2': {'sui2'},)
-        self.assertEqual(調類,  {'2': {'sui2'},})
+        self.assertEqual(韻類,  {'sui2': {'sui2'}, })
+        self.assertEqual(調類,  {'2': {'sui2'}, })
