@@ -172,3 +172,45 @@ class 資料加到辭典單元試驗(TestCase):
         )
         self.assertEqual(len(韻類['i']), 1)
         self.assertEqual(len(全部詞), 2)
+
+    def test_拆做音素(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '媠｜sui2', 臺灣閩南語羅馬字拼音,
+            加語料=True,
+        )
+        self.assertEqual(聲類, {'s-'})
+        self.assertEqual(韻類,  {'i': {'i2'}, 'u': {'u2'}})
+        self.assertEqual(調類,  {'2': {'i2', 'u2'}, })
+
+    def test_拆做聲韻(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '媠｜sui2', 臺灣閩南語羅馬字拼音,
+            加語料=True,
+        )
+        self.assertEqual(聲類, {'s-'})
+        self.assertEqual(韻類,  {'ui2': {'ui2'}, 'u': {'ui2'}})
+        self.assertEqual(調類,  {'2': {'ui2'}, })
+
+    def test_拆做音節(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '媠｜sui2', 臺灣閩南語羅馬字拼音,
+            加語料=True,
+        )
+        self.assertEqual(聲類, {})
+        self.assertEqual(韻類,  {'sui2': {'sui2'},)
+        self.assertEqual(調類,  {'2': {'sui2'},})
