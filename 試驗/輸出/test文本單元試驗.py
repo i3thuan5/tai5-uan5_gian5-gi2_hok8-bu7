@@ -148,6 +148,11 @@ class 輸出文本單元試驗(TestCase):
         self.語料.輸出文本語料()
         分詞資料mocka.assert_called_once_with()
 
+    def test_無翻譯檔案(self):
+        self.加一筆母語食飽未()
+        self.語料.輸出文本語料()
+        self.assertFalse(exists(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')))
+
     def 加一筆外語你好嗎(self):
         外語內容 = {'外語語言': '華語', '外語資料': '你好嗎？'}
         外語內容.update(self.資料內容)
