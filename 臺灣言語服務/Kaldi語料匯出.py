@@ -101,7 +101,7 @@ class Kaldi語料匯出(程式腳本):
                 全部詞.add(
                     cls.音節轉辭典格式(聲類, 韻類, 調類, 加語料, 詞物件, 音標系統)
                 )
-            except RuntimeError:
+            except (ValueError, RuntimeError):
                 字物件陣列 = 詞物件.篩出字物件()
                 if (
                     len(字物件陣列) == 1 and
@@ -155,7 +155,10 @@ class Kaldi語料匯出(程式腳本):
                     except KeyError:
                         調類[調] = {一个音素調}
                 else:
-                    if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
+                    try:
+                        if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
+                            raise RuntimeError('語料無這个韻抑是調')
+                    except KeyError:
                         raise RuntimeError('語料無這个韻抑是調')
         if 詞條:
             return '{}\t{}'.format(''.join(詞條.split()), ' '.join(聲韻陣列))
