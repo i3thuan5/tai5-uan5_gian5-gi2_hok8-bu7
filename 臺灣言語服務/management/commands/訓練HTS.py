@@ -49,7 +49,7 @@ class Command(BaseCommand):
             語料資料夾 = join(模型資料夾, '語料')
             try:
                 音韻規則 = 服務設定['音韻規則']
-            except:
+            except KeyError:
                 音韻規則 = None
             HTS模型訓練.輸出一種語言語料(
                 語料資料夾, 語言, 語者,

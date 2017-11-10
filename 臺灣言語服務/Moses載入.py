@@ -57,7 +57,7 @@ class Moses載入:
         if 語族 == '漢語':
             try:
                 解析拼音 = 服務設定['解析拼音']
-            except:
+            except KeyError:
                 解析拼音 = 服務設定['音標系統']
             母語模型.update({
                 '解析拼音': 解析拼音,
