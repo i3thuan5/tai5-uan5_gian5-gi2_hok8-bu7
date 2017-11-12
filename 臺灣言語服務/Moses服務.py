@@ -42,7 +42,7 @@ class Moses服務:
         }
         try:
             翻譯結果['綜合標音'] = 母語章物件.綜合標音(母語模型['字綜合標音'])
-        except:
+        except KeyError:
             pass
         return 翻譯結果
 
@@ -63,7 +63,7 @@ class Moses服務:
         }
         try:
             翻譯結果['綜合標音'] = 母語章物件.綜合標音(母語模型['字綜合標音'])
-        except:
+        except KeyError:
             pass
         return 翻譯結果
 

@@ -22,11 +22,11 @@ class Moses介面:
             查詢腔口 = 連線參數['查詢腔口']
             if 查詢腔口 not in self.服務.支援腔口():
                 raise RuntimeError()
-        except:
+        except (KeyError, RuntimeError):
             查詢腔口 = '閩南語'
         try:
             查詢語句 = 連線參數['查詢語句']
-        except:
+        except KeyError:
             查詢語句 = '你好嗎？我很好！'
         try:
             return JsonResponse(self.服務.正規化翻譯實作(查詢腔口, 查詢語句))
@@ -45,11 +45,11 @@ class Moses介面:
             查詢腔口 = 連線參數['查詢腔口']
             if 查詢腔口 not in self.服務.支援腔口():
                 raise RuntimeError()
-        except:
+        except (KeyError, RuntimeError):
             查詢腔口 = '閩南語'
         try:
             查詢語句 = 連線參數['查詢語句']
-        except:
+        except KeyError:
             查詢語句 = '你好嗎？我很好！'
         try:
             return JsonResponse(self.服務.標漢字音標實作(查詢腔口, 查詢語句))

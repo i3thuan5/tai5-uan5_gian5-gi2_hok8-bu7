@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from 臺灣言語工具.解析整理.文章粗胚 import 文章粗胚
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.解析整理.羅馬音仕上げ import 羅馬音仕上げ
+from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 
 
 class 文本介面:
@@ -21,7 +22,7 @@ class 文本介面:
             腔口參數 = settings.HOK8_BU7_SIAT4_TING7[連線參數['查詢腔口']]
             漢字 = 連線參數['漢字']
             音標 = 連線參數['音標']
-        except:
+        except KeyError:
             return JsonResponse({'失敗': '參數有三个：查詢腔口、漢字、音標'}, status=403)
         try:
             return JsonResponse(cls.漢字音標對齊實作(腔口參數, 漢字, 音標))
@@ -40,7 +41,7 @@ class 文本介面:
         )
         try:
             對齊物件 = 拆文分析器.對齊章物件(整理後漢字, 整理後音標)
-        except:
+        except 解析錯誤:
             return {'失敗': '對齊失敗'}
         對齊結果 = {
             '分詞': 對齊物件.轉音(腔口參數['音標系統']).看分詞()
@@ -49,10 +50,10 @@ class 文本介面:
             原音物件 = 對齊物件.轉音(腔口參數['音標系統'], 函式='轉閏號調')
             對齊結果['漢字'] = 羅馬音仕上げ.輕聲佮外來語(原音物件.看型(物件分詞符號=' '))
             對齊結果['音標'] = 羅馬音仕上げ.輕聲佮外來語(原音物件.看音())
-        except:
+        except 解析錯誤:
             pass
         try:
             對齊結果['綜合標音'] = 對齊物件.綜合標音(腔口參數['字綜合標音'])
-        except:
+        except KeyError:
             pass
         return 對齊結果
