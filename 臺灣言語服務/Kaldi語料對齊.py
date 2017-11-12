@@ -58,7 +58,7 @@ class Kaldi語料對齊(Kaldi對齊結果):
     def 對齊音檔(self):
         try:
             ctm資料 = self._對齊()
-        except:
+        except OSError:
             self.對齊失敗()
             raise
         self.對齊成功(ctm資料)

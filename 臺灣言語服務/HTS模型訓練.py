@@ -130,5 +130,5 @@ class HTS模型訓練(程式腳本):
         try:
             while True:
                 文本 = 文本.文本校對.first().新文本
-        except:
+        except AttributeError:
             return 文本
