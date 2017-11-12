@@ -42,10 +42,11 @@ def 看辨識結果(request):
             服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
 
             try:
-                這筆['綜合標音'] = 拆文分析器.分詞章物件(辨識結果.分詞).綜合標音(
-                    服務設定['字綜合標音']
+                這筆['綜合標音'] = (
+                    拆文分析器.分詞章物件(辨識結果.分詞)
+                    .綜合標音(服務設定['字綜合標音'])
                 )
-            except:
+            except KeyError:
                 pass
         結果.append(這筆)
     return JsonResponse({'辨識結果': 結果})
@@ -55,7 +56,7 @@ def 看辨識結果(request):
 def Kaldi辨識(request):
     try:
         啥人唸的 = request.POST['啥人唸的'].strip()
-    except:
+    except KeyError:
         啥人唸的 = '無註明'
     語言 = request.POST['語言']
     資料陣列 = bytes(json.loads(
@@ -81,10 +82,11 @@ def Kaldi辨識影音(影音編號):
 def _Kaldi辨識影音(影音):
     try:
         章物件 = Kaldi語料辨識.辨識音檔(影音)
-        影音.Kaldi辨識結果.辨識成功(章物件.看分詞())
-    except:
+    except OSError:
         影音.Kaldi辨識結果.辨識失敗()
         raise
+    else:
+        影音.Kaldi辨識結果.辨識成功(章物件.看分詞())
 
 
 @csrf_exempt

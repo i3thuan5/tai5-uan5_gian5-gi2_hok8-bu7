@@ -22,7 +22,7 @@ class HTS載入:
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[母語腔口]
         try:
             音韻規則 = 服務設定['音韻規則']
-        except:
+        except KeyError:
             音韻規則 = None
         return {
             '語族': 服務設定['語族'],
