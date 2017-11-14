@@ -1,6 +1,6 @@
 from base64 import b64encode
+import io
 import json
-
 
 from django.test.testcases import TestCase
 
@@ -26,21 +26,33 @@ class 辨識介面單元試驗(TestCase):
     def test_成功(self):
         回應 = self.client.post('/辦識音檔', {
             '語言': '閩南語',
-            'blob': self.blob #b'ODIsIDczLCA3MCwgNzAsIDQwLCAwLCAwLCAwLCA4NywgNjUsIDg2LCA2OSwgMTAyLCAxMDksIDExNiwgMzIsIDE2LCAwLCAwLCAwLCAxLCAwLCAxLCAwLCAxMjgsIDYyLCAwLCAwLCAwLCAxMjUsIDAsIDAsIDIsIDAsIDE2LCAwLCAxMDAsIDk3LCAxMTYsIDk3LCA0LCAwLCAwLCAwLCAxMTUsIDExNywgMTA1LCA1MA==',
+            'blob': self.blob,
         })
         self.assertEqual(回應.status_code, 200)
 
-    def test_blob有音檔(self):   
+    def test_blob有音檔(self):
         self.client.post('/辦識音檔', {
             '語言': '閩南語',
-            'blob': self.blob #b'ODIsIDczLCA3MCwgNzAsIDQwLCAwLCAwLCAwLCA4NywgNjUsIDg2LCA2OSwgMTAyLCAxMDksIDExNiwgMzIsIDE2LCAwLCAwLCAwLCAxLCAwLCAxLCAwLCAxMjgsIDYyLCAwLCAwLCAwLCAxMjUsIDAsIDAsIDIsIDAsIDE2LCAwLCAxMDAsIDk3LCAxMTYsIDk3LCA0LCAwLCAwLCAwLCAxMTUsIDExNywgMTA1LCA1MA==',
+            'blob': self.blob,
         })
         self.assertEqual(
             影音表.objects.get().聲音檔().wav格式資料(),
-             self.音檔.wav格式資料()
-             )
-        
-
+            self.音檔.wav格式資料()
+        )
 
     def test_file有音檔(self):
-        self.fail()
+        with io.BytesIO(self.音檔.wav格式資料()) as 音檔:
+            self.client.post('/辦識音檔', {
+                '語言': '閩南語',
+                '音檔': 音檔,
+            })
+        self.assertEqual(
+            影音表.objects.get().聲音檔().wav格式資料(),
+            self.音檔.wav格式資料()
+        )
+
+    def test_音檔佮blob攏無傳(self):
+        回應=self.client.post('/辦識音檔', {
+                '語言': '閩南語',
+            })
+        self.assertEqual(回應.status_code, 400)
