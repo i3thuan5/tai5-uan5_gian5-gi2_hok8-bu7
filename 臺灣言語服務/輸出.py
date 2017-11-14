@@ -95,7 +95,7 @@ class 資料輸出工具:
         for 腔 in 腔口:
             makedirs(翻譯語料資料夾(腔.語言腔口), exist_ok=True)
             檔案表[腔.語言腔口] = {語句: {}, 字詞: {}}
-            for 檔名 in self.翻譯語料檔名:
+            for 檔名 in 語料檔名:
                 if 語句 in 檔名:
                     檔案表[腔.語言腔口][語句][檔名.replace(語句, '')] = gzip.open(
                         join(翻譯語料資料夾(腔.語言腔口), 檔名 + '.txt.gz'), 'wt')
