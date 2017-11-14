@@ -59,13 +59,17 @@ def Kaldi辨識(request):
     except KeyError:
         啥人唸的 = '無註明'
     語言 = request.POST['語言']
-    資料陣列 = bytes(json.loads(
-        '[' + b64decode(request.POST['blob']).decode('utf-8') + ']'
-    ))
+    資料陣列 = blob2bytes(request.POST['blob'])
 
     影音 = Kaldi語料辨識.匯入音檔(語言, 啥人唸的, 聲音檔.對資料轉(資料陣列), '')
     Kaldi辨識影音.delay(影音.編號())
     return HttpResponse('上傳成功！！')
+
+
+def blob2bytes(blob):
+    return bytes(json.loads(
+        '[' + b64decode(blob).decode('utf-8') + ']'
+    ))
 
 
 def 無辨識過的重訓練一擺():
