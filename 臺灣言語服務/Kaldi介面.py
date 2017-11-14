@@ -69,7 +69,7 @@ def Kaldi辨識(request):
 
 
 def 無辨識過的重訓練一擺():
-    for 影音 in 影音表.objects.filter(Kaldi辨識結果__isnull=True):
+    for 影音 in 影音表.objects.filter(Kaldi辨識結果__辨識好猶未=False):
         _Kaldi辨識影音(影音)
     return JsonResponse({'成功': '成功'})
 

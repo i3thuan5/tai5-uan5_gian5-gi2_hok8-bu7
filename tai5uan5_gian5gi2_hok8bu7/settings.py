@@ -139,9 +139,11 @@ HOK8_BU7_SIAT4_TING7 = {
         '決策樹仔': 閩南語決策樹仔,
         '辨識設定': {
               '腳本資料夾': os.path.join(BASE_DIR, 'kaldi/egs/taiwanese/s5c'),
+              '腳本': '服務來試.sh',
               '語料資料夾': 'data',
               '模型資料夾': 'tri5.2',
               '圖資料夾': 'graph_sp',
+              '重估語言模型資料夾': 'data/lang-3grams',
               '結果檔名': '7.0.0.txt',
         },
     },
