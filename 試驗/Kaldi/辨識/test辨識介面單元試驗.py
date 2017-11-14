@@ -52,7 +52,7 @@ class 辨識介面單元試驗(TestCase):
         )
 
     def test_音檔佮blob攏無傳(self):
-        回應=self.client.post('/辦識音檔', {
-                '語言': '閩南語',
-            })
+        回應 = self.client.post('/辦識音檔', {
+            '語言': '閩南語',
+        })
         self.assertEqual(回應.status_code, 400)
