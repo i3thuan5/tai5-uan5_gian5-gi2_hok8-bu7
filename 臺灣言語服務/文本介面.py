@@ -5,7 +5,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from 臺灣言語工具.解析整理.文章粗胚 import 文章粗胚
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
-from 臺灣言語工具.解析整理.羅馬音仕上げ import 羅馬音仕上げ
+from 臺灣言語工具.解析整理.羅馬字仕上げ import 羅馬字仕上げ
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 
 
@@ -48,8 +48,8 @@ class 文本介面:
         }
         try:
             原音物件 = 對齊物件.轉音(腔口參數['音標系統'], 函式='轉閏號調')
-            對齊結果['漢字'] = 羅馬音仕上げ.輕聲佮外來語(原音物件.看型(物件分詞符號=' '))
-            對齊結果['音標'] = 羅馬音仕上げ.輕聲佮外來語(原音物件.看音())
+            對齊結果['漢字'] = 羅馬字仕上げ.輕聲佮外來語(原音物件.看型(物件分詞符號=' '))
+            對齊結果['音標'] = 羅馬字仕上げ.輕聲佮外來語(原音物件.看音())
         except 解析錯誤:
             pass
         try:
