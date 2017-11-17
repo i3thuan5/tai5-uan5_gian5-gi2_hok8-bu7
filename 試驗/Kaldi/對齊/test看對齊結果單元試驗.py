@@ -84,6 +84,21 @@ class 看對齊結果單元試驗(TestCase):
         self.assertIn('成功', 回應資料['對齊結果'][0]['狀態'])
         self.assertIn('壓縮檔網址', 回應資料['對齊結果'][0])
 
+    def test_有語言(self):
+        語料對齊 = Kaldi語料對齊.匯入音檔(
+            '閩南語', '啥人唸的',
+            聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
+        )
+        語料對齊.對齊成功([
+            {'開始': 0.30, '長度': 0.23, '分詞': 'tsiang5', },
+            {'開始': 0.60, '長度': 0.23, '分詞': 'tsiang5', }
+        ])
+        with NamedTemporaryFile() as 凊彩檔案:
+            語料對齊.存壓縮檔(凊彩檔案.name)
+
+        回應資料 = self.client.get('/對齊結果').json()
+        self.assertEqual(回應資料['對齊結果'][0]['語言'], '閩南語')
+
     def test_有原始檔案(self):
         Kaldi語料對齊.匯入音檔(
             '閩南語', '啥人唸的',

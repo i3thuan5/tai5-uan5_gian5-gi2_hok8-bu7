@@ -54,6 +54,15 @@ class Kaldi匯入音檔單元試驗(TestCase):
         self.assertEqual(回應資料['辨識結果'][0]['狀態'], '成功')
         self.assertEqual(回應資料['辨識結果'][0]['分詞'], 'sui2')
 
+    def test_辨識有語言(self):
+        Kaldi語料辨識.匯入音檔(
+            '閩南語', '啥人唸的',
+            聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
+        ).Kaldi辨識結果.辨識成功('sui2')
+
+        回應資料 = self.client.get('/辦識結果').json()
+        self.assertEqual(回應資料['辨識結果'][0]['語言'], '閩南語')
+
     def test_辨識失敗(self):
         Kaldi語料辨識.匯入音檔(
             '閩南語', '啥人唸的',
