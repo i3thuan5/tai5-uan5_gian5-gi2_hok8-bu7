@@ -9,7 +9,7 @@ from 試驗.加資料.加資料試驗 import 加資料試驗
 from 臺灣言語資料庫.資料模型 import 聽拍表
 
 
-class 加聽拍資料試驗(TestCase, 加資料試驗):
+class 聽拍資料試驗(TestCase):
 
     def setUp(self):
         self.加初始資料佮設定變數()
@@ -54,7 +54,12 @@ class 加聽拍資料試驗(TestCase, 加資料試驗):
             {'內容': '直直行就到矣。'},
         ])
 
+    def test_愛有音檔才會當有聽拍(self):
+        self.fail()
+    def test_聽拍的時間袂使超過音檔(self):
+        self.fail()
     def test_聽拍內容(self):
+        
         self.資料 = 聽拍表._加資料(self.句內容)
         self.assertEqual(
             self.資料.聽拍內容(),
@@ -112,6 +117,7 @@ class 加聽拍資料試驗(TestCase, 加資料試驗):
         with self.assertRaises(ValueError):
             聽拍表._加資料(self.句內容)
         self.assertEqual(self.資料表.objects.all().count(), 0)
+
     @skip('這功能毋知有需要無')
     def test_屬性加語者資料(self):
         self.屬性加語者資料()
