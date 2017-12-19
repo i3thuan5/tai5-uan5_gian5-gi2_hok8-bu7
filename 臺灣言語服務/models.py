@@ -10,17 +10,17 @@ from 臺灣言語服務.models檢查 import 檢查敢是分詞
 
 class 訓練過渡格式(models.Model):
     來源 = models.CharField(max_length=100, db_index=True)
+    年代 = models.CharField(max_length=30, db_index=True)
     種類 = models.CharField(
         max_length=100, db_index=True,
         choices=[('字詞', '字詞'), ('語句', '語句'), ],
     )
-    年代 = models.CharField(max_length=30, db_index=True)
 
     影音所在 = models.FileField(blank=True)
     影音語者 = models.CharField(blank=True, max_length=100)
-    文本 = models.TextField(blank=True,validators=[檢查敢是分詞])
+    文本 = models.TextField(blank=True, validators=[檢查敢是分詞])
     聽拍 = models.TextField(blank=True)
-    外語 = models.TextField(blank=True)
+    外語 = models.TextField(blank=True, validators=[檢查敢是分詞])
 
     def 編號(self):
         return self.pk
