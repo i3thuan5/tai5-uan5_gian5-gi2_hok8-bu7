@@ -3,6 +3,31 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語資料庫.資料模型 import 聽拍表
 
 
+class 訓練過渡格式(models.Model):
+    來源 = models.CharField(max_length=100)
+    種類 = models.CharField(max_length=100)
+    著作年 = models.CharField(max_length=20)
+
+    外語資料 = models.TextField(blank=True)
+
+    影音所在 = models.FileField(blank=True)
+    影音語者 = models.CharField(max_length=100)
+
+    分詞資料 = models.TextField(blank=True)
+
+    聽拍資料 = models.TextField()
+
+    def 編號(self):
+        return self.pk
+
+    @classmethod
+    def 資料數量(cls):
+        return cls.objects.all().count()
+
+    def 聽拍內容(self):
+        return json.loads(self.聽拍資料)
+
+
 class Kaldi辨識結果(models.Model):
     影音 = models.OneToOneField(影音表, related_name='Kaldi辨識結果')
     辨識好猶未 = models.BooleanField(default=False)

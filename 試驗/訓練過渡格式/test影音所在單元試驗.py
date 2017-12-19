@@ -26,15 +26,15 @@ class 影音所在試驗(TestCase):
             '著作年': '2016',
             '影音資料': self.句檔案,
         }
+
     def tearDown(self):
         self.句檔案.close()
+
     def test_影音所在毋是檔案(self):
         self.fail()
 
     def test_影音所在毋是wav(self):
         self.句內容['影音資料'] = 2015
-        with self.assertRaises(ValueError):
-
 
     def test_愛轉做絕對路徑(self):
         資料 = 影音表.加資料(self.詞內容)
@@ -56,3 +56,5 @@ class 影音所在試驗(TestCase):
         self.assertEqual(self.資料表.objects.all().count(), 0)
     #     照django.File傳AttributeError
 
+    def test_有語者就一定愛有影音(self):
+        影音語者
