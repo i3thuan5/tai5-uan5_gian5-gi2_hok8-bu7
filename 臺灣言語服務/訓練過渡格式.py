@@ -6,7 +6,6 @@ from django.db import models
 
 class 資料表(models.Model):
 
-    收錄時間 = models.DateTimeField(auto_now_add=True)
     來源 = models.CharField(max_length=100)
     種類 = models.CharField(max_length=100)
     著作年 = models.CharField(max_length=20)  # 1952、19xx、…
@@ -23,12 +22,6 @@ class 資料表(models.Model):
 
     def 編號(self):
         return self.pk
-
-    def 屬性內容(self):
-        內容結果 = {}
-        for 屬性 in self.屬性.all():
-            內容結果[屬性.分類] = json.loads(屬性.性質)
-        return 內容結果
 
     @classmethod
     def 資料數量(cls):
