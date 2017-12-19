@@ -1,14 +1,17 @@
+import json
+
 from django.db import models
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語資料庫.資料模型 import 聽拍表
 
 
 class 訓練過渡格式(models.Model):
-    來源 = models.CharField(max_length=100)
+    來源 = models.CharField(max_length=100, db_index=True)
     種類 = models.CharField(
-        max_length=100, choices=[('字詞', '字詞'), ('語句', '語句')]
+        max_length=100, db_index=True,
+        choices=[('字詞', '字詞'), ('語句', '語句'), ],
     )
-    年代 = models.CharField(max_length=20)
+    年代 = models.CharField(max_length=30, db_index=True)
 
     影音所在 = models.FileField(blank=True)
     影音語者 = models.CharField(blank=True, max_length=100)
