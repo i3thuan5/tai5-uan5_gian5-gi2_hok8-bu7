@@ -5,7 +5,9 @@ from 臺灣言語資料庫.資料模型 import 聽拍表
 
 class 訓練過渡格式(models.Model):
     來源 = models.CharField(max_length=100)
-    種類 = models.CharField(max_length=100)
+    種類 = models.CharField(
+        max_length=100, choices=[('字詞', '字詞'), ('語句', '語句')]
+    )
     年代 = models.CharField(max_length=20)
 
     影音所在 = models.FileField(blank=True)
