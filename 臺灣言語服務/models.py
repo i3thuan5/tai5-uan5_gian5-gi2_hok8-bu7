@@ -1,5 +1,7 @@
 import json
+from os.path import abspath
 
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -7,8 +9,7 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語資料庫.資料模型 import 聽拍表
 from 臺灣言語服務.models檢查 import 檢查敢是分詞
 from 臺灣言語服務.models檢查 import 檢查敢是影音檔案
-from os.path import abspath
-from django.core.exceptions import ValidationError
+from 臺灣言語服務.models檢查 import 檢查聽拍內底欄位敢有夠
 
 
 class 訓練過渡格式(models.Model):
@@ -25,8 +26,17 @@ class 訓練過渡格式(models.Model):
     )
     影音語者 = models.CharField(blank=True, max_length=100)
     文本 = models.TextField(blank=True, validators=[檢查敢是分詞])
-    聽拍 = models.TextField(blank=True)
+    聽拍 = models.TextField(null=True, blank=True, validators=[檢查聽拍內底欄位敢有夠])
     外語 = models.TextField(blank=True, validators=[檢查敢是分詞])
+
+    def __init__(self, *參數陣列, **參數辭典):
+        try:
+            聽拍字串 = 參數辭典.pop('聽拍')
+        except KeyError:
+            pass
+        else:
+            參數辭典['聽拍'] = json.dumps(聽拍字串)
+        super().__init__(*參數陣列, **參數辭典)
 
     def 編號(self):
         return self.pk
@@ -43,8 +53,14 @@ class 訓練過渡格式(models.Model):
         if self.影音所在 != None:
             self.影音所在 = abspath(self.影音所在)
             檢查敢是影音檔案(self.影音所在)
-        if self.影音語者 and not self.影音所在:
-            raise ValidationError('有指令語者，煞無影音')
+        else:
+            if self.影音語者:
+                raise ValidationError('有指定語者，煞無影音')
+            if self.聽拍:
+                raise ValidationError('有聽拍，煞無影音')
+
+    def 聽拍物件(self):
+        return json.loads(self.聽拍)
 
 
 class Kaldi辨識結果(models.Model):

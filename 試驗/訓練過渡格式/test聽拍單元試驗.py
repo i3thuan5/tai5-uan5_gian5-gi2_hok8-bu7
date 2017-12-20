@@ -1,159 +1,150 @@
 # -*- coding: utf-8 -*-
 import json
-from unittest.case import skip
+from os import makedirs
+from os.path import join
+from shutil import rmtree
+import wave
 
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 
-from 臺灣言語資料庫.資料模型 import 聽拍表
+from 臺灣言語服務.models import 訓練過渡格式
 
 
 class 聽拍資料試驗(TestCase):
 
-    def setUp(self):
-        self.加初始資料佮設定變數()
-        self.資料表 = 聽拍表
-        self.資料表.加資料 = self.資料表._加資料
-        self.詞內容.update({
-            '聽拍資料': [
-                        {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.2},
-                        {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
-                        ]
-        })
-        self.句內容.update({
-            '聽拍資料': [
-                        {'內容': '請問車頭按怎行？'},
-                        {'內容': '直直行就到矣。'},
-                        ]
-        })
+    公開內容 = {'來源': 'Dr. Pigu', '種類':  '字詞', '年代':  '2017', }
 
-    def 屬性加語者資料(self):
-        self.詞內容['屬性'].update({
-            '人數': ['2'],
-            '語者': {
-                '阿宏': {'性別': '查埔', '年紀': '25'},
-                '阿莉': {'性別': '查某', '年紀': '25'},
-            }
-        })
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.資料夾 = join(settings.BASE_DIR, '暫存')
+        makedirs(cls.資料夾, exist_ok=True)
+        cls.音檔所在 = join(cls.資料夾, '音檔.wav')
+        with wave.open(cls.音檔所在, 'wb') as 音檔:
+            音檔.setnchannels(1)
+            音檔.setframerate(16000)
+            音檔.setsampwidth(2)
+            音檔.writeframesraw(b'sui2' * 80000)
+
+    @classmethod
+    def tearDownClass(cls):
+        rmtree(cls.資料夾)
+
+    def test_一句話(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
 
     def test_一句一句話(self):
-        self.資料 = 聽拍表._加資料(self.詞內容)
-        self.assertEqual(json.loads(self.資料.聽拍資料), [
+        聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.2},
             {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
-        ])
-        self.比較屬性(self.資料, {
-            '詞性': '形容詞',
-        })
+        ]
+        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
 
-    def test_加句(self):
-        self.資料 = 聽拍表._加資料(self.句內容)
-        self.assertEqual(json.loads(self.資料.聽拍資料), [
-            {'內容': '請問車頭按怎行？'},
-            {'內容': '直直行就到矣。'},
-        ])
+    def test_時間疊做伙無要緊(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.5},
+            {'語者': '阿莉', '內容': 'ho2', '開始時間': 0.5, '結束時間': 2.0},
+        ]
+        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
 
     def test_愛有音檔才會當有聽拍(self):
-        self.fail()
-    def test_聽拍的時間袂使超過音檔(self):
-        self.fail()
-    def test_聽拍內容(self):
-        
-        self.資料 = 聽拍表._加資料(self.句內容)
-        self.assertEqual(
-            self.資料.聽拍內容(),
-            [
-                {'內容': '請問車頭按怎行？'},
-                {'內容': '直直行就到矣。'},
-            ]
-        )
-
-    def test_無聽拍資料(self):
-        self.詞內容.pop('聽拍資料')
-        self.assertRaises(KeyError, super(加聽拍資料試驗, self).test_加詞)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-        self.句內容.pop('聽拍資料')
-        self.assertRaises(KeyError, super(加聽拍資料試驗, self).test_加句)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-
-    def test_聽拍資料無內容欄位(self):
-        self.詞內容['聽拍資料'] = [
-            {'語者': '阿宏', '開始時間': 0.0, '結束時間': 1.2},
-            {'語者': '阿莉', '開始時間': 1.2, '結束時間': 2.0},
-        ]
-        self.assertRaises(KeyError, super(加聽拍資料試驗, self).test_加詞)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-
-    def test_無語者欄位(self):
-        self.詞內容['聽拍資料'] = [
-            {'語者': '阿宏', '開始時間': 0.0, '結束時間': 1.2},
-            {'語者': '阿莉', '開始時間': 1.2, '結束時間': 2.0},
-        ]
-        self.assertRaises(KeyError, super(加聽拍資料試驗, self).test_加詞)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-
-    def test_無開始時間欄位(self):
-        self.詞內容['聽拍資料'] = [
-            {'語者': '阿宏', '開始時間': 0.0, '結束時間': 1.2},
-            {'語者': '阿莉', '開始時間': 1.2, '結束時間': 2.0},
-        ]
-        self.assertRaises(KeyError, super(加聽拍資料試驗, self).test_加詞)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-
-    def test_聽拍資料無結束時間欄位(self):
-        self.詞內容['聽拍資料'] = [
-            {'語者': '阿宏', '開始時間': 0.0, '結束時間': 1.2},
-            {'語者': '阿莉', '開始時間': 1.2, '結束時間': 2.0},
-        ]
-        self.assertRaises(KeyError, super(加聽拍資料試驗, self).test_加詞)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-
-    def test_空的聽拍資料(self):
-        self.詞內容['聽拍資料'] = []
-        self.資料 = 聽拍表._加資料(self.詞內容)
-        self.assertEqual(json.loads(self.資料.聽拍資料), [
-        ])
-        self.比較屬性(self.資料, {
-            '詞性': '形容詞',
-        })
-
-    def test_聽拍資料用字串(self):
-        self.詞內容['聽拍資料'] = json.dumps(self.詞內容['聽拍資料'])
-        self.test_加詞()
-        self.句內容['聽拍資料'] = json.dumps(self.句內容['聽拍資料'])
-        self.test_加句()
-
-    def test_聽拍資料毋是字串佮物件(self):
-        self.句內容['聽拍資料'] = 2015
-        with self.assertRaises(ValueError):
-            聽拍表._加資料(self.句內容)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-        self.句內容['聽拍資料'] = None
-        with self.assertRaises(ValueError):
-            聽拍表._加資料(self.句內容)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-        self.句內容['聽拍資料'] = {'牛睏山部落的織布機課程', '守城社區的母語課程'}
-        with self.assertRaises(ValueError):
-            聽拍表._加資料(self.句內容)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-        self.句內容['聽拍資料'] = ['牛睏山部落的織布機課程', '守城社區的母語課程']
-        with self.assertRaises(ValueError):
-            聽拍表._加資料(self.句內容)
-        self.assertEqual(self.資料表.objects.all().count(), 0)
-
-    @skip('這功能毋知有需要無')
-    def test_屬性加語者資料(self):
-        self.屬性加語者資料()
-        self.資料 = 聽拍表._加資料(self.詞內容)
-        self.assertEqual(json.loads(self.資料.聽拍資料), [
+        聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.2},
             {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
-        ])
-        self.比較屬性(self.資料, {
-            '詞性': '形容詞',
-            '人數': ['2'],
-            '語者': {
-                '阿宏': {'性別': '查埔', '年紀': '25'},
-                '阿莉': {'性別': '查某', '年紀': '25'},
-            }
-        })
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_聽拍的時間袂使超過音檔(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 10.2},
+            {'語者': '阿莉', '內容': 'ho2', '開始時間': 10.2, '結束時間': 20.0},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_聽拍的時間袂使有負的(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'li1', '開始時間': -3.0, '結束時間': 1.2},
+            {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_無聽拍資料無要緊(self):
+        訓練過渡格式(**self.公開內容).full_clean()
+
+    def test_聽拍資料無內容欄位(self):
+        聽拍 = [
+            {'語者': '阿宏',  '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_無語者欄位(self):
+        聽拍 = [
+            {'內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_無開始時間欄位(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_聽拍資料無結束時間欄位(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_聽拍資料用字串(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=json.dumps(聽拍), **self.公開內容).full_clean()
+
+    def test_有聽拍資料就filter揣出來(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        訓練過渡格式.objects.create(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
+        self.assertTrue(訓練過渡格式.objects.filter(聽拍__isnull=False).exists())
+
+    def test_無聽拍資料就袂使用聽拍_會當filter(self):
+        訓練過渡格式.objects.create(**self.公開內容)
+        self.assertTrue(訓練過渡格式.objects.filter(聽拍__isnull=True).exists())
+        self.assertTrue(訓練過渡格式.objects.filter(聽拍=None).exists())
+
+    def test_無聽拍資料就袂使用聽拍_是None(self):
+        一筆 = 訓練過渡格式.objects.create(**self.公開內容)
+        self.assertIsNone(一筆.聽拍)
+
+    def test_存入去愛有法度提出來用(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        一筆 = 訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
+        self.assertEqual(一筆.聽拍物件(), 聽拍)
+
+    def test_改聽拍(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        一筆 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
+        新聽拍 = [
+            {'語者': '阿莉', '內容': 'khiau2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        一筆.聽拍 = 新聽拍
+        self.assertEqual(一筆.聽拍物件(), 新聽拍)
