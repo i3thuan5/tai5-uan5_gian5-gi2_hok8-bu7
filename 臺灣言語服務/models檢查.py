@@ -1,6 +1,5 @@
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
-import json
 from os.path import isfile
 
 from django.core.exceptions import ValidationError
@@ -23,9 +22,7 @@ def 檢查敢是影音檔案(影音所在):
 
 
 def 檢查聽拍內底欄位敢有夠(聽拍):
-    print(聽拍, type(聽拍))
-    for 一逝 in json.loads(聽拍):
-        print(一逝)
+    for 一逝 in 聽拍:
         for 欄位 in ['語者', '內容', '開始時間', '結束時間']:
             if 欄位 not in 一逝:
                 raise ValidationError(

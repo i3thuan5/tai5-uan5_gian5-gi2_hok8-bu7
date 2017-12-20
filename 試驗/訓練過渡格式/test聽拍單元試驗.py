@@ -136,7 +136,7 @@ class 聽拍資料試驗(TestCase):
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
         一筆 = 訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
-        self.assertEqual(一筆.聽拍物件(), 聽拍)
+        self.assertEqual(一筆.聽拍, 聽拍)
 
     def test_改聽拍(self):
         聽拍 = [
@@ -147,4 +147,4 @@ class 聽拍資料試驗(TestCase):
             {'語者': '阿莉', '內容': 'khiau2', '開始時間': 0.0, '結束時間': 1.2},
         ]
         一筆.聽拍 = 新聽拍
-        self.assertEqual(一筆.聽拍物件(), 新聽拍)
+        self.assertEqual(一筆.聽拍, 新聽拍)
