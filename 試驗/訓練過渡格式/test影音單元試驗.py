@@ -1,6 +1,5 @@
 from os.path import join
 from shutil import rmtree
-from unittest.case import skip
 import wave
 
 from django.core.exceptions import ValidationError
@@ -48,9 +47,12 @@ class 影音所在試驗(TestCase):
         with self.assertRaises(ValidationError):
             訓練過渡格式(影音所在=self.資料夾, **self.公開內容).full_clean()
 
-    @skip('敢有需要先檢查？逐个服務愛用時才轉？')
     def test_影音所在毋是wav(self):
-        self.句內容['影音資料'] = 2015
+        檔案所在 = join(self.資料夾, '別種檔案.sui')
+        with open(檔案所在, 'wb') as 音檔:
+            音檔.write(b'sui2' * 80000)
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=檔案所在, **self.公開內容).full_clean()
 
     def test_愛轉做絕對路徑(self):
         一筆 = 訓練過渡格式(影音所在=join('暫存', '音檔.wav'), **self.公開內容)
@@ -61,3 +63,7 @@ class 影音所在試驗(TestCase):
     def test_影音所在袂使是空字串(self):
         with self.assertRaises(ValidationError):
             訓練過渡格式(影音所在='', **self.公開內容).full_clean()
+
+    def test_影音有通提出來用(self):
+        一筆 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, **self.公開內容)
+        self.assertEqual(一筆.聲音檔().時間長度(), 10.0)

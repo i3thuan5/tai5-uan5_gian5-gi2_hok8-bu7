@@ -3,13 +3,17 @@ from os.path import abspath
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from jsonfield.fields import JSONField
+
 
 from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語資料庫.資料模型 import 聽拍表
 from 臺灣言語服務.models檢查 import 檢查敢是分詞
 from 臺灣言語服務.models檢查 import 檢查敢是影音檔案
 from 臺灣言語服務.models檢查 import 檢查聽拍內底欄位敢有夠
-from jsonfield.fields import JSONField
+from 臺灣言語服務.models檢查 import 檢查敢是wav
+from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
+from 臺灣言語服務.models檢查 import 檢查聽拍結束時間有超過音檔無
 
 
 class 訓練過渡格式(models.Model):
@@ -22,7 +26,7 @@ class 訓練過渡格式(models.Model):
 
     影音所在 = models.FilePathField(
         null=True, blank=True,
-        max_length=200, validators=[檢查敢是影音檔案]
+        max_length=200, validators=[檢查敢是影音檔案, 檢查敢是wav]
     )
     影音語者 = models.CharField(blank=True, max_length=100)
     文本 = models.TextField(blank=True, validators=[檢查敢是分詞])
@@ -36,11 +40,16 @@ class 訓練過渡格式(models.Model):
     def 資料數量(cls):
         return cls.objects.all().count()
 
+    def 聲音檔(self):
+        return 聲音檔.對檔案讀(self.影音所在)
+
     def clean(self):
         super().clean()
         if self.影音所在 != None:
             self.影音所在 = abspath(self.影音所在)
             檢查敢是影音檔案(self.影音所在)
+            if self.聽拍:
+                檢查聽拍結束時間有超過音檔無(self.聲音檔().時間長度(), self.聽拍)
         else:
             if self.影音語者:
                 raise ValidationError('有指定語者，煞無影音')

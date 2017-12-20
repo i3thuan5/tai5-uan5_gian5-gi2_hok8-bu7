@@ -63,8 +63,7 @@ class 聽拍資料試驗(TestCase):
 
     def test_聽拍的時間袂使超過音檔(self):
         聽拍 = [
-            {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 10.2},
-            {'語者': '阿莉', '內容': 'ho2', '開始時間': 10.2, '結束時間': 20.0},
+            {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 100.2},
         ]
         with self.assertRaises(ValidationError):
             訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
@@ -72,7 +71,20 @@ class 聽拍資料試驗(TestCase):
     def test_聽拍的時間袂使有負的(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': -3.0, '結束時間': 1.2},
-            {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_聽拍的時間開始愛較細(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'li1', '開始時間': 3.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_聽拍的時間開始佮結束仝款(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'li1', '開始時間': 3.0, '結束時間': 3.0},
         ]
         with self.assertRaises(ValidationError):
             訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
