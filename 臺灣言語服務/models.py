@@ -40,8 +40,9 @@ class 訓練過渡格式(models.Model):
 
     def clean(self):
         super().clean()
-        if self.影音所在:
+        if self.影音所在 != None:
             self.影音所在 = abspath(self.影音所在)
+            檢查敢是影音檔案(self.影音所在)
         if self.影音語者 and not self.影音所在:
             raise ValidationError('有指令語者，煞無影音')
 
