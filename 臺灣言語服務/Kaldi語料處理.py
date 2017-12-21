@@ -67,13 +67,13 @@ class Kaldi語料處理():
     def 資料庫匯出外語辭典檔(cls, 輸出):
         # 匯出華字台音的lexicon
         # 母親    ʔ- a1 b- o2
-        for 一筆 in 訓練過渡格式.objects.filter(外語__isnull=False, 文本__isnull=False):
+        for 一筆 in 訓練過渡格式.objects.filter(外文__isnull=False, 文本__isnull=False):
             try:
                 輸出.add(
                     Kaldi語料匯出.音節轉辭典格式(
                         set(), {}, {}, True,
                         拆文分析器.分詞句物件(一筆.文本),
-                        臺灣閩南語羅馬字拼音, 一筆.外語
+                        臺灣閩南語羅馬字拼音, 一筆.外文
                     )
                 )
             except ValueError:
