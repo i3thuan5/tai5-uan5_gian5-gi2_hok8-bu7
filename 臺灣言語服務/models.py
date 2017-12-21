@@ -45,7 +45,7 @@ class 訓練過渡格式(models.Model):
 
     def clean(self):
         super().clean()
-        if self.影音所在 != None:
+        if self.影音所在 is not None:
             self.影音所在 = abspath(self.影音所在)
             檢查敢是影音檔案(self.影音所在)
             if self.聽拍:
