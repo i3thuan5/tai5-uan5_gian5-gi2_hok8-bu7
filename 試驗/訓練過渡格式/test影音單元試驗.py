@@ -42,6 +42,10 @@ class 影音所在試驗(TestCase):
     def test_有影音無一定愛有語者(self):
         訓練過渡格式(影音所在=self.音檔所在, **self.公開內容).full_clean()
 
+    def test_無語者就是存空的(self):
+        一筆 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, **self.公開內容)
+        self.assertEqual(一筆.影音語者, '')
+
     def test_有語者就一定愛有影音(self):
         with self.assertRaises(ValidationError):
             訓練過渡格式(影音語者='Pigu', **self.公開內容).full_clean()

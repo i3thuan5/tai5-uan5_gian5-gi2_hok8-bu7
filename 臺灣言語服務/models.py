@@ -29,9 +29,9 @@ class 訓練過渡格式(models.Model):
         max_length=200, validators=[檢查敢是影音檔案, 檢查敢是wav]
     )
     影音語者 = models.CharField(blank=True, max_length=100)
-    文本 = models.TextField(blank=True, validators=[檢查敢是分詞])
+    文本 = models.TextField(null=True, blank=True, validators=[檢查敢是分詞])
     聽拍 = JSONField(null=True, blank=True, validators=[檢查聽拍內底欄位敢有夠])
-    外語 = models.TextField(blank=True, validators=[檢查敢是分詞])
+    外文 = models.TextField(null=True, blank=True, validators=[檢查敢是分詞])
 
     def 編號(self):
         return self.pk
