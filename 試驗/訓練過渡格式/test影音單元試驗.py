@@ -36,6 +36,9 @@ class 影音所在試驗(TestCase):
         一筆.save()
         self.assertIsNone(一筆.影音所在)
 
+    def test_有影音上好有語者(self):
+        訓練過渡格式(影音所在=self.音檔所在, 影音語者='Pigu', **self.公開內容).full_clean()
+
     def test_有影音無一定愛有語者(self):
         訓練過渡格式(影音所在=self.音檔所在, **self.公開內容).full_clean()
 
