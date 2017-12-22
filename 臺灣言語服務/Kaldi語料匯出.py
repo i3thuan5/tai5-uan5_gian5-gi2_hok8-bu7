@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 from os import makedirs
 from os.path import join, isdir
 from shutil import rmtree
@@ -7,7 +6,6 @@ from shutil import rmtree
 from django.db.models.query_utils import Q
 
 
-from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
@@ -16,6 +14,7 @@ from 臺灣言語工具.基本物件.公用變數 import 標點符號
 from 臺灣言語工具.基本物件.公用變數 import 無音
 from 臺灣言語工具.基本物件.公用變數 import 分詞符號
 from 臺灣言語工具.基本物件.字 import 字
+from 臺灣言語服務.models import 訓練過渡格式
 
 
 class Kaldi語料匯出(程式腳本):
@@ -172,19 +171,18 @@ class Kaldi語料匯出(程式腳本):
         第幾个人 = 0
         語者名對應輸出名 = {}
         第幾个 = 0
-        for 影音 in (
-            影音表.objects
+        for 一筆 in (
+            訓練過渡格式.objects
             .distinct()
-            .filter(影音聽拍__isnull=False)
-            .filter(語言腔口__語言腔口=語言)
+            .filter(影音所在__isnull=False)
+            .filter(聽拍__isnull=False)
             .filter(匯出條件)
             .order_by('pk')
         ):
             音檔名 = 'tong{0:07}'.format(第幾个)
-            cls._音檔資訊(影音, 音檔名, 音檔目錄, 音檔對應頻道)
-            音檔長度 = 影音.聲音檔().時間長度()
-            聽拍 = cls._揣上尾的聽拍(影音.影音聽拍.first().聽拍)
-            for 第幾句, 一句聽拍 in enumerate(json.loads(聽拍.聽拍資料)):
+            cls._音檔資訊(一筆.影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
+            音檔長度 = 一筆.聲音檔().時間長度()
+            for 第幾句, 一句聽拍 in enumerate(一筆.聽拍):
                 第幾个人 = cls._語句資訊(
                     辭典資料, 音標系統, 語者名對應輸出名,
                     音檔名, 音檔長度, 第幾句, 第幾个人,
@@ -192,22 +190,32 @@ class Kaldi語料匯出(程式腳本):
                     聽拍內容, 語句目錄, 語句對應語者
                 )
             第幾个 += 1
-        for 影音 in (
-            影音表.objects
+
+        for 一筆 in (
+            訓練過渡格式.objects
             .distinct()
-            .filter(影音聽拍__isnull=True)
-            .filter(影音文本__isnull=False)
-            .filter(語言腔口__語言腔口=語言)
+            .filter(影音所在__isnull=False)
+            .filter(文本__isnull=False)
+            .filter(匯出條件)
+            .order_by('pk')
         ):
-            cls._揣上尾的文本(影音.影音文本.first().文本)
+            音檔名 = 'tong{0:07}'.format(第幾个)
+            cls._音檔資訊(一筆.影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
+            音檔長度 = 一筆.聲音檔().時間長度()
+            第幾个人 = cls._語句資訊(
+                辭典資料, 音標系統, 語者名對應輸出名,
+                音檔名, 音檔長度, 0, 第幾个人,
+                0, 音檔長度, 一筆.影音語者, 一筆.文本,
+                聽拍內容, 語句目錄, 語句對應語者
+            )
             第幾个 += 1
         return 第幾个
 
     @classmethod
-    def _音檔資訊(cls, 影音, 音檔名, 音檔目錄, 音檔對應頻道):
+    def _音檔資訊(cls, 影音所在, 音檔名, 音檔目錄, 音檔對應頻道):
         print(
             音檔名,
-            'sox -G {} -b 16 -c 1 -r 16k -t wav - | '.format(影音.影音所在()),
+            'sox -G {} -b 16 -c 1 -r 16k -t wav - | '.format(影音所在),
             file=音檔目錄
         )
 #             sw02001-A sw02001 A
