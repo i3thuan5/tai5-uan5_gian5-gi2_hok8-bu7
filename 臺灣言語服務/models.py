@@ -63,6 +63,10 @@ class 訓練過渡格式(models.Model):
             檢查敢是影音檔案(self.影音所在)
             if self.聽拍:
                 檢查聽拍結束時間有超過音檔無(self.聲音檔().時間長度(), self.聽拍)
+                if self.文本 is not None:
+                    raise ValidationError('有聽拍就袂使有文本')
+                if self.影音語者 != '':
+                    raise ValidationError('有聽拍就袂使有語者')
         else:
             if self.影音語者:
                 raise ValidationError('有指定語者，煞無影音')
