@@ -15,7 +15,7 @@ from 臺灣言語服務.models import 訓練過渡格式
 
 class 聽拍資料試驗(TestCase):
 
-    公開內容 = {'來源': 'Dr. Pigu', '種類':  '字詞', '年代':  '2017', }
+    公家內容 = {'來源': 'Dr. Pigu', '種類':  '字詞', '年代':  '2017', }
 
     @classmethod
     def setUpClass(cls):
@@ -37,21 +37,21 @@ class 聽拍資料試驗(TestCase):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
-        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_一句一句話(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.2},
             {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
         ]
-        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_時間疊做伙無要緊(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.5},
             {'語者': '阿莉', '內容': 'ho2', '開始時間': 0.5, '結束時間': 2.0},
         ]
-        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+        訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_愛有音檔才會當有聽拍(self):
         聽拍 = [
@@ -59,116 +59,116 @@ class 聽拍資料試驗(TestCase):
             {'語者': '阿莉', '內容': 'ho2', '開始時間': 1.2, '結束時間': 2.0},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_有聽拍袂使有文本(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 文本='sui2', 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 文本='sui2', 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_有聽拍袂使有語者(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 影音語者='阿宏', 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 影音語者='阿宏', 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_聽拍的時間袂使超過音檔(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 100.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_聽拍的時間袂使有負的(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': -3.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_聽拍的時間開始愛較細(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 3.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_聽拍的時間開始佮結束仝款(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 3.0, '結束時間': 3.0},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_無聽拍資料無要緊(self):
-        訓練過渡格式(**self.公開內容).full_clean()
+        訓練過渡格式(**self.公家內容).full_clean()
 
     def test_聽拍資料無內容欄位(self):
         聽拍 = [
             {'語者': '阿宏', '開始時間': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_無語者欄位(self):
         聽拍 = [
             {'內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_無開始時間欄位(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_聽拍資料無結束時間欄位(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
     def test_聽拍資料用字串(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
-            訓練過渡格式(影音所在=self.音檔所在, 聽拍=json.dumps(聽拍), **self.公開內容).full_clean()
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=json.dumps(聽拍), **self.公家內容).full_clean()
 
     def test_有聽拍資料就filter揣出來(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
-        訓練過渡格式.objects.create(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
+        訓練過渡格式.objects.create(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容)
         self.assertTrue(訓練過渡格式.objects.filter(聽拍__isnull=False).exists())
 
     def test_無聽拍資料就袂使用聽拍_會當filter(self):
-        訓練過渡格式.objects.create(**self.公開內容)
+        訓練過渡格式.objects.create(**self.公家內容)
         self.assertTrue(訓練過渡格式.objects.filter(聽拍__isnull=True).exists())
         self.assertTrue(訓練過渡格式.objects.filter(聽拍=None).exists())
 
     def test_無聽拍資料就袂使用聽拍_是None(self):
-        一筆 = 訓練過渡格式.objects.create(**self.公開內容)
+        一筆 = 訓練過渡格式.objects.create(**self.公家內容)
         self.assertIsNone(一筆.聽拍)
 
     def test_存入去愛有法度提出來用(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
-        一筆 = 訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
+        一筆 = 訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容)
         self.assertEqual(一筆.聽拍, 聽拍)
 
     def test_改聽拍(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
         ]
-        一筆 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容)
+        一筆 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容)
         新聽拍 = [
             {'語者': '阿莉', '內容': 'khiau2', '開始時間': 0.0, '結束時間': 1.2},
         ]
