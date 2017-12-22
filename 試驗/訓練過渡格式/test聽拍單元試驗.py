@@ -61,6 +61,20 @@ class 聽拍資料試驗(TestCase):
         with self.assertRaises(ValidationError):
             訓練過渡格式(聽拍=聽拍, **self.公開內容).full_clean()
 
+    def test_有聽拍袂使有文本(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 文本='sui2', 聽拍=聽拍, **self.公開內容).full_clean()
+
+    def test_有聽拍袂使有語者(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 影音語者='阿宏', 聽拍=聽拍, **self.公開內容).full_clean()
+
     def test_聽拍的時間袂使超過音檔(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 100.2},
@@ -94,7 +108,7 @@ class 聽拍資料試驗(TestCase):
 
     def test_聽拍資料無內容欄位(self):
         聽拍 = [
-            {'語者': '阿宏',  '開始時間': 0.0, '結束時間': 1.2},
+            {'語者': '阿宏', '開始時間': 0.0, '結束時間': 1.2},
         ]
         with self.assertRaises(ValidationError):
             訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公開內容).full_clean()
