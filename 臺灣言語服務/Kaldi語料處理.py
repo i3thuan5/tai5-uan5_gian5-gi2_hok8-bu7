@@ -7,6 +7,7 @@ import re
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
+from 臺灣言語工具.基本物件.公用變數 import 無音
 
 
 class Kaldi語料處理():
@@ -16,8 +17,12 @@ class Kaldi語料處理():
         音 = set()
         for 逝 in 語句陣列:
             for 字物件 in 拆文分析器.分詞句物件(逝.strip()).篩出字物件():
-                if 音標系統(字物件.看音()).音標:
-                    音.add(字物件.看音())
+                if 字物件.音 != 無音:
+                    if 音標系統(字物件.看音()).音標:
+                        音.add(字物件.看音())
+                else:
+                    if 音標系統(字物件.看型()).音標:
+                        音.add(字物件.看型())
         return 音
 
     @classmethod
