@@ -43,6 +43,12 @@ def 檢查聽拍內底欄位敢有夠(聽拍):
                 raise ValidationError(
                     '「{}」無「{}」欄位'.format(一逝, 欄位)
                 )
+        try:
+            拆文分析器.分詞句物件(一逝['內容'])
+        except 解析錯誤 as 錯誤:
+            raise ValidationError(
+                '「{}」無法度正確解析：{}'.format(一逝['內容'],錯誤)
+            )
         if 一逝['開始時間'] < 0.0:
             raise ValidationError(
                 '「{}」的開始時間「{}」是負的'.format(一逝, 一逝['開始時間'])

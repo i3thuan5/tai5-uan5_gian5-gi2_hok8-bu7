@@ -46,6 +46,13 @@ class 聽拍資料試驗(TestCase):
         ]
         訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
 
+    def test_聽拍內底愛是合法的分詞_標點愛閬空白(self):
+        聽拍 = [
+            {'語者': '阿宏', '內容': 'sui2!', '開始時間': 0.0, '結束時間': 1.2},
+        ]
+        with self.assertRaises(ValidationError):
+            訓練過渡格式(影音所在=self.音檔所在, 聽拍=聽拍, **self.公家內容).full_clean()
+
     def test_時間疊做伙無要緊(self):
         聽拍 = [
             {'語者': '阿宏', '內容': 'li1', '開始時間': 0.0, '結束時間': 1.5},
