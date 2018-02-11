@@ -64,3 +64,6 @@ MANIFEST
 /node_modules/
 /資料庫影音檔案
 翻譯模型
+/.project
+/.pydevproject
+/db.sqlite3
