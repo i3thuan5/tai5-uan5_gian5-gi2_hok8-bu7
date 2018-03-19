@@ -47,7 +47,7 @@ class 閩南語翻譯整合試驗(TestCase):
         self.assertIn('分詞', 回應物件)
         self.assertIn('綜合標音', 回應物件)
 
-    def test_短詞翻譯(self):
+    def test_有多元書寫(self):
         連線要求 = RequestFactory().get('/正規化翻譯')
         連線要求.GET = {
             '查詢腔口': '閩南語',
