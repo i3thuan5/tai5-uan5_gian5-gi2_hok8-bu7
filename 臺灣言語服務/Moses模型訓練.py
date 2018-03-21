@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import gzip
 from os import makedirs
 from os.path import join, basename
 
 
-from 臺灣言語服務.輸出 import 資料輸出工具
 from 臺灣言語工具.翻譯.摩西工具.摩西翻譯模型訓練 import 摩西翻譯模型訓練
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
@@ -18,13 +18,55 @@ from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀�
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
+from 臺灣言語服務.models import 訓練過渡格式
 
 
 class Moses模型訓練(程式腳本):
 
     @classmethod
-    def 輸出全部語料(cls):
-        資料輸出工具().輸出翻譯語料()
+    def 輸出全部語料(cls, 語言):
+        資料夾 = 翻譯語料資料夾(語言)
+        makedirs(資料夾, exist_ok=True)
+
+        對齊語句數量 = 0
+        with cls._照資料夾開壓縮檔(資料夾, '對齊母語語句.txt.gz') as 對齊母語語句:
+            with cls._照資料夾開壓縮檔(資料夾, '對齊外語語句.txt.gz') as 對齊外語語句:
+                for 一筆 in 訓練過渡格式.objects.filter(文本__isnull=False, 種類='語句'):
+                    print(一筆.文本, file=對齊母語語句)
+                    print(一筆.文本, file=對齊外語語句)
+                    對齊語句數量 += 1
+                    if 一筆.外文 is not None:
+                        print(一筆.文本, file=對齊母語語句)
+                        print(一筆.外文, file=對齊外語語句)
+                        對齊語句數量 += 1
+
+        對齊字詞數量 = 0
+        with cls._照資料夾開壓縮檔(資料夾, '對齊母語字詞.txt.gz') as 對齊母語字詞:
+            with cls._照資料夾開壓縮檔(資料夾, '對齊外語字詞.txt.gz') as 對齊外語字詞:
+                for 一筆 in 訓練過渡格式.objects.filter(文本__isnull=False, 種類='字詞'):
+                    print(一筆.文本, file=對齊母語字詞)
+                    print(一筆.文本, file=對齊外語字詞)
+                    對齊字詞數量 += 1
+                    if 一筆.外文 is not None:
+                        print(一筆.文本, file=對齊母語字詞)
+                        print(一筆.外文, file=對齊外語字詞)
+                        對齊字詞數量 += 1
+
+        語句數 = 0
+        with cls._照資料夾開壓縮檔(資料夾, '語句文本.txt.gz') as 語句文本:
+            for 一筆 in 訓練過渡格式.objects.filter(文本__isnull=False, 種類='語句'):
+                print(一筆.文本, file=語句文本)
+                語句數 += 1
+        字詞數 = 0
+        with cls._照資料夾開壓縮檔(資料夾, '字詞文本.txt.gz') as 字詞文本:
+            for 一筆 in 訓練過渡格式.objects.filter(文本__isnull=False, 種類='字詞'):
+                print(一筆.文本, file=字詞文本)
+                字詞數 += 1
+        return 對齊語句數量, 對齊字詞數量, 語句數, 字詞數
+
+    @classmethod
+    def _照資料夾開壓縮檔(cls, 資料夾, 檔名):
+        return gzip.open(join(資料夾, 檔名), 'wt')
 
     @classmethod
     def 訓練一个摩西翻譯模型(cls, 語言, 語族):
