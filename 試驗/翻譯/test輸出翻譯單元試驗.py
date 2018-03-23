@@ -8,7 +8,6 @@ from django.test.testcases import TestCase
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
 from 臺灣言語服務.models import 訓練過渡格式
-from unittest.case import expectedFailure
 
 
 class 翻譯試驗(TestCase):
@@ -115,31 +114,6 @@ class 翻譯試驗(TestCase):
             ['食飽未？']
         )
 
-    def test_檢查正規化數量(self):
-        訓練過渡格式.objects.create(
-            文本='食飽未？', 外文='你好嗎？',
-            種類='語句', **self.公家內容
-        )
-        訓練過渡格式.objects.create(
-            文本='食飽未 ？', 外文='你好嗎？',
-            種類='語句', **self.公家內容
-        )
-        訓練過渡格式.objects.create(
-            文本='未', 外文='嗎',
-            種類='字詞', **self.公家內容
-        )
-        訓練過渡格式.objects.create(
-            文本='食飽啦！',
-            種類='語句', **self.公家內容
-        )
-        訓練過渡格式.objects.create(
-            文本='食',
-            種類='字詞', **self.公家內容
-        )
-        輸出數量 = Moses模型訓練.輸出全部語料(self.目錄)
-        self.assertEqual(輸出數量, (2 * 2 + 1, 1 * 2 + 1, 2 + 1, 1 + 1))
-
-    @expectedFailure
     def test_檢查翻譯數量(self):
         訓練過渡格式.objects.create(
             文本='食飽未？', 外文='你好嗎？',
