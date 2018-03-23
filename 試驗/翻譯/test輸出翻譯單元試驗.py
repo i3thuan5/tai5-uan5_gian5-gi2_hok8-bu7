@@ -58,11 +58,11 @@ class 翻譯試驗(TestCase):
         Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            sorted(['你好嗎？', '食飽未？'])
+            sorted(['你好嗎？'])
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            sorted(['食飽未？', '食飽未？'])
+            sorted(['食飽未？'])
         )
 
     def test_外語母語語句對應檢查對齊字詞(self):
@@ -103,11 +103,11 @@ class 翻譯試驗(TestCase):
         Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            ['食飽未？']
+            []
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            ['食飽未？']
+            []
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),

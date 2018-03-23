@@ -24,33 +24,30 @@ from 臺灣言語服務.models import 訓練過渡格式
 class Moses模型訓練(程式腳本):
 
     @classmethod
-    def 輸出全部語料(cls, 語言):
-        資料夾 = 翻譯語料資料夾(語言)
+    def 輸出全部語料(cls, 資料夾):
         makedirs(資料夾, exist_ok=True)
 
         對齊語句數量 = 0
         with cls._照資料夾開壓縮檔(資料夾, '對齊母語語句.txt.gz') as 對齊母語語句:
             with cls._照資料夾開壓縮檔(資料夾, '對齊外語語句.txt.gz') as 對齊外語語句:
-                for 一筆 in 訓練過渡格式.objects.filter(文本__isnull=False, 種類='語句'):
+                for 一筆 in 訓練過渡格式.objects.filter(
+                    文本__isnull=False, 外文__isnull=False,
+                    種類='語句'
+                ):
                     print(一筆.文本, file=對齊母語語句)
-                    print(一筆.文本, file=對齊外語語句)
+                    print(一筆.外文, file=對齊外語語句)
                     對齊語句數量 += 1
-                    if 一筆.外文 is not None:
-                        print(一筆.文本, file=對齊母語語句)
-                        print(一筆.外文, file=對齊外語語句)
-                        對齊語句數量 += 1
 
         對齊字詞數量 = 0
         with cls._照資料夾開壓縮檔(資料夾, '對齊母語字詞.txt.gz') as 對齊母語字詞:
             with cls._照資料夾開壓縮檔(資料夾, '對齊外語字詞.txt.gz') as 對齊外語字詞:
-                for 一筆 in 訓練過渡格式.objects.filter(文本__isnull=False, 種類='字詞'):
+                for 一筆 in 訓練過渡格式.objects.filter(
+                    文本__isnull=False, 外文__isnull=False,
+                    種類='字詞'
+                ):
                     print(一筆.文本, file=對齊母語字詞)
-                    print(一筆.文本, file=對齊外語字詞)
+                    print(一筆.外文, file=對齊外語字詞)
                     對齊字詞數量 += 1
-                    if 一筆.外文 is not None:
-                        print(一筆.文本, file=對齊母語字詞)
-                        print(一筆.外文, file=對齊外語字詞)
-                        對齊字詞數量 += 1
 
         語句數 = 0
         with cls._照資料夾開壓縮檔(資料夾, '語句文本.txt.gz') as 語句文本:
