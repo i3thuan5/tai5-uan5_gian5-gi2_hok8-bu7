@@ -28,7 +28,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？', 外文='你好嗎？',
             種類='語句', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
         self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')))
         self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')))
 
@@ -37,7 +37,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？', 外文='你好嗎？',
             種類='字詞', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
 
         self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '對齊外語字詞.txt.gz')))
         self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '對齊母語字詞.txt.gz')))
@@ -47,7 +47,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？', 外文='你好嗎？',
             種類='語句', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
         self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')))
         self.assertTrue(isfile(join(翻譯語料資料夾('臺灣話'), '字詞文本.txt.gz')))
 
@@ -56,7 +56,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？', 外文='你好嗎？',
             種類='語句', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
             sorted(['你好嗎？', '食飽未？'])
@@ -71,7 +71,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？', 外文='你好嗎？',
             種類='語句', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語字詞.txt.gz')),
             []
@@ -86,7 +86,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？', 外文='你好嗎？',
             種類='語句', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
             ['食飽未？']
@@ -101,7 +101,7 @@ class 翻譯試驗(TestCase):
             文本='食飽未？',
             種類='語句', **self.公家內容
         )
-        Moses模型訓練.輸出全部語料('臺灣話')
+        Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
             ['食飽未？']
@@ -136,7 +136,7 @@ class 翻譯試驗(TestCase):
             文本='食',
             種類='字詞', **self.公家內容
         )
-        輸出數量 = Moses模型訓練.輸出全部語料('臺灣話')
+        輸出數量 = Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(輸出數量, (2 * 2 + 1, 1 * 2 + 1, 2 + 1, 1 + 1))
 
     @expectedFailure
@@ -161,7 +161,7 @@ class 翻譯試驗(TestCase):
             文本='食',
             種類='字詞', **self.公家內容
         )
-        輸出數量 = Moses模型訓練.輸出全部語料('臺灣話')
+        輸出數量 = Moses模型訓練.輸出全部語料(self.目錄)
         self.assertEqual(輸出數量, (2, 1, 3, 2))
 
     def 得著檔案資料(self, 檔名):
