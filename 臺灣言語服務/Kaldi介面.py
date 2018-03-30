@@ -1,11 +1,13 @@
 from base64 import b64decode
 import json
 
+from django.conf import settings
+from django.http.response import HttpResponse, JsonResponse,\
+    HttpResponseBadRequest
+from django.utils.datastructures import MultiValueDictKeyError
+from django.views.decorators.csrf import csrf_exempt
 
 from celery import shared_task
-from django.conf import settings
-from django.http.response import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 
 from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
@@ -27,7 +29,8 @@ def 看辨識結果(request):
     ):
         這筆 = {
             '編號': 影音.編號(),
-            '網址': 影音.影音資料.url
+            '網址': 影音.影音資料.url,
+            '語言': 影音.語言腔口.語言腔口,
         }
         辨識結果 = 影音.Kaldi辨識結果
         if not 辨識結果.辨識好猶未:
@@ -40,12 +43,13 @@ def 看辨識結果(request):
 
             語言 = 影音.語言腔口.語言腔口
             服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
-
+            章物件 = 拆文分析器.分詞章物件(辨識結果.分詞)
             try:
-                這筆['綜合標音'] = (
-                    拆文分析器.分詞章物件(辨識結果.分詞)
-                    .綜合標音(服務設定['字綜合標音'])
-                )
+                這筆['綜合標音'] = 章物件.綜合標音(服務設定['字綜合標音'])
+            except KeyError:
+                pass
+            try:
+                這筆['多元書寫'] = 服務設定['多元書寫'].書寫章(章物件)
             except KeyError:
                 pass
         結果.append(這筆)
@@ -56,20 +60,34 @@ def 看辨識結果(request):
 def Kaldi辨識(request):
     try:
         啥人唸的 = request.POST['啥人唸的'].strip()
-    except KeyError:
+    except MultiValueDictKeyError:
         啥人唸的 = '無註明'
-    語言 = request.POST['語言']
-    資料陣列 = bytes(json.loads(
-        '[' + b64decode(request.POST['blob']).decode('utf-8') + ']'
-    ))
-
-    影音 = Kaldi語料辨識.匯入音檔(語言, 啥人唸的, 聲音檔.對資料轉(資料陣列), '')
+    try:
+        影音 = Kaldi語料辨識.匯入音檔(request.POST['語言'], 啥人唸的, 揣音檔出來(request), '')
+    except MultiValueDictKeyError:
+        return HttpResponseBadRequest(
+            '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
+        )
     Kaldi辨識影音.delay(影音.編號())
     return HttpResponse('上傳成功！！')
 
 
+def 揣音檔出來(request):
+    try:
+        return 聲音檔.對資料轉(request.FILES['音檔'].read())
+    except MultiValueDictKeyError:
+        pass
+    return 聲音檔.對資料轉(blob2bytes(request.POST['blob']))
+
+
+def blob2bytes(blob):
+    return bytes(json.loads(
+        '[' + b64decode(blob).decode('utf-8') + ']'
+    ))
+
+
 def 無辨識過的重訓練一擺():
-    for 影音 in 影音表.objects.filter(Kaldi辨識結果__isnull=True):
+    for 影音 in 影音表.objects.filter(Kaldi辨識結果__辨識好猶未=False):
         _Kaldi辨識影音(影音)
     return JsonResponse({'成功': '成功'})
 
@@ -114,7 +132,8 @@ def 看對齊結果(request):
         這筆 = {
             '編號': 對齊結果.pk,
             '原始wav檔網址': 對齊結果.影音.影音資料.url,
-            '分詞文本': 對齊結果.欲切開的聽拍.聽拍內容()[0]['內容']
+            '分詞文本': 對齊結果.欲切開的聽拍.聽拍內容()[0]['內容'],
+            '語言': 對齊結果.影音.語言腔口.語言腔口,
         }
         if not 對齊結果.對齊好猶未:
             這筆['狀態'] = '對齊中…'

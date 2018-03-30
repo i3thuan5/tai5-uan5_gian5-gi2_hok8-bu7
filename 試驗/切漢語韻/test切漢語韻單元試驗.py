@@ -1,4 +1,4 @@
-from unittest.case import TestCase
+from django.test.testcases import TestCase
 from 臺灣言語服務.漢語語音處理 import 漢語語音處理
 
 

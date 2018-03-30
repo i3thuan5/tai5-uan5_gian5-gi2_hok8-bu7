@@ -33,6 +33,21 @@ class 閩南語對齊整合試驗(TestCase):
             'suí--Suí Ê koo-niû'
         )
 
+    def test_有多元書寫(self):
+        連線回應 = self.client.get(
+            '/漢字音標對齊',
+            {
+                '查詢腔口': '閩南語',
+                '漢字': '媠媠的姑娘',
+                '音標': 'sui2--Sui2 E5 koo-niû',
+            }
+        )
+        回應物件 = 連線回應.json()
+        self.assertIn(
+            '多元書寫',
+            回應物件,
+        )
+
     def test_漢字照詞分開(self):
         連線回應 = self.client.get(
             '/漢字音標對齊',

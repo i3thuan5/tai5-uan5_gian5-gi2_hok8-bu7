@@ -79,11 +79,11 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            sorted(['你 好 嗎 ？', '食 飽 未 ？'])
+            sorted(['你-好-嗎 ？', '食-飽-未 ？'])
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            sorted(['食 飽 未 ？', '食 飽 未 ？'])
+            sorted(['食-飽-未 ？', '食-飽-未 ？'])
         )
 
     def test_外語母語語句對應檢查對齊字詞(self):
@@ -105,7 +105,7 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '字詞文本.txt.gz')),
@@ -127,11 +127,11 @@ class 翻譯試驗(TestCase):
 
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            sorted(['你 好 嗎 ？', '你 好 嗎 ？', '食 飽 未 ？', '食 飽 未 ？'])
+            sorted(['你-好-嗎 ？', '你-好-嗎 ？', '食-飽-未 ？', '食-飽-未 ？'])
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            sorted(['食 飽 未 ？', '食 飽 未 ？', '食 飽 未 ？', '食 飽 未 ？'])
+            sorted(['食-飽-未 ？', '食-飽-未 ？', '食-飽-未 ？', '食-飽-未 ？'])
         )
 
     def test_外語影音母語對應(self):
@@ -141,11 +141,11 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            sorted(['你 好 嗎 ？', '食 飽 未 ？'])
+            sorted(['你-好-嗎 ？', '食-飽-未 ？'])
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            sorted(['食 飽 未 ？', '食 飽 未 ？'])
+            sorted(['食-飽-未 ？', '食-飽-未 ？'])
         )
 
     def test_外語母語文本兩層對應檢查對齊語句(self):
@@ -155,11 +155,11 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            sorted(['你 好 嗎 ？', '食 飽 未 ？', '食 飽 未 矣 ！ ？'])
+            sorted(['你-好-嗎 ？', '食-飽-未 ？', '食-飽-未-矣 ！ ？'])
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            sorted(['食 飽 未 矣 ！ ？', '食 飽 未 矣 ！ ？', '食 飽 未 矣 ！ ？'])
+            sorted(['食-飽-未-矣 ！ ？', '食-飽-未-矣 ！ ？', '食-飽-未-矣 ！ ？'])
         )
 
     def test_外語母語文本兩層對應檢查文本(self):
@@ -169,7 +169,7 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
-            ['食 飽 未 矣 ！ ？']
+            ['食-飽-未-矣 ！ ？']
         )
 
     def test_影音母語對應(self):
@@ -178,15 +178,15 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
 
     def test_一个影音無對應(self):
@@ -199,15 +199,15 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
-            ['食 飽 未 ？']
+            ['食-飽-未 ？']
         )
 
     def test_一個文本愛有語句才有輸出(self):
@@ -222,15 +222,15 @@ class 翻譯試驗(TestCase):
         self.語料.輸出翻譯語料()
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊外語語句.txt.gz')),
-            sorted(['食 飽 未 ？', '食 飽 未 矣 ！ ？'])
+            sorted(['食-飽-未 ？', '食-飽-未-矣 ！ ？'])
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '對齊母語語句.txt.gz')),
-            ['食 飽 未 矣 ！ ？', '食 飽 未 矣 ！ ？']
+            ['食-飽-未-矣 ！ ？', '食-飽-未-矣 ！ ？']
         )
         self.assertEqual(
             self.得著檔案資料(join(翻譯語料資料夾('臺灣話'), '語句文本.txt.gz')),
-            ['食 飽 未 矣 ！ ？']
+            ['食-飽-未-矣 ！ ？']
         )
 
     @patch('臺灣言語資料庫.資料模型.文本表.分詞資料')
@@ -300,7 +300,7 @@ class 翻譯試驗(TestCase):
         return 文本表.加資料(文本內容)
 
     def 母語文本加一筆食飽未矣(self, 文本):
-        文本內容 = {'文本資料': '食 飽 未 矣 ！ ？'}
+        文本內容 = {'文本資料': '食飽未矣 ！ ？'}
         文本內容.update(self.資料內容)
         return 文本.校對做(文本內容)
 

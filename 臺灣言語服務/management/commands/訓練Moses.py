@@ -6,11 +6,14 @@ from django.core.management.base import BaseCommand
 
 
 from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
-from django.core.management import call_command
+from 臺灣言語工具.翻譯.摩西工具.安裝摩西翻譯佮相關程式 import 安裝摩西翻譯佮相關程式
 
 
 class Command(BaseCommand):
-    help = '訓練Moses模型，會當選愛訓練啥物語言抑是全部語言的'
+    help = (
+        '訓練Moses模型，會當選愛訓練啥物語言抑是全部語言的。\n'
+        '裝Moses程式，掠而且編譯，可能愛半點鐘以上'
+    )
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -26,6 +29,12 @@ class Command(BaseCommand):
             action='store_const',
             const=True,
         )
+        parser.add_argument(
+            '--編譯核心數',
+            dest='核心數',
+            default=4,
+            type=int,
+        )
 
     def handle(self, *args, **參數):
         if not 參數['全部語言'] and len(參數['語言']) == 0:
@@ -38,7 +47,8 @@ class Command(BaseCommand):
             語言陣列 = sorted(settings.HOK8_BU7_SIAT4_TING7.keys())
         else:
             語言陣列 = 參數['語言']
-        call_command('牽Moses')
+        安裝摩西翻譯佮相關程式.安裝gizapp()
+        安裝摩西翻譯佮相關程式.安裝moses(編譯CPU數=參數['核心數'])
         Moses模型訓練.輸出全部語料()
         for 一个語言 in 語言陣列:
             try:
