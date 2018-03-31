@@ -4,11 +4,9 @@ from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.基本物件.公用變數 import 分型音符號
 import re
-from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語工具.基本物件.公用變數 import 無音
-from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 
 
 class Kaldi語料處理():
@@ -76,14 +74,14 @@ class Kaldi語料處理():
         return 結果
 
     @classmethod
-    def 資料庫匯出外語辭典檔(cls, 輸出):
+    def 資料庫匯出外語辭典檔(cls, 辭典輸出物件,輸出):
         # 匯出華字台音的lexicon
         # 母親    ʔ- a1 b- o2
         for 一筆 in 訓練過渡格式.objects.filter(外文__isnull=False, 文本__isnull=False):
             try:
                 辭典格式, *_新聲學類 = Kaldi語料匯出.音節轉辭典格式(
                     拆文分析器.分詞句物件(一筆.文本),
-                    辭典輸出(臺灣閩南語羅馬字拼音,'拆做音素'), 一筆.外文
+                    辭典輸出物件, 一筆.外文
                 )
                 輸出.add(辭典格式)
             except ValueError:
