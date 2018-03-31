@@ -47,7 +47,6 @@ class Kaldi語料處理():
         資料 = set()
         for 音節 in sorted(音陣列):
             辭典格式, *_新聲學類 = Kaldi語料匯出.音節轉辭典格式(
-                set(), {}, {}, True,
                 拆文分析器.對齊字物件(音節, 音節), 音標系統,
                 '{1}{0}{1}'.format(分型音符號, cls._漢字聲韻(音標系統, 音節))
             )
@@ -82,7 +81,6 @@ class Kaldi語料處理():
         for 一筆 in 訓練過渡格式.objects.filter(外文__isnull=False, 文本__isnull=False):
             try:
                 辭典格式, *_新聲學類 = Kaldi語料匯出.音節轉辭典格式(
-                    set(), {}, {}, True,
                     拆文分析器.分詞句物件(一筆.文本),
                     臺灣閩南語羅馬字拼音, 一筆.外文
                 )
