@@ -39,7 +39,7 @@ class 看對齊結果單元試驗(TestCase):
 
     def test_對齊中(self):
         Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
 
@@ -49,7 +49,7 @@ class 看對齊結果單元試驗(TestCase):
 
     def test_對齊好產生壓縮檔中(self):
         Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         ).對齊成功([
             {'開始': 0.30, '長度': 0.23, '分詞': 'tsiang5', },
@@ -61,7 +61,7 @@ class 看對齊結果單元試驗(TestCase):
 
     def test_對齊失敗(self):
         Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         ).對齊失敗()
 
@@ -70,7 +70,7 @@ class 看對齊結果單元試驗(TestCase):
 
     def test_壓縮好矣(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         語料對齊.對齊成功([
@@ -86,7 +86,7 @@ class 看對齊結果單元試驗(TestCase):
 
     def test_有語言(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         語料對齊.對齊成功([
@@ -97,11 +97,11 @@ class 看對齊結果單元試驗(TestCase):
             語料對齊.存壓縮檔(凊彩檔案.name)
 
         回應資料 = self.client.get('/對齊結果').json()
-        self.assertEqual(回應資料['對齊結果'][0]['語言'], '閩南語')
+        self.assertEqual(回應資料['對齊結果'][0]['語言'], '台語')
 
     def test_有原始檔案(self):
         Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
 
@@ -111,7 +111,7 @@ class 看對齊結果單元試驗(TestCase):
 
     def test_有原始文本(self):
         Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), '\ntsiang5\ntsiang5',
         )
 

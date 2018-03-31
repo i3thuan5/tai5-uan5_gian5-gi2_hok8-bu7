@@ -9,14 +9,14 @@ class 對齊狀態單元試驗(TestCase):
 
     def test_猶未對齊狀態(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         self.assertFalse(語料對齊.對齊好猶未)
 
     def test_對齊前就有聽拍(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '媠媠',
+            '台語', '媠媠',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5\nkhiau2',
         )
         self.assertEqual(
@@ -26,7 +26,7 @@ class 對齊狀態單元試驗(TestCase):
 
     def test_對齊成功(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '媠媠',
+            '台語', '媠媠',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5\nkhiau2',
         )
         語料對齊.對齊成功([
@@ -57,7 +57,7 @@ class 對齊狀態單元試驗(TestCase):
 
     def test_有換逝(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '媠媠',
+            '台語', '媠媠',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'),
             '\ntsiang5 tsiang5\n\nkhiau2\n',
         )
@@ -89,7 +89,7 @@ class 對齊狀態單元試驗(TestCase):
 
     def test_對齊失敗(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         語料對齊.對齊失敗()

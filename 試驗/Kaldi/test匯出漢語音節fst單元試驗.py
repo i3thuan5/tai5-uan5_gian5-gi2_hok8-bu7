@@ -157,7 +157,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
             with open(語言文本, 'w') as 檔案:
                 print('敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4', file=檔案)
 
-            call_command('轉Kaldi音節fst', '閩南語', '拆做音素', 語言文本, 資料夾路徑)
+            call_command('轉Kaldi音節fst', '台語', '拆做音素', 語言文本, 資料夾路徑)
 
             self.assertEqual(揣出漢語音節種類mock.call_count, 1)
 
@@ -176,7 +176,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
             with open(語言文本, 'w') as 檔案:
                 print('敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4', file=檔案)
 
-            call_command('轉Kaldi音節fst', '閩南語', '拆做音素', 語言文本, 資料夾路徑)
+            call_command('轉Kaldi音節fst', '台語', '拆做音素', 語言文本, 資料夾路徑)
 
             self.比較檔案(
                 join(資料夾路徑, 'data', 'local', 'free-syllable', 'uniform.fst'),
@@ -200,7 +200,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
             with open(語言文本, 'w') as 檔案:
                 print('敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4', file=檔案)
 
-            call_command('轉Kaldi音節fst', '閩南語', '拆做音素', 語言文本, 資料夾路徑)
+            call_command('轉Kaldi音節fst', '台語', '拆做音素', 語言文本, 資料夾路徑)
 
             self.比較檔案(
                 join(資料夾路徑, 'data', 'local', 'free-syllable', 'lexicon.txt'),

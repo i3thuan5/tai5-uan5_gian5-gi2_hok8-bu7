@@ -26,7 +26,7 @@ class 匯出Kaldi格式資料單元試驗(TestCase):
                 文本='tsiang5 tsiang5',
             )
             with io.StringIO() as out:
-                call_command('匯出Kaldi格式資料', '閩南語', '拆做音素', 資料夾路徑, stdout=out)
+                call_command('匯出Kaldi格式資料', '台語', '拆做音素', 資料夾路徑, stdout=out)
                 self.assertIn('1 段', out.getvalue())
 
     def test_有聽拍資料(self):
@@ -45,11 +45,11 @@ class 匯出Kaldi格式資料單元試驗(TestCase):
                 }],
             )
             with io.StringIO() as out:
-                call_command('匯出Kaldi格式資料', '閩南語', '拆做音素', 資料夾路徑, stdout=out)
+                call_command('匯出Kaldi格式資料', '台語', '拆做音素', 資料夾路徑, stdout=out)
                 self.assertIn('1 段', out.getvalue())
 
     def test_無資料(self):
         with TemporaryDirectory() as 資料夾路徑:
             with io.StringIO() as out:
-                call_command('匯出Kaldi格式資料', '閩南語', '拆做音素', 資料夾路徑, stdout=out)
+                call_command('匯出Kaldi格式資料', '台語', '拆做音素', 資料夾路徑, stdout=out)
                 self.assertIn('0 段', out.getvalue())

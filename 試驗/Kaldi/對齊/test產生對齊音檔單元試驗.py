@@ -13,7 +13,7 @@ class 產生對齊音檔單元試驗(TestCase):
 
     def test_對齊檔案(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '媠媠',
+            '台語', '媠媠',
             聲音檔.對參數轉(2, 16, 1, b'sui2khiau2' * 160), 'tsiang5 tsiang5\nkhiau2',
         )
         語料對齊.對齊成功([
@@ -27,7 +27,7 @@ class 產生對齊音檔單元試驗(TestCase):
 
     def test_壓縮檔案(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
-            '閩南語', '媠媠',
+            '台語', '媠媠',
             聲音檔.對參數轉(2, 16, 1, b'sui2khiau2' * 160), 'tsiang5 tsiang5\nkhiau2',
         )
         語料對齊.對齊成功([
