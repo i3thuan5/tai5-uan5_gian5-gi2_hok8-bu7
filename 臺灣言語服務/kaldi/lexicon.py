@@ -4,8 +4,9 @@ from 臺灣言語服務.漢語語音處理 import 漢語語音處理
 
 
 class 辭典輸出:
-    def __init__(self, 羅馬字):
+    def __init__(self, 羅馬字, 選擇函式):
         self.羅馬字系統 = 羅馬字
+        self.輸出函式 = getattr(self, 選擇函式)
 
     def 拆做音素(self, 字物件):
         原聲, 韻, 調 = self._提出音值(字物件).音
@@ -37,3 +38,7 @@ class 辭典輸出:
         if not 檢查字物件.音標敢著(self.羅馬字系統):
             raise ValueError('音標無合法')
         return 檢查字物件.轉音(self.羅馬字系統, '音值')
+
+    def 漢字聲韻(self,  音節):
+        音標物件 = self.羅馬字系統(音節)
+        return 音標物件.聲 + 音標物件.韻

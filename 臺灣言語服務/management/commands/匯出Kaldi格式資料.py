@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.語言模型.安裝KenLM訓練程式 import 安裝KenLM訓練程式
+from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 
 
 class Command(BaseCommand):
@@ -44,14 +45,15 @@ class Command(BaseCommand):
         辭典資料 = Kaldi語料匯出.初使化辭典資料()
         for 語言 in 參數['語言']:
             服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
+            辭典輸出物件=辭典輸出(服務設定['音標系統'], '拆做音素')
             幾段音檔 = Kaldi語料匯出.匯出一種語言語料(
-                語言, 服務設定['音標系統'],
+                語言, 辭典輸出物件,
                 參數['匯出路徑'], 參數['資料夾名'], 辭典資料
             )
         if 參數['語言文本'] is not None:
             安裝KenLM訓練程式.安裝kenlm()
             服務設定 = settings.HOK8_BU7_SIAT4_TING7[參數['語言'][0]]
-            Kaldi語料匯出.辭典資料載入語句文本(參數['語言文本'], 服務設定['音標系統'], 辭典資料)
+            Kaldi語料匯出.辭典資料載入語句文本(參數['語言文本'], 辭典輸出物件, 辭典資料)
             Kaldi語料匯出.匯出語言模型(參數['語言文本'], 參數['連紲詞長度'], 參數['匯出路徑'], 參數['資料夾名'])
         Kaldi語料匯出.匯出辭典資料(辭典資料, 參數['匯出路徑'], 參數['資料夾名'])
         self.stdout.write('輸出 {} 段音檔'.format(幾段音檔))

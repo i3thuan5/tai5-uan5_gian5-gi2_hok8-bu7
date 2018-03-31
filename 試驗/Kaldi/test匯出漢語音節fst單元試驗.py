@@ -8,13 +8,14 @@ from django.test.testcases import TestCase
 
 from 臺灣言語服務.Kaldi語料處理 import Kaldi語料處理
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
+from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 
 
 class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_揣出漢語音節(self):
         音節 = Kaldi語料處理.揣出漢語音節種類(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             ['敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4']
         )
         self.assertEqual(
@@ -24,7 +25,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_揣出有音檔名嘛無要緊(self):
         音節 = Kaldi語料處理.揣出漢語音節種類(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             [
                 'tong0000000-0000000無註明-ku0000000 '
                 '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4'
@@ -37,7 +38,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_無法度解析的免插(self):
         音節 = Kaldi語料處理.揣出漢語音節種類(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             ['敢-若｜kan2-na2 散-步｜san3-poo7 咧｜咧 !｜!']
         )
         self.assertEqual(
@@ -47,7 +48,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_轉fst(self):
         fst = Kaldi語料處理.轉fst格式(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'kan2', 'na2', 'san3', 'poo7', 'leh4'}
         )
         self.assertEqual(
@@ -64,7 +65,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_fst仝調一條路就好(self):
         fst = Kaldi語料處理.轉fst格式(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'sui1', 'sui2', 'sui3'}
         )
         self.assertEqual(
@@ -77,7 +78,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_轉辭典檔(self):
         fst = Kaldi語料處理.轉辭典檔(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'kan2', 'na2', 'san3', 'poo7', 'leh4'}
         )
         self.assertEqual(
@@ -93,7 +94,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_仝音攏出現(self):
         fst = Kaldi語料處理.轉辭典檔(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'sui1', 'sui2', 'sui3'}
         )
         self.assertEqual(
@@ -107,7 +108,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_輕聲佮原本音攏仝款(self):
         fst = Kaldi語料處理.轉辭典檔(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'khiau2', '0sui2', 'sui1', 'sui2', 'sui3'}
         )
         self.assertEqual(
@@ -123,7 +124,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_外來詞佮原本音攏仝款(self):
         fst = Kaldi語料處理.轉辭典檔(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'khiau2', '1sui2', 'sui1', 'sui2', 'sui3'}
         )
         self.assertEqual(
@@ -138,7 +139,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
     def test_單元音(self):
         fst = Kaldi語料處理.轉辭典檔(
-            臺灣閩南語羅馬字拼音,
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
             {'i1'}
         )
         self.assertEqual(
@@ -158,10 +159,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
 
             call_command('轉Kaldi音節fst', '閩南語', 語言文本, 資料夾路徑)
 
-            揣出漢語音節種類mock.assert_called_once_with(
-                臺灣閩南語羅馬字拼音,
-                ['敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4']
-            )
+            self.assertEqual(揣出漢語音節種類mock.call_count, 1)
 
     @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.轉fst格式')
     def test_指令有輸出fst(self, 轉fst格式mock):
