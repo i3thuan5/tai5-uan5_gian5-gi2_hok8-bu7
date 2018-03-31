@@ -48,7 +48,7 @@ class 資料加到辭典單元試驗(TestCase):
             加語料=True,
         )
         self.assertEqual(聲類, {'s-'})
-        self.assertEqual(韻類,  {'ui2': {'ui2'}, 'u': {'ui2'}})
+        self.assertEqual(韻類,  {'ui': {'ui2'}})
         self.assertEqual(調類,  {'2': {'ui2'}, })
 
     def test_拆做音節(self):
@@ -62,7 +62,7 @@ class 資料加到辭典單元試驗(TestCase):
             加語料=True,
         )
         self.assertEqual(聲類, {})
-        self.assertEqual(韻類,  {'sui2': {'sui2'}, })
+        self.assertEqual(韻類,  {'sui': {'sui2'}, })
         self.assertEqual(調類,  {'2': {'sui2'}, })
         
     def test_語料有就會當加入辭典(self):
