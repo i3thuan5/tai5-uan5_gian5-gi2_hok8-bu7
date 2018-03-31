@@ -86,7 +86,7 @@ class 資料庫匯出外文辭典試驗(TestCase):
             '母親\tʔ- a1 b- ə2',
         ])
         with TemporaryDirectory() as 資料夾路徑:
-            call_command('匯出Kaldi外文辭典', '台語', 資料夾路徑)
+            call_command('匯出Kaldi外文辭典', '台語', '拆做音素', 資料夾路徑)
 
             self.比較檔案(
                 join(資料夾路徑, 'lexicon.txt'),

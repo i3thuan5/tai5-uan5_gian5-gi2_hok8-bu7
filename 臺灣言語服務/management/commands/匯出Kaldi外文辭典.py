@@ -21,6 +21,11 @@ class Command(BaseCommand, 程式腳本):
             help='選擇語料的語言'
         )
         parser.add_argument(
+            '辭典輸出函式',
+            type=str,
+            help='選擇lexicon佮聲學單位格式'
+        )
+        parser.add_argument(
             '匯出路徑',
             type=str,
             help='kaldi的egs內底的s5資料夾'
@@ -30,7 +35,7 @@ class Command(BaseCommand, 程式腳本):
         資料夾 = 參數['匯出路徑']
         makedirs(資料夾, exist_ok=True)
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[參數['語言']]
-        辭典輸出物件 = 辭典輸出(服務設定['音標系統'], '拆做音素')
+        辭典輸出物件 = 辭典輸出(服務設定['音標系統'], 參數['辭典輸出函式'])
 
         self._陣列寫入檔案(
             join(資料夾, 'lexicon.txt'),

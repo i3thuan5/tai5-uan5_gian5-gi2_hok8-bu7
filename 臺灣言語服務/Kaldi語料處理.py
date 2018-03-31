@@ -74,7 +74,7 @@ class Kaldi語料處理():
         return 結果
 
     @classmethod
-    def 資料庫匯出外語辭典檔(cls, 辭典輸出物件,輸出):
+    def 資料庫匯出外語辭典檔(cls, 辭典輸出物件, 輸出):
         # 匯出華字台音的lexicon
         # 母親    ʔ- a1 b- o2
         for 一筆 in 訓練過渡格式.objects.filter(外文__isnull=False, 文本__isnull=False):
