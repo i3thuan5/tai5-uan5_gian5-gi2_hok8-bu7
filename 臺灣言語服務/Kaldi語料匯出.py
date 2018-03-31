@@ -97,9 +97,8 @@ class Kaldi語料匯出(程式腳本):
             if len(分詞.strip()) == 0:
                 continue
             try:
-                全部詞.add(
-                    cls.音節轉辭典格式(聲類, 韻類, 調類, 加語料, 詞物件, 音標系統)
-                )
+                辭典格式, 新聲類, 新韻類, 新調類 = cls.音節轉辭典格式(聲類, 韻類, 調類, 加語料, 詞物件, 音標系統)
+                全部詞.add(辭典格式)
             except (ValueError, RuntimeError):
                 字物件陣列 = 詞物件.篩出字物件()
                 if (
@@ -125,6 +124,9 @@ class Kaldi語料匯出(程式腳本):
 
     @classmethod
     def 音節轉辭典格式(cls, 聲類, 韻類, 調類, 加語料, 物件, 音標系統, 詞條=None):
+        新聲類 = set()
+        新韻類 = set()
+        新調類 = set()
         聲韻陣列 = []
         for 字物件 in 物件.篩出字物件():
             if 字物件.音 != 無音:
@@ -136,6 +138,7 @@ class Kaldi語料匯出(程式腳本):
             原聲, 韻, 調 = 檢查字物件.轉音(音標系統, '音值').音
             聲 = 原聲 + '-'
             聲韻陣列.append(聲)
+            新聲類.add(聲)
             if 加語料:
                 聲類.add(聲)
             else:
@@ -144,6 +147,8 @@ class Kaldi語料匯出(程式腳本):
             for 一个音素 in 漢語語音處理.切漢語韻(韻):
                 一个音素調 = 一个音素 + 調
                 聲韻陣列.append(一个音素調)
+                新韻類.add((一个音素, 一个音素調))
+                新調類.add((調, 一个音素調))
                 if 加語料:
                     try:
                         韻類[一个音素].add(一个音素調)
@@ -160,9 +165,11 @@ class Kaldi語料匯出(程式腳本):
                     except KeyError:
                         raise RuntimeError('語料無這个韻抑是調')
         if 詞條:
-            return '{}\t{}'.format(''.join(詞條.split()), ' '.join(聲韻陣列))
-        分詞 = 物件.看分詞()
-        return '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
+            分詞 = ''.join(詞條.split())
+        else:
+            分詞 = 物件.看分詞()
+        辭典格式 = '{}\t{}'.format(分詞, ' '.join(聲韻陣列))
+        return 辭典格式, 新聲類, 新韻類, 新調類
 
     @classmethod
     def _揣影音輸出(cls, 語言, 音標系統,
