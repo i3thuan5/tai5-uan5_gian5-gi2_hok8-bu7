@@ -9,11 +9,9 @@ from django.db.models.query_utils import Q
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
-from 臺灣言語服務.漢語語音處理 import 漢語語音處理
 from 臺灣言語工具.基本物件.公用變數 import 標點符號
 from 臺灣言語工具.基本物件.公用變數 import 無音
 from 臺灣言語工具.基本物件.公用變數 import 分詞符號
-from 臺灣言語工具.基本物件.字 import 字
 from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 

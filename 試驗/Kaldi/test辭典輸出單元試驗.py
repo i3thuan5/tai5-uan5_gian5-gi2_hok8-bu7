@@ -1,7 +1,6 @@
 from django.test.testcases import TestCase
 
 
-from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.kaldi.lexicon import 辭典輸出
