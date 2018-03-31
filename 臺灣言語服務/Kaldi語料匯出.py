@@ -98,6 +98,10 @@ class Kaldi語料匯出(程式腳本):
                 continue
             try:
                 辭典格式, 新聲類, 新韻類, 新調類 = cls.音節轉辭典格式(聲類, 韻類, 調類, 加語料, 詞物件, 音標系統)
+                if 加語料:
+                    cls._加新聲學單位(聲類, 韻類, 調類, 新聲類, 新韻類, 新調類)
+                else:
+                    cls._檢查有新聲學單位無(聲類, 韻類, 調類, 新聲類, 新韻類, 新調類)
                 全部詞.add(辭典格式)
             except (ValueError, RuntimeError):
                 字物件陣列 = 詞物件.篩出字物件()
@@ -139,31 +143,11 @@ class Kaldi語料匯出(程式腳本):
             聲 = 原聲 + '-'
             聲韻陣列.append(聲)
             新聲類.add(聲)
-            if 加語料:
-                聲類.add(聲)
-            else:
-                if 聲 not in 聲類:
-                    raise RuntimeError('語料無這个音')
             for 一个音素 in 漢語語音處理.切漢語韻(韻):
                 一个音素調 = 一个音素 + 調
                 聲韻陣列.append(一个音素調)
                 新韻類.add((一个音素, 一个音素調))
                 新調類.add((調, 一个音素調))
-                if 加語料:
-                    try:
-                        韻類[一个音素].add(一个音素調)
-                    except KeyError:
-                        韻類[一个音素] = {一个音素調}
-                    try:
-                        調類[調].add(一个音素調)
-                    except KeyError:
-                        調類[調] = {一个音素調}
-                else:
-                    try:
-                        if 一个音素調 not in 韻類[一个音素] or 一个音素調 not in 調類[調]:
-                            raise RuntimeError('語料無這个韻抑是調')
-                    except KeyError:
-                        raise RuntimeError('語料無這个韻抑是調')
         if 詞條:
             分詞 = ''.join(詞條.split())
         else:
@@ -258,20 +242,37 @@ class Kaldi語料匯出(程式腳本):
         return 第幾个人
 
     @classmethod
-    def _揣上尾的聽拍(cls, 聽拍):
-        try:
-            while True:
-                聽拍 = 聽拍.聽拍校對.first().新聽拍
-        except AttributeError:
-            return 聽拍
+    def _加新聲學單位(cls, 聲類, 韻類, 調類, 新聲類, 新韻類, 新調類):
+        for 新聲 in 新聲類:
+            聲類.add(新聲)
+        for 一个音素, 一个音素調 in 新韻類:
+            try:
+                韻類[一个音素].add(一个音素調)
+            except KeyError:
+                韻類[一个音素] = {一个音素調}
+        for 調, 一个音素調 in 新調類:
+            try:
+                調類[調].add(一个音素調)
+            except KeyError:
+                調類[調] = {一个音素調}
 
     @classmethod
-    def _揣上尾的文本(cls, 文本):
-        try:
-            while True:
-                文本 = 文本.文本校對.first().新文本
-        except AttributeError:
-            return 文本
+    def _檢查有新聲學單位無(cls, 聲類, 韻類, 調類, 新聲類, 新韻類, 新調類):
+        for 新聲 in 新聲類:
+            if 新聲 not in 聲類:
+                raise RuntimeError('語料無這个音')
+        for 一个音素, 一个音素調 in 新韻類:
+            try:
+                if 一个音素調 not in 韻類[一个音素]:
+                    raise RuntimeError('語料無這个韻抑是調')
+            except KeyError:
+                raise RuntimeError('語料無這个韻抑是調')
+        for 調, 一个音素調 in 新調類:
+            try:
+                if 一个音素調 not in 調類[調]:
+                    raise RuntimeError('語料無這个調')
+            except KeyError:
+                raise RuntimeError('語料無這个調')
 
     @classmethod
     def _寫檔(cls, 資料夾, 檔名):
