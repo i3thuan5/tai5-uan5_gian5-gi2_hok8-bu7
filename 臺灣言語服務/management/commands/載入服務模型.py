@@ -11,7 +11,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **參數):
         pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
-        daemon = Pyro4.Daemon(host=pyro4主機)
+        if pyro4主機:
+            開放ip = '0.0.0.0'
+        else:
+            開放ip = None
+        daemon = Pyro4.Daemon(host=開放ip)
         ns = Pyro4.locateNS(host=pyro4主機)
 
         uri = daemon.register(Moses服務())
