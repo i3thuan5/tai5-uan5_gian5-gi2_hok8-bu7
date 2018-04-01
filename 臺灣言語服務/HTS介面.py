@@ -15,7 +15,8 @@ from 臺灣言語服務.HTS服務 import HTS服務
 
 class HTS介面:
 
-    def __init__(self):
+    @property
+    def 服務(self):
         if getattr(settings, "HTS_ING7_PYRO4", False):
             pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
             pyro4_naming主機 = Pyro4.locateNS(pyro4主機)
