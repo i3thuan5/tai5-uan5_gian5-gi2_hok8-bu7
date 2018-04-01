@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from 臺灣言語服務.HTS服務 import HTS服務
 from 臺灣言語服務.Moses服務 import Moses服務
+from time import sleep
 
 
 class Command(BaseCommand):
@@ -14,7 +15,13 @@ class Command(BaseCommand):
         ns = Pyro4.locateNS(host=pyro4主機)
 
         uri = daemon.register(Moses服務())
-        ns.register("Moses服務", uri)
+        while True:
+            try:
+                ns.register("Moses服務", uri)
+            except Pyro4.errors.NamingError:
+                sleep(3)
+            else:
+                break
         print("Moses服務", uri, file=self.stderr)
 
         if getattr(settings, "HTS_ING7_PYRO4", False):
@@ -23,4 +30,3 @@ class Command(BaseCommand):
             print("HTS服務", uri, file=self.stderr)
 
         daemon.requestLoop()
-        Pyro4.Daemon.serveSimple
