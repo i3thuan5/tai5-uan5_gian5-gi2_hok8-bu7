@@ -16,14 +16,11 @@ from 臺灣言語服務.HTS服務 import HTS服務
 class HTS介面:
 
     def __init__(self):
-        用pyro4 = False
-        try:
-            if settings.HTS_PYRO4:
-                用pyro4 = True
-        except AttributeError:
-            pass
-        if 用pyro4:
-            self.服務 = Pyro4.Proxy("PYRONAME:HTS服務")
+        if getattr(settings, "HTS_ING7_PYRO4", False):
+            pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
+            pyro4_naming主機 = Pyro4.locateNS(pyro4主機)
+            pyro4的uri = pyro4_naming主機.lookup("HTS服務")
+            self.服務 = Pyro4.Proxy(pyro4的uri)
         else:
             self.服務 = HTS服務()
 
