@@ -26,7 +26,7 @@ class 匯出漢語音節text單元試驗(TestCase):
             音節,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                'kan｜kan na｜na san｜san poo｜poo leh｜leh'
+                'kan na san poo leh'
             ]
         )
 
@@ -42,7 +42,7 @@ class 匯出漢語音節text單元試驗(TestCase):
             音節,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                'kan｜kan na｜na san｜san poo｜poo'
+                'kan na san poo'
             ]
         )
 
@@ -73,7 +73,7 @@ class 匯出漢語音節text單元試驗(TestCase):
             音節,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                'kan｜kan na｜na san｜san poo｜poo'
+                'kan na san poo'
             ]
         )
 
@@ -81,7 +81,7 @@ class 匯出漢語音節text單元試驗(TestCase):
     def test_指令有輸出辭典檔(self, 轉音節text格式mock):
         轉音節text格式mock.return_value = [
             'tong0000000-0000000無註明-ku0000000 '
-            'kan｜kan na｜na san｜san poo｜poo leh｜leh'
+            'kan na san poo leh'
         ]
         with TemporaryDirectory() as 資料夾路徑:
             原本語料 = join(資料夾路徑, 'train_dev')
@@ -100,7 +100,7 @@ class 匯出漢語音節text單元試驗(TestCase):
                 程式腳本._讀檔案(join(結果語料, 'text')),
                 [
                     'tong0000000-0000000無註明-ku0000000 '
-                    'kan｜kan na｜na san｜san poo｜poo leh｜leh'
+                    'kan na san poo leh'
                 ]
             )
 
