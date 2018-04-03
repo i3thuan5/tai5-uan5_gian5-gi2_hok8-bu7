@@ -94,7 +94,7 @@ class 匯出漢語音節text單元試驗(TestCase):
                 )
             結果語料 = join(資料夾路徑, 'train_dev_free')
 
-            call_command('轉Kaldi音節text', '閩南語', 原本語料, 結果語料)
+            call_command('轉Kaldi音節text', '台語', 原本語料, 結果語料)
 
             self.assertEqual(
                 程式腳本._讀檔案(join(結果語料, 'text')),
@@ -116,7 +116,7 @@ class 匯出漢語音節text單元試驗(TestCase):
             程式腳本._字串寫入檔案(join(原本語料, 'utt2spk'), 'kiann5')
             結果語料 = join(資料夾路徑, 'train_dev_free')
 
-            call_command('轉Kaldi音節text', '閩南語', 原本語料, 結果語料)
+            call_command('轉Kaldi音節text', '台語', 原本語料, 結果語料)
 
             self.assertEqual(
                 程式腳本._讀檔案(join(結果語料, 'utt2spk')),
@@ -136,6 +136,6 @@ class 匯出漢語音節text單元試驗(TestCase):
             split16 = join(結果語料, 'split16')
             makedirs(split16)
 
-            call_command('轉Kaldi音節text', '閩南語', 原本語料, 結果語料)
+            call_command('轉Kaldi音節text', '台語', 原本語料, 結果語料)
 
             self.assertFalse(isdir(split16))
