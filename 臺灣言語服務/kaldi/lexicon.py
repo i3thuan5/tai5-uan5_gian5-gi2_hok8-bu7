@@ -42,7 +42,7 @@ class 辭典輸出:
             檢查字物件 = 字(字物件.型, 字物件.型)
         if not 檢查字物件.音標敢著(self.羅馬字系統):
             raise ValueError('音標無合法')
-        return 檢查字物件.轉音(self.羅馬字系統, '音值')
+        return 檢查字物件
 
     def 漢字聲韻(self,  音節):
         音標物件 = self.羅馬字系統(音節)
