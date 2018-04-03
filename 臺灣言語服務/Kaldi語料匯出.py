@@ -103,6 +103,7 @@ class Kaldi語料匯出(程式腳本):
                 全部詞.add(辭典格式)
             except (ValueError, RuntimeError):
                 字物件陣列 = 詞物件.篩出字物件()
+                print('詞物件', 詞物件)
                 if (
                     len(字物件陣列) == 1 and
                     字物件陣列[0].型 == "NSN" and
