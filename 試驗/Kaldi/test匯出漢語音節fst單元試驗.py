@@ -54,11 +54,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                '0\t0\tkan｜kan\tkan｜kan',
-                '0\t0\tleh｜leh\tleh｜leh',
-                '0\t0\tna｜na\tna｜na',
-                '0\t0\tpoo｜poo\tpoo｜poo',
-                '0\t0\tsan｜san\tsan｜san',
+                '0\t0\tkan\tkan',
+                '0\t0\tleh\tleh',
+                '0\t0\tna\tna',
+                '0\t0\tpoo\tpoo',
+                '0\t0\tsan\tsan',
                 '0\t1',
             ]
         )
@@ -71,7 +71,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                '0\t0\tsui｜sui\tsui｜sui',
+                '0\t0\tsui\tsui',
                 '0\t1',
             ]
         )
@@ -84,11 +84,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'kan｜kan\tk- a2 n2',
-                'leh｜leh\tl- e4 ʔ4',
-                'na｜na\tn- a2',
-                'poo｜poo\tp- o7',
-                'san｜san\ts- a3 n3'
+                'kan\tk- a2 n2',
+                'leh\tl- e4 ʔ4',
+                'na\tn- a2',
+                'poo\tp- o7',
+                'san\ts- a3 n3'
             ]
         )
 
@@ -100,9 +100,9 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'sui｜sui\ts- u1 i1',
-                'sui｜sui\ts- u2 i2',
-                'sui｜sui\ts- u3 i3',
+                'sui\ts- u1 i1',
+                'sui\ts- u2 i2',
+                'sui\ts- u3 i3',
             ]
         )
 
@@ -114,11 +114,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'khiau｜khiau\tkʰ- i2 a2 u2',
-                'sui｜sui\ts- u0 i0',
-                'sui｜sui\ts- u1 i1',
-                'sui｜sui\ts- u2 i2',
-                'sui｜sui\ts- u3 i3',
+                'khiau\tkʰ- i2 a2 u2',
+                'sui\ts- u0 i0',
+                'sui\ts- u1 i1',
+                'sui\ts- u2 i2',
+                'sui\ts- u3 i3',
             ]
         )
 
@@ -130,10 +130,10 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'khiau｜khiau\tkʰ- i2 a2 u2',
-                'sui｜sui\ts- u1 i1',
-                'sui｜sui\ts- u2 i2',
-                'sui｜sui\ts- u3 i3',
+                'khiau\tkʰ- i2 a2 u2',
+                'sui\ts- u1 i1',
+                'sui\ts- u2 i2',
+                'sui\ts- u3 i3',
             ]
         )
 
@@ -145,7 +145,7 @@ class 匯出漢語音節fst單元試驗(TestCase):
         self.assertEqual(
             fst,
             [
-                'i｜i\tʔ- i1',
+                'i\tʔ- i1',
             ]
         )
 
@@ -164,11 +164,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
     @patch('臺灣言語服務.Kaldi語料處理.Kaldi語料處理.轉fst格式')
     def test_指令有輸出fst(self, 轉fst格式mock):
         轉fst格式mock.return_value = [
-            '0 0 leh4｜leh4 leh4｜leh4',
-            '0 0 kan2｜kan2 kan2｜kan2',
-            '0 0 na2｜na2 na2｜na2',
-            '0 0 poo7｜poo7 poo7｜poo7',
-            '0 0 san3｜san3 san3｜san3',
+            '0 0 leh leh',
+            '0 0 kan kan',
+            '0 0 na na',
+            '0 0 poo poo',
+            '0 0 san san',
             '0 1',
         ]
         with TemporaryDirectory() as 資料夾路徑:
@@ -181,11 +181,11 @@ class 匯出漢語音節fst單元試驗(TestCase):
             self.比較檔案(
                 join(資料夾路徑, 'data', 'local', 'free-syllable', 'uniform.fst'),
                 [
-                    '0 0 leh4｜leh4 leh4｜leh4',
-                    '0 0 kan2｜kan2 kan2｜kan2',
-                    '0 0 na2｜na2 na2｜na2',
-                    '0 0 poo7｜poo7 poo7｜poo7',
-                    '0 0 san3｜san3 san3｜san3',
+                    '0 0 leh leh',
+                    '0 0 kan kan',
+                    '0 0 na na',
+                    '0 0 poo poo',
+                    '0 0 san san',
                     '0 1',
                 ]
             )
