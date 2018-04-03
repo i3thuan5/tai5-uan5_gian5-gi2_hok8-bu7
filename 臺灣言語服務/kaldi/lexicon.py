@@ -44,6 +44,7 @@ class 辭典輸出:
             raise ValueError('音標無合法')
         音標 = self.羅馬字系統(檢查字物件.音)
         檢查字物件.音 = 音標.聲, 音標.韻, 音標.調
+        print(檢查字物件.音)
         return 檢查字物件
 
     def 漢字聲韻(self,  音節):
