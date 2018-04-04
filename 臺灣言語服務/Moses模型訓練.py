@@ -16,7 +16,6 @@ from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言�
 from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
 from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀集內組
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
-from 臺灣言語服務.資料模型路徑 import 翻譯模型資料夾
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語服務.資料模型路徑 import 翻譯做母語模型資料夾
