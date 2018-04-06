@@ -215,7 +215,7 @@ class Moses模型訓練(程式腳本):
 
     @classmethod
     def _外文斷詞(cls, 語料陣列, 暫存資料夾):
-        斷詞檔名 = join(暫存資料夾, basename(語料陣列))
+        斷詞檔名 = join(暫存資料夾, '外文斷詞.txt.gz')
         with gzip.open(斷詞檔名, 'wt') as 寫檔:
             for 原本檔案 in 語料陣列:
                 for 一逝 in cls._讀檔案(原本檔案):
