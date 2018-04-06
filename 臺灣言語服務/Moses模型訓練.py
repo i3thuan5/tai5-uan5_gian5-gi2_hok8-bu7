@@ -84,7 +84,7 @@ class Moses模型訓練(程式腳本):
     @classmethod
     def 訓練翻譯做外文模型(cls, 語料資料夾, 模型資料夾):
         平行華語, 平行母語, _母語文本 = cls._原始語料(語料資料夾)
-        with TemporaryDirectory as 暫存資料夾:
+        with TemporaryDirectory() as 暫存資料夾:
             平行斷詞華語 = cls._外文斷詞(平行華語, 暫存資料夾)
             模型訓練 = 摩西翻譯模型訓練()
             模型訓練.訓練(
