@@ -3,6 +3,8 @@ import gzip
 from os import makedirs
 from os.path import join, basename
 
+from setuptools.py31compat import TemporaryDirectory
+
 
 from 臺灣言語工具.翻譯.摩西工具.摩西翻譯模型訓練 import 摩西翻譯模型訓練
 from 臺灣言語工具.翻譯.摩西工具.語句編碼器 import 語句編碼器
@@ -19,7 +21,7 @@ from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語服務.資料模型路徑 import 翻譯正規化模型資料夾
-from setuptools.py31compat import TemporaryDirectory
+from 臺灣言語工具.斷詞.國教院斷詞用戶端 import 國教院斷詞用戶端
 
 
 class Moses模型訓練(程式腳本):
@@ -86,7 +88,7 @@ class Moses模型訓練(程式腳本):
             平行斷詞華語 = cls._外文斷詞(平行華語, 暫存資料夾)
             模型訓練 = 摩西翻譯模型訓練()
             模型訓練.訓練(
-                平行母語, 平行華語, 平行華語,
+                平行母語, 平行斷詞華語, 平行斷詞華語,
                 模型資料夾,
                 連紲詞長度=3,
                 編碼器=語句編碼器(),  # 若用著Unicdoe擴充就需要,
