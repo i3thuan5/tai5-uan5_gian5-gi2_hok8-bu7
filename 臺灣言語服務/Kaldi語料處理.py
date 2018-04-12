@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
-from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
-from 臺灣言語工具.基本物件.公用變數 import 分型音符號
-import re
-from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
-from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語工具.基本物件.公用變數 import 無音
+from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
+from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
+from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
+from 臺灣言語服務.models import 訓練過渡格式
+import re
 
 
 class Kaldi語料處理():
@@ -31,8 +30,8 @@ class Kaldi語料處理():
         路 = set()
         for 音節 in 音陣列:
             路.add(
-                '0\t0\t{2}{1}{2}\t{2}{1}{2}'.format(
-                    音節, 分型音符號, 音節.rstrip('0123456789')
+                '0\t0\t{1}\t{1}'.format(
+                    音節, 音節.rstrip('0123456789')
                 )
             )
         資料 = sorted(路)
@@ -45,7 +44,7 @@ class Kaldi語料處理():
         for 音節 in sorted(音陣列):
             辭典格式, *_新聲學類 = Kaldi語料匯出.音節轉辭典格式(
                 拆文分析器.對齊字物件(音節, 音節), 辭典輸出物件,
-                '{1}{0}{1}'.format(分型音符號, 音節.rstrip('0123456789'))
+                音節.rstrip('0123456789')
             )
             資料.add(辭典格式)
         return sorted(資料)
@@ -65,9 +64,7 @@ class Kaldi語料處理():
                         音 = 字物件.型
                     音標物件 = 音標系統(音)
                     if 音標物件.音標:
-                        音節逝.append('{2}{1}{2}'.format(
-                            音標物件.音標, 分型音符號, 音標物件.聲 + 音標物件.韻
-                        ))
+                        音節逝.append(音標物件.聲 + 音標物件.韻)
                 結果.append(' '.join(音節逝))
         return 結果
 
