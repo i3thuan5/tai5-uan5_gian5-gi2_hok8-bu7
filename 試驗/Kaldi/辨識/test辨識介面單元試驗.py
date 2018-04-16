@@ -9,7 +9,6 @@ from django.urls.base import resolve
 
 from 臺灣言語服務.Kaldi介面 import Kaldi辨識
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
-from 臺灣言語資料庫.資料模型 import 影音表
 
 
 class 辨識介面單元試驗(TestCase):
