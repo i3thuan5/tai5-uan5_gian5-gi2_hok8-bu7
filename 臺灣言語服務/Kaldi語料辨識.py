@@ -2,24 +2,18 @@ import io
 from os.path import join
 
 from django.conf import settings
-from django.db import models
 from django.db.models.query_utils import Q
-from django.utils import timezone
 
 
-from 臺灣言語資料庫.資料模型 import 來源表
-from 臺灣言語資料庫.資料模型 import 版權表
-from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.models import Kaldi辨識結果
-from 臺灣言語服務.KaldiModels import 影音檔案欄位
 
 
 class Kaldi語料辨識(Kaldi辨識結果):
     class Meta:
-        proxy=True
+        proxy = True
 
     def 辨識成功(self, 分詞):
         self.辨識好猶未 = True
@@ -32,36 +26,9 @@ class Kaldi語料辨識(Kaldi辨識結果):
         self.辨識出問題 = True
         self.save()
 
-
-
     @classmethod
     def 匯入音檔(cls, 語言, 啥人唸的, 聲音檔, 內容):
-        公家內容 = {
-            '收錄者': 來源表.objects.get_or_create(名='系統管理員')[0].編號(),
-            '來源': 來源表.objects.get_or_create(名=啥人唸的)[0].編號(),
-            '版權': 版權表.objects.get_or_create(版權='會使公開')[0].pk,
-            '種類': '語句',
-            '語言腔口': 語言,
-            '著作所在地': '臺灣',
-            '著作年': str(timezone.now().year),
-        }
-        音檔 = io.BytesIO(聲音檔.wav格式資料())
-        影音內容 = {'影音資料': 音檔}
-        影音內容.update(公家內容)
-        影音 = 影音表.加資料(影音內容)
-        聽拍資料 = [
-            {
-                '語者': 啥人唸的,
-                '內容': 內容,
-                '開始時間': 0,
-                '結束時間': 聲音檔.時間長度()
-            }
-        ]
-        聽拍內容 = {'聽拍資料': 聽拍資料}
-        聽拍內容.update(公家內容)
-        影音.寫聽拍(聽拍內容)
-        辨識 = cls.準備辨識(語言, 聲音檔)
-        return 辨識
+        return cls.準備辨識(語言, 聲音檔)
 
     def 辨識(self):
         try:
@@ -83,7 +50,7 @@ class Kaldi語料辨識(Kaldi辨識結果):
 
         公家內容 = {'來源': 'Dr. Pigu', '種類':  '字詞', '年代':  '2017', }
 
-        過渡格式=訓練過渡格式.objects.create(影音所在=self.音檔所在, 影音語者='Pigu', **公家內容)
+        過渡格式 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, 影音語者='Pigu', **公家內容)
 
         Kaldi語料匯出.匯出一種語言語料(
             self.語言, 服務設定['音標系統'],
