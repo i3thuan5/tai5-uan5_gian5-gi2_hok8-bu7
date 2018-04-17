@@ -46,23 +46,22 @@ class Kaldi語料辨識(Kaldi辨識結果):
         辨識設定 = 服務設定['辨識設定']
         kaldi_eg目錄 = 辨識設定['腳本資料夾']
 
-        編號字串 = '{0:07}'.format(id)
         暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
 
         公家內容 = {'來源': '使用者', '種類': '語句', '年代': str(timezone.now().year)}
 
-        過渡格式 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, 影音語者='Pigu', **公家內容)
+        過渡格式 = 訓練過渡格式.objects.create(影音所在=self.影音所在(), 影音語者='Pigu', **公家內容)
 
         Kaldi語料匯出.匯出一種語言語料(
             self.語言, 服務設定['音標系統'],
-            暫存目錄, 編號字串, Kaldi語料匯出.初使化辭典資料(),
+            暫存目錄, self.編號名(), Kaldi語料匯出.初使化辭典資料(),
             Q(pk=過渡格式.編號())
         )
         模型目錄 = join(kaldi_eg目錄, 'exp', 辨識設定['模型資料夾'])
         路徑目錄 = join(模型目錄, 辨識設定['圖資料夾'])
         重估語言模型目錄 = join(kaldi_eg目錄, 辨識設定['重估語言模型資料夾'])
-        資料目錄 = join(暫存目錄, 編號字串, 'train')
-        結果目錄 = join(模型目錄, 'decode_hok8bu7_{}'.format(編號字串))
+        資料目錄 = join(暫存目錄, self.編號名(), 'train')
+        結果目錄 = join(模型目錄, 'decode_hok8bu7_{}'.format(self.編號名()))
         with 程式腳本._換目錄(kaldi_eg目錄):
             程式腳本._走指令([
                 'bash', '-x',
