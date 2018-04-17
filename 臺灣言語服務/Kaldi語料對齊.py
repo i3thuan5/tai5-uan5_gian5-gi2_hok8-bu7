@@ -16,6 +16,8 @@ from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語服務.models import Kaldi對齊結果
+from 臺灣言語服務.models import 訓練過渡格式
+from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 
 
 class Kaldi語料對齊(Kaldi對齊結果):
@@ -29,7 +31,7 @@ class Kaldi語料對齊(Kaldi對齊結果):
         語料對齊.save()
         return 語料對齊
 
-    def 對齊音檔(self):
+    def 對齊(self):
         try:
             ctm資料 = self._對齊()
         except OSError:
@@ -44,27 +46,32 @@ class Kaldi語料對齊(Kaldi對齊結果):
             self.存壓縮檔(tar路徑)
 
     def _對齊(self):
-        語言 = self.影音.語言腔口.語言腔口
-        服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
+        服務設定 = settings.HOK8_BU7_SIAT4_TING7[self.語言]
 
         對齊設定 = 服務設定['辨識設定']
         kaldi_eg目錄 = 對齊設定['腳本資料夾']
-        影音編號 = self.影音.編號()
 
-        編號字串資料夾名 = '{0:07}'.format(影音編號)
         暫存目錄 = join(settings.BASE_DIR, 'kaldi-data')
 
+        過渡格式 = 訓練過渡格式.objects.create(
+            來源='使用者',
+            種類='語句',
+            年代=str(timezone.now().year),
+            影音所在=self.影音所在(), 影音語者='Pigu',
+            文本=self.欲切開的聽拍,
+        )
+        
         辭典資料 = Kaldi語料匯出.初使化辭典資料()
         Kaldi語料匯出.匯出一種語言語料(
-            語言, 服務設定['音標系統'],
-            暫存目錄, 編號字串資料夾名, 辭典資料,
-            Q(pk=影音編號)
+            self.語言, 辭典輸出(服務設定['音標系統'], '拆做音素'), ## 音素愛改
+            暫存目錄, self.編號名(), 辭典資料,
+            Q(pk=過渡格式.id)
         )
-        Kaldi語料匯出.匯出辭典資料(辭典資料, 暫存目錄, 編號字串資料夾名)
+        Kaldi語料匯出.匯出辭典資料(辭典資料, 暫存目錄, self.編號名())
 
         模型目錄 = join(kaldi_eg目錄, 'exp', 對齊設定['模型資料夾'])
         資料目錄 = join(kaldi_eg目錄, 對齊設定['語料資料夾'], 'local', 'dict')
-        對齊語料目錄 = join(暫存目錄, 編號字串資料夾名)
+        對齊語料目錄 = join(暫存目錄, self.編號名())
         with 程式腳本._換目錄(kaldi_eg目錄):
             程式腳本._走指令([
                 'bash', '-x',

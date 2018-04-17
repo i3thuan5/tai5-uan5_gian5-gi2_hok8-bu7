@@ -63,7 +63,7 @@ def Kaldi辨識(request):
         return HttpResponseBadRequest(
             '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
         )
-    Kaldi辨識影音.delay(Kaldi辨識.id)
+#     Kaldi辨識影音.delay(Kaldi辨識.id)
     return HttpResponse('上傳成功！！')
 
 
@@ -134,5 +134,4 @@ def 看對齊結果(request):
 
 @shared_task
 def Kaldi對齊影音(對齊編號):
-    語料對齊 = Kaldi語料對齊.objects.get(pk=對齊編號)
-    語料對齊.對齊音檔()
+    Kaldi語料對齊.objects.get(pk=對齊編號).對齊()
