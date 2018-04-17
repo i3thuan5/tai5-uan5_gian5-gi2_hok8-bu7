@@ -1,13 +1,12 @@
 from base64 import b64decode
 import json
 
+from celery import shared_task
 from django.conf import settings
 from django.http.response import HttpResponse, JsonResponse,\
     HttpResponseBadRequest
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
-
-from celery import shared_task
 
 
 from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
@@ -63,12 +62,12 @@ def Kaldi辨識(request):
     except MultiValueDictKeyError:
         啥人唸的 = '無註明'
     try:
-        影音 = Kaldi語料辨識.匯入音檔(request.POST['語言'], 啥人唸的, 揣音檔出來(request), '')
+        Kaldi辨識 = Kaldi語料辨識.匯入音檔(request.POST['語言'], 啥人唸的, 揣音檔出來(request), '')
     except MultiValueDictKeyError:
         return HttpResponseBadRequest(
             '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
         )
-    Kaldi辨識影音.delay(影音.編號())
+#     Kaldi辨識影音.delay(Kaldi辨識.id) ##愛補
     return HttpResponse('上傳成功！！')
 
 
@@ -87,24 +86,14 @@ def blob2bytes(blob):
 
 
 def 無辨識過的重訓練一擺():
-    for 影音 in 影音表.objects.filter(Kaldi辨識結果__辨識好猶未=False):
-        _Kaldi辨識影音(影音)
+    for Kaldi辨識 in Kaldi語料辨識.objects.filter(辨識好猶未=False):
+        Kaldi辨識.辨識()
     return JsonResponse({'成功': '成功'})
 
 
 @shared_task
-def Kaldi辨識影音(影音編號):
-    _Kaldi辨識影音(影音表.objects.get(pk=影音編號))
-
-
-def _Kaldi辨識影音(影音):
-    try:
-        章物件 = Kaldi語料辨識.辨識音檔(影音)
-    except OSError:
-        影音.Kaldi辨識結果.辨識失敗()
-        raise
-    else:
-        影音.Kaldi辨識結果.辨識成功(章物件.看分詞())
+def Kaldi辨識影音(Kaldi辨識編號):
+    Kaldi語料辨識.objects.get(pk=Kaldi辨識編號).辨識()
 
 
 @csrf_exempt

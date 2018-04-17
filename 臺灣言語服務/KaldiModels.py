@@ -23,15 +23,18 @@ class 影音檔案欄位(models.Model):
         return 聲音檔.對檔案讀(self.影音所在())
 
     def 影音所在(self):
-        return join(abspath(settings.MEDIA_ROOT), self.影音資料.name)
+        return join(abspath(settings.MEDIA_ROOT), self.影音.name)
 
     def 存影音資料(self, 音檔):
         self.影音.save(
-            name='{0}_{1:04}'.format(self.名, self.id),
+            name=self.編號名(),
             content=ContentFile(音檔.wav格式資料()),
             save=True,
         )
         return self
+
+    def 編號名(self):
+        return '{0}_{1:04}'.format(self.名, self.id)
 
 
 class Kaldi辨識結果(影音檔案欄位):
@@ -39,17 +42,6 @@ class Kaldi辨識結果(影音檔案欄位):
     辨識好猶未 = models.BooleanField(default=False)
     辨識出問題 = models.BooleanField(default=False)
     分詞 = models.TextField(blank=True)
-
-    def 辨識成功(self, 分詞):
-        self.辨識好猶未 = True
-        self.辨識出問題 = False
-        self.分詞 = 分詞
-        self.save()
-
-    def 辨識失敗(self):
-        self.辨識好猶未 = True
-        self.辨識出問題 = True
-        self.save()
 
 
 class Kaldi對齊結果(影音檔案欄位):

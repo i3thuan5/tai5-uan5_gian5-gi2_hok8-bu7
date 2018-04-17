@@ -2,6 +2,7 @@ import io
 from os.path import join
 
 from django.conf import settings
+from django.db import models
 from django.db.models.query_utils import Q
 from django.utils import timezone
 
@@ -13,9 +14,25 @@ from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.models import Kaldi辨識結果
+from 臺灣言語服務.KaldiModels import 影音檔案欄位
 
 
-class Kaldi語料辨識:
+class Kaldi語料辨識(Kaldi辨識結果):
+    class Meta:
+        proxy=True
+
+    def 辨識成功(self, 分詞):
+        self.辨識好猶未 = True
+        self.辨識出問題 = False
+        self.分詞 = 分詞
+        self.save()
+
+    def 辨識失敗(self):
+        self.辨識好猶未 = True
+        self.辨識出問題 = True
+        self.save()
+
+
 
     @classmethod
     def 匯入音檔(cls, 語言, 啥人唸的, 聲音檔, 內容):
@@ -43,25 +60,35 @@ class Kaldi語料辨識:
         聽拍內容 = {'聽拍資料': 聽拍資料}
         聽拍內容.update(公家內容)
         影音.寫聽拍(聽拍內容)
-        辨識=Kaldi辨識結果.準備辨識(語言,聲音檔)
+        辨識 = Kaldi辨識結果.準備辨識(語言, 聲音檔)
         return 辨識
 
-    @classmethod
-    def 辨識音檔(cls, 影音):
-        語言 = 影音.語言腔口.語言腔口
-        服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
+    def 辨識(self):
+        try:
+            章物件 = self.辨識音檔()
+        except OSError:
+            self.辨識失敗()
+            raise
+        else:
+            self.辨識成功(章物件.看分詞())
+
+    def 辨識音檔(self):
+        服務設定 = settings.HOK8_BU7_SIAT4_TING7[self.語言]
 
         辨識設定 = 服務設定['辨識設定']
         kaldi_eg目錄 = 辨識設定['腳本資料夾']
-        影音編號 = 影音.編號()
 
-        編號字串 = '{0:07}'.format(影音編號)
+        編號字串 = '{0:07}'.format(id)
         暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
 
+        公家內容 = {'來源': 'Dr. Pigu', '種類':  '字詞', '年代':  '2017', }
+
+        過渡格式=訓練過渡格式.objects.create(影音所在=self.音檔所在, 影音語者='Pigu', **公家內容)
+
         Kaldi語料匯出.匯出一種語言語料(
-            語言, 服務設定['音標系統'],
+            self.語言, 服務設定['音標系統'],
             暫存目錄, 編號字串, Kaldi語料匯出.初使化辭典資料(),
-            Q(pk=影音編號)
+            Q(pk=過渡格式.編號())
         )
         模型目錄 = join(kaldi_eg目錄, 'exp', 辨識設定['模型資料夾'])
         路徑目錄 = join(模型目錄, 辨識設定['圖資料夾'])

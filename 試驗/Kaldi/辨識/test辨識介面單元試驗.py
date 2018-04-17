@@ -3,12 +3,12 @@ import io
 import json
 
 from django.test.testcases import TestCase
-
 from django.urls.base import resolve
 
 
 from 臺灣言語服務.Kaldi介面 import Kaldi辨識
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
+from 臺灣言語服務.KaldiModels import Kaldi辨識結果
 
 
 class 辨識介面單元試驗(TestCase):
@@ -35,7 +35,7 @@ class 辨識介面單元試驗(TestCase):
             'blob': self.blob,
         })
         self.assertEqual(
-            影音表.objects.get().聲音檔().wav格式資料(),
+            Kaldi辨識結果.objects.get().聲音檔().wav格式資料(),
             self.音檔.wav格式資料()
         )
 
@@ -46,7 +46,7 @@ class 辨識介面單元試驗(TestCase):
                 '音檔': 音檔,
             })
         self.assertEqual(
-            影音表.objects.get().聲音檔().wav格式資料(),
+            Kaldi辨識結果.objects.get().聲音檔().wav格式資料(),
             self.音檔.wav格式資料()
         )
 

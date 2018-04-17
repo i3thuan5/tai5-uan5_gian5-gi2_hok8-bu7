@@ -1,16 +1,19 @@
+from os.path import abspath
+from sys import stderr
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from jsonfield.fields import JSONField
-from os.path import abspath
-from sys import stderr
+
+
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 from 臺灣言語服務.KaldiModels import Kaldi對齊結果
-from 臺灣言語服務.KaldiModels import Kaldi辨識結果
 from 臺灣言語服務.models檢查 import 檢查敢是wav
 from 臺灣言語服務.models檢查 import 檢查敢是分詞
 from 臺灣言語服務.models檢查 import 檢查敢是影音檔案
 from 臺灣言語服務.models檢查 import 檢查聽拍內底欄位敢有夠
 from 臺灣言語服務.models檢查 import 檢查聽拍結束時間有超過音檔無
+from 臺灣言語服務.KaldiModels import Kaldi辨識結果
 
 
 class 訓練過渡格式(models.Model):
