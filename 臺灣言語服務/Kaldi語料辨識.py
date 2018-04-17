@@ -43,8 +43,8 @@ class Kaldi語料辨識:
         聽拍內容 = {'聽拍資料': 聽拍資料}
         聽拍內容.update(公家內容)
         影音.寫聽拍(聽拍內容)
-        Kaldi辨識結果.準備辨識(影音)
-        return 影音
+        辨識=Kaldi辨識結果.準備辨識(語言,聲音檔)
+        return 辨識
 
     @classmethod
     def 辨識音檔(cls, 影音):
