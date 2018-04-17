@@ -1,4 +1,5 @@
 from os.path import join
+from tempfile import TemporaryDirectory
 
 from django.conf import settings
 from django.db.models.query_utils import Q
@@ -10,7 +11,7 @@ from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.models import Kaldi辨識結果
 from 臺灣言語服務.models import 訓練過渡格式
-from tempfile import TemporaryDirectory
+from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 
 
 class Kaldi語料辨識(Kaldi辨識結果):
@@ -55,11 +56,16 @@ class Kaldi語料辨識(Kaldi辨識結果):
         辨識設定 = 服務設定['辨識設定']
         kaldi_eg目錄 = 辨識設定['腳本資料夾']
 
-        公家內容 = {'來源': '使用者', '種類': '語句', '年代': str(timezone.now().year)}
-        過渡格式 = 訓練過渡格式.objects.create(影音所在=self.影音所在(), 影音語者='Pigu', **公家內容)
+        過渡格式 = 訓練過渡格式.objects.create(
+            來源='使用者',
+            種類='語句',
+            年代=str(timezone.now().year),
+            影音所在=self.影音所在(), 影音語者='Pigu',
+            文本='kaldi辨識服務',
+        )
 
         Kaldi語料匯出.匯出一種語言語料(
-            self.語言, 服務設定['音標系統'],
+            self.語言, 辭典輸出(服務設定['音標系統'], '拆做音素'),
             暫存目錄, self.編號名(), Kaldi語料匯出.初使化辭典資料(),
             Q(pk=過渡格式.編號())
         )
