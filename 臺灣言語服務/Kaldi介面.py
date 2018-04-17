@@ -11,27 +11,24 @@ from django.views.decorators.csrf import csrf_exempt
 
 from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
-from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.Kaldi語料對齊 import Kaldi語料對齊
 from 臺灣言語服務.models import Kaldi對齊結果
+from 臺灣言語服務.KaldiModels import Kaldi辨識結果
 
 
 @csrf_exempt
 def 看辨識結果(request):
     結果 = []
-    for 影音 in (
-        影音表.objects
-        .filter(Kaldi辨識結果__isnull=False)
-        .select_related('Kaldi辨識結果', '語言腔口')
+    for 辨識結果 in (
+        Kaldi辨識結果.objects
         .order_by('-pk')[:300]
     ):
         這筆 = {
-            '編號': 影音.編號(),
-            '網址': 影音.影音資料.url,
-            '語言': 影音.語言腔口.語言腔口,
+            '編號': 辨識結果.id,
+            '網址': 辨識結果.影音.url,
+            '語言': 辨識結果.語言,
         }
-        辨識結果 = 影音.Kaldi辨識結果
         if not 辨識結果.辨識好猶未:
             這筆['狀態'] = '辨識中…'
         elif 辨識結果.辨識出問題:
@@ -40,8 +37,7 @@ def 看辨識結果(request):
             這筆['狀態'] = '成功'
             這筆['分詞'] = 辨識結果.分詞
 
-            語言 = 影音.語言腔口.語言腔口
-            服務設定 = settings.HOK8_BU7_SIAT4_TING7[語言]
+            服務設定 = settings.HOK8_BU7_SIAT4_TING7[辨識結果.語言]
             章物件 = 拆文分析器.分詞章物件(辨識結果.分詞)
             try:
                 這筆['綜合標音'] = 章物件.綜合標音(服務設定['字綜合標音'])
