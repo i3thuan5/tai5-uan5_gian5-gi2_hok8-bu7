@@ -2,6 +2,7 @@ from os.path import join
 
 from django.conf import settings
 from django.db.models.query_utils import Q
+from django.utils import timezone
 
 
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
@@ -48,7 +49,7 @@ class Kaldi語料辨識(Kaldi辨識結果):
         編號字串 = '{0:07}'.format(id)
         暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
 
-        公家內容 = {'來源': 'Dr. Pigu', '種類':  '字詞', '年代':  '2017', }
+        公家內容 = {'來源': '使用者', '種類': '語句', '年代': str(timezone.now().year)}
 
         過渡格式 = 訓練過渡格式.objects.create(影音所在=self.音檔所在, 影音語者='Pigu', **公家內容)
 
