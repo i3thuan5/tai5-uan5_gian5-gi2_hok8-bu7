@@ -10,6 +10,7 @@ from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.models import Kaldi辨識結果
 from 臺灣言語服務.models import 訓練過渡格式
+from tempfile import TemporaryDirectory
 
 
 class Kaldi語料辨識(Kaldi辨識結果):
@@ -41,15 +42,20 @@ class Kaldi語料辨識(Kaldi辨識結果):
             self.辨識成功(章物件.看分詞())
 
     def 辨識音檔(self):
+        try:
+            指定目錄 = join(settings.BASE_DIR, settings.KALDI_KUE3_TING5)
+            return self._辨識音檔指定資料夾(指定目錄)
+        except AttributeError:
+            with TemporaryDirectory() as 暫存目錄:
+                return self._辨識音檔指定資料夾(暫存目錄)
+
+    def _辨識音檔指定資料夾(self, 暫存目錄):
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[self.語言]
 
         辨識設定 = 服務設定['辨識設定']
         kaldi_eg目錄 = 辨識設定['腳本資料夾']
 
-        暫存目錄 = join(settings.BASE_DIR, 'kaldi資料')
-
         公家內容 = {'來源': '使用者', '種類': '語句', '年代': str(timezone.now().year)}
-
         過渡格式 = 訓練過渡格式.objects.create(影音所在=self.影音所在(), 影音語者='Pigu', **公家內容)
 
         Kaldi語料匯出.匯出一種語言語料(
