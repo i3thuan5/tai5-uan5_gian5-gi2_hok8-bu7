@@ -63,7 +63,7 @@ def Kaldi辨識(request):
         return HttpResponseBadRequest(
             '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
         )
-#     Kaldi辨識影音.delay(Kaldi辨識.id) ##愛補
+    Kaldi辨識影音.delay(Kaldi辨識.id)
     return HttpResponse('上傳成功！！')
 
 
@@ -110,15 +110,13 @@ def 看對齊結果(request):
     結果 = []
     for 對齊結果 in (
         Kaldi對齊結果.objects
-        .filter()
-        .select_related('影音__語言腔口', '欲切開的聽拍')
         .order_by('-pk')[:300]
     ):
         這筆 = {
             '編號': 對齊結果.pk,
-            '原始wav檔網址': 對齊結果.影音.影音資料.url,
-            '分詞文本': 對齊結果.欲切開的聽拍.聽拍內容()[0]['內容'],
-            '語言': 對齊結果.影音.語言腔口.語言腔口,
+            '原始wav檔網址': 對齊結果.影音.url,
+            '分詞文本': 對齊結果.欲切開的聽拍,
+            '語言': 對齊結果.語言,
         }
         if not 對齊結果.對齊好猶未:
             這筆['狀態'] = '對齊中…'

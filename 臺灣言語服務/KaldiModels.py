@@ -45,6 +45,7 @@ class Kaldi辨識結果(影音檔案欄位):
 
 
 class Kaldi對齊結果(影音檔案欄位):
+    名 = 'Kaldi對齊'
     對齊好猶未 = models.BooleanField(default=False)
     對齊出問題 = models.BooleanField(default=False)
     欲切開的聽拍 = models.TextField()

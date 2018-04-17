@@ -1,4 +1,3 @@
-import io
 from os.path import join
 
 from django.conf import settings
@@ -9,6 +8,7 @@ from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.models import Kaldi辨識結果
+from 臺灣言語服務.models import 訓練過渡格式
 
 
 class Kaldi語料辨識(Kaldi辨識結果):
