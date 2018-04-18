@@ -1,4 +1,3 @@
-import io
 from os import makedirs
 from os.path import join, basename
 import tarfile
@@ -10,9 +9,6 @@ from django.db.models.query_utils import Q
 from django.utils import timezone
 
 
-from 臺灣言語資料庫.資料模型 import 來源表
-from 臺灣言語資料庫.資料模型 import 版權表
-from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語服務.models import Kaldi對齊結果
@@ -33,25 +29,26 @@ class Kaldi語料對齊(Kaldi對齊結果):
 
     def 對齊(self):
         try:
-            ctm資料 = self._對齊()
+            ctm資料 = self.對齊音檔()
         except OSError:
             self.對齊失敗()
             raise
         self.對齊成功(ctm資料)
-        with TemporaryDirectory() as 暫存資料夾路徑:
-            wav路徑 = join(暫存資料夾路徑, '切好的音檔')
-            self.產生音檔(wav路徑)
-            tar路徑 = join(暫存資料夾路徑, '切好的音檔.tar')
-            self.壓縮音檔(wav路徑, tar路徑)
-            self.存壓縮檔(tar路徑)
+        self.做出切音結果()
 
-    def _對齊(self):
+    def 對齊音檔(self):
+        try:
+            指定目錄 = join(settings.BASE_DIR, settings.KALDI_KUE3_TING5)
+            return self._對齊音檔指定資料夾(指定目錄)
+        except AttributeError:
+            with TemporaryDirectory() as 暫存目錄:
+                return self._對齊音檔指定資料夾(暫存目錄)
+
+    def _對齊音檔指定資料夾(self, 暫存目錄):
         服務設定 = settings.HOK8_BU7_SIAT4_TING7[self.語言]
 
         對齊設定 = 服務設定['辨識設定']
         kaldi_eg目錄 = 對齊設定['腳本資料夾']
-
-        暫存目錄 = join(settings.BASE_DIR, 'kaldi-data')
 
         過渡格式 = 訓練過渡格式.objects.create(
             來源='使用者',
@@ -60,10 +57,10 @@ class Kaldi語料對齊(Kaldi對齊結果):
             影音所在=self.影音所在(), 影音語者='Pigu',
             文本=self.欲切開的聽拍,
         )
-        
+
         辭典資料 = Kaldi語料匯出.初使化辭典資料()
         Kaldi語料匯出.匯出一種語言語料(
-            self.語言, 辭典輸出(服務設定['音標系統'], '拆做音素'), ## 音素愛改
+            self.語言, 辭典輸出(服務設定['音標系統'], '拆做音素'),  # 音素愛改
             暫存目錄, self.編號名(), 辭典資料,
             Q(pk=過渡格式.id)
         )
@@ -93,7 +90,6 @@ class Kaldi語料對齊(Kaldi對齊結果):
     def 對齊成功(self, ctm時間):
         self.對齊好猶未 = True
         self.對齊出問題 = False
-        self.save()
 
         聽拍資料 = []
         ctm所在 = 0
@@ -118,6 +114,14 @@ class Kaldi語料對齊(Kaldi對齊結果):
         self.對齊好猶未 = True
         self.對齊出問題 = True
         self.save()
+
+    def 做出切音結果(self):
+        with TemporaryDirectory() as 暫存資料夾路徑:
+            wav路徑 = join(暫存資料夾路徑, '切好的音檔')
+            self.產生音檔(wav路徑)
+            tar路徑 = join(暫存資料夾路徑, '切好的音檔.tar')
+            self.壓縮音檔(wav路徑, tar路徑)
+            self.存壓縮檔(tar路徑)
 
     def 產生音檔(self, wav資料夾路徑):
         makedirs(wav資料夾路徑, exist_ok=True)

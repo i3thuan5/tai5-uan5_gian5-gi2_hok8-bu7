@@ -54,14 +54,13 @@ class 看對齊結果單元試驗(TestCase):
     def test_壓縮好矣(self):
         語料對齊 = Kaldi語料對齊.匯入音檔(
             '台語', '啥人唸的',
-            聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
+            聲音檔.對參數轉(2, 16, 1, b'sui2khiau2'*33), 'tsiang5 tsiang5',
         )
         語料對齊.對齊成功([
             {'開始': 0.30, '長度': 0.23, '分詞': 'tsiang5', },
             {'開始': 0.60, '長度': 0.23, '分詞': 'tsiang5', }
         ])
-        with NamedTemporaryFile() as 凊彩檔案:
-            語料對齊.存壓縮檔(凊彩檔案.name)
+        語料對齊.做出切音結果()
 
         回應資料 = self.client.get('/對齊結果').json()
         self.assertIn('成功', 回應資料['對齊結果'][0]['狀態'])
