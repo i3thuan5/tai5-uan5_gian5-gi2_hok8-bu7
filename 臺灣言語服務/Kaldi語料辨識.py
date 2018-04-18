@@ -60,7 +60,7 @@ class Kaldi語料辨識(Kaldi辨識結果):
             來源='使用者',
             種類='語句',
             年代=str(timezone.now().year),
-            影音所在=self.影音所在(), 影音語者='Pigu',
+            影音所在=self.影音所在(),
             文本='kaldi辨識服務',
         )
 
