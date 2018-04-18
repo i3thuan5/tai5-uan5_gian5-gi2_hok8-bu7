@@ -63,7 +63,7 @@ def Kaldi辨識(request):
         return HttpResponseBadRequest(
             '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
         )
-#     Kaldi辨識影音.delay(Kaldi辨識.id)
+    Kaldi辨識影音.delay(Kaldi辨識.id)
     return HttpResponse('上傳成功！！')
 
 
@@ -94,13 +94,18 @@ def Kaldi辨識影音(Kaldi辨識編號):
 
 @csrf_exempt
 def Kaldi對齊(request):
-    語言 = request.POST['語言']
-    文本 = request.POST['文本']
-    語料對齊 = Kaldi語料對齊.匯入音檔(
-        語言, '無註明',
-        聲音檔.對資料轉(request.FILES['原始wav檔'].read()),
-        文本.replace('\r\n', '\n').replace('\r', '\n')
-    )
+    try:
+        語言 = request.POST['語言']
+        文本 = request.POST['文本']
+        語料對齊 = Kaldi語料對齊.匯入音檔(
+            語言, '無註明',
+            揣音檔出來(request),
+            文本.replace('\r\n', '\n').replace('\r', '\n')
+        )
+    except MultiValueDictKeyError:
+        return HttpResponseBadRequest(
+            '設定「語言」參數以外，閣愛傳「文本」佮「blob」抑是「音檔」！！'
+        )
     Kaldi對齊影音.delay(語料對齊.pk)
     return HttpResponse('上傳成功！！')
 
