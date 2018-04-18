@@ -133,7 +133,7 @@ class 資料加到辭典單元試驗(TestCase):
             聲類, 韻類, 調類, 全部詞, 全部句, '滇｜tinn7', self.輸出單位,
             加語料=True,
         )
-        self.assertEqual(len(韻類['iⁿ']), 1,韻類)
+        self.assertEqual(len(韻類['iⁿ']), 1, 韻類)
         self.assertEqual(len(全部詞), 1)
         Kaldi語料匯出._資料加到辭典(
             聲類, 韻類, 調類, 全部詞, 全部句, '甜｜tinn1', self.輸出單位,

@@ -21,7 +21,8 @@ class 對齊指令單元試驗(TestCase):
     @patch('臺灣言語工具.系統整合.程式腳本.程式腳本._換目錄')
     @patch('臺灣言語工具.系統整合.程式腳本.程式腳本._走指令')
     @override_settings(KALDI_KUE3_TING5='kaldi過程資料')
-    def test_有產生kaldi語句(self, _走指令mock, _換目錄mock, 讀檔案mock, _對齊成功mock, _做出切音結果mock):
+    def test_有產生kaldi語句(self, _走指令mock, _換目錄mock, 讀檔案mock,
+                        _對齊成功mock, _做出切音結果mock):
         Kaldi對齊 = Kaldi語料對齊.匯入音檔(
             '台語', '啥人唸的',
             self.音檔, 'tsiang5 tsiang5\nkhiau2',
@@ -63,7 +64,8 @@ class 對齊指令單元試驗(TestCase):
     @patch('臺灣言語工具.系統整合.程式腳本.程式腳本._換目錄')
     @patch('臺灣言語工具.系統整合.程式腳本.程式腳本._走指令')
     @override_settings(KALDI_KUE3_TING5='kaldi過程資料')
-    def test_有指定過程暫存資料夾(self, _走指令mock, _換目錄mock, 讀檔案mock, 對齊成功mock, 做出切音結果mock):
+    def test_有指定過程暫存資料夾(self, _走指令mock, _換目錄mock, 讀檔案mock,
+                        對齊成功mock, 做出切音結果mock):
         Kaldi對齊 = Kaldi語料對齊.匯入音檔(
             '台語', '啥人唸的',
             self.音檔, 'tsiang5 tsiang5',
