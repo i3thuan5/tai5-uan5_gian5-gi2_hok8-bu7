@@ -10,6 +10,7 @@ from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 from 臺灣言語服務.models import 訓練過渡格式
+from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 
 
 class Kaldi匯出一種語言語料單元試驗(TestCase):
@@ -25,7 +26,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         self.匯入音檔('媠巧', 'tsiang5 tsiang5')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
@@ -60,7 +61,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         )
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
@@ -117,7 +118,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         一筆.save()
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
@@ -156,7 +157,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         self.匯入音檔('媠巧', 'konn5 konn5')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
@@ -179,7 +180,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         self.匯入音檔('無註明', 'konn5 konn5')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
@@ -202,7 +203,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         一筆 = self.匯入音檔('媠巧', 'tsiang5 tsiang5')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料(),
                 Q(pk=一筆.編號())
             )
@@ -231,7 +232,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         self.匯入音檔('媠巧', '\ntsiang5\ntsiang5\n')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
-                '台語', 臺灣閩南語羅馬字拼音,
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(

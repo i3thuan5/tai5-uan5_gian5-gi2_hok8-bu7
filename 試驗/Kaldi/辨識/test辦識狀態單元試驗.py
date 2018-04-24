@@ -9,14 +9,14 @@ class 辦識狀態單元試驗(TestCase):
 
     def test_猶未辦識狀態(self):
         影音 = Kaldi語料辨識.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         self.assertFalse(影音.Kaldi辨識結果.辨識好猶未)
 
     def test_辦識成功(self):
         影音 = Kaldi語料辨識.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         影音.Kaldi辨識結果.辨識成功('sui2')
@@ -26,7 +26,7 @@ class 辦識狀態單元試驗(TestCase):
 
     def test_辦識失敗(self):
         影音 = Kaldi語料辨識.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         影音.Kaldi辨識結果.辨識失敗()

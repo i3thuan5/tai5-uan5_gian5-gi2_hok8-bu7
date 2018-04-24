@@ -4,9 +4,13 @@ from unittest.mock import patch
 
 from django.core.management import call_command
 from django.test.testcases import TestCase
+
+
 from 臺灣言語服務.Kaldi語料處理 import Kaldi語料處理
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語服務.models import 訓練過渡格式
+from 臺灣言語服務.kaldi.lexicon import 辭典輸出
+from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 
 
 #   /\      /\
@@ -18,7 +22,9 @@ class 資料庫匯出外文辭典試驗(TestCase):
 
     def test匯出一個詞(self):
         self._在外文表塞一個例()
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'), set()
+        )
         self.assertEqual(
             fst,
             [
@@ -29,7 +35,9 @@ class 資料庫匯出外文辭典試驗(TestCase):
     def test不匯出重複的詞(self):
         self._在外文表塞一個例()
         self._在外文表塞一個例()
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'), set()
+        )
         self.assertEqual(
             fst,
             [
@@ -39,7 +47,9 @@ class 資料庫匯出外文辭典試驗(TestCase):
 
     def test外文空白愛提掉(self):
         self._在外文表塞一個例('母 親', '阿母', 'a-bo2')
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'), set()
+        )
         self.assertEqual(
             fst,
             [
@@ -49,12 +59,16 @@ class 資料庫匯出外文辭典試驗(TestCase):
 
     def test不合法的音標(self):
         self._在外文表塞一個例('隨', '便', 'min2')
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔(set())
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'), set()
+        )
         self.assertEqual(fst, [])
 
     def test預設詞(self):
         self._在外文表塞一個例()
-        fst = Kaldi語料處理.資料庫匯出外語辭典檔({'漂亮 s u i'})
+        fst = Kaldi語料處理.資料庫匯出外語辭典檔(
+            辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'), {'漂亮 s u i'}
+        )
         self.assertEqual(
             fst,
             sorted([
@@ -72,7 +86,7 @@ class 資料庫匯出外文辭典試驗(TestCase):
             '母親\tʔ- a1 b- ə2',
         ])
         with TemporaryDirectory() as 資料夾路徑:
-            call_command('匯出華台辭典', 資料夾路徑)
+            call_command('匯出Kaldi外文辭典', '台語', '拆做音素', 資料夾路徑)
 
             self.比較檔案(
                 join(資料夾路徑, 'lexicon.txt'),

@@ -2,7 +2,6 @@ sudo: true
 dist: trusty
 language: python
 python:
-- '3.4'
 - '3.5'
 env:
 - TOX_ENV=tan1uan5
@@ -61,3 +60,4 @@ deploy:
   on:
     tags: true
     repo: sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7
+    condition: $TRAVIS_PYTHON_VERSION == '3.5' && $TOX_ENV = 'tan1uan5'
