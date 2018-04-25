@@ -9,7 +9,7 @@ class 匯入音檔單元試驗(TestCase):
 
     def test_內容(self):
         影音 = Kaldi語料辨識.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         聽拍資料 = 影音.影音聽拍.get().聽拍.聽拍內容()
@@ -18,7 +18,7 @@ class 匯入音檔單元試驗(TestCase):
 
     def test_人名(self):
         影音 = Kaldi語料辨識.匯入音檔(
-            '閩南語', '啥人唸的',
+            '台語', '啥人唸的',
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
         )
         聽拍 = 影音.影音聽拍.get().聽拍
