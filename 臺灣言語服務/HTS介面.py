@@ -21,9 +21,9 @@ class HTS介面:
             pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
             pyro4_naming主機 = Pyro4.locateNS(pyro4主機)
             pyro4的uri = pyro4_naming主機.lookup("HTS服務")
-            self.服務 = Pyro4.Proxy(pyro4的uri)
+            return Pyro4.Proxy(pyro4的uri)
         else:
-            self.服務 = HTS服務()
+            return HTS服務()
 
     def 語音合成支援腔口(self, request):
         return JsonResponse({'腔口': self.服務.支援腔口()})
