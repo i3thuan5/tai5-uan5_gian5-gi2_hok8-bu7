@@ -211,7 +211,7 @@ class Kaldi語料匯出(程式腳本):
         開始 = float(開始時間)
         結束 = float(結束時間)
         if 0.0 <= 開始 and 開始 + 0.1 < 結束 and 結束 <= 音檔長度:
-            if 原本語者 == '無註明':
+            if 原本語者 in ['', '無註明']:
                 語者 = '{0:07}無註明'.format(第幾个人)
                 第幾个人 += 1
             else:
@@ -249,6 +249,7 @@ class Kaldi語料匯出(程式腳本):
 
     @classmethod
     def _檢查有新聲學單位無(cls, 聲類, 韻類, 調類, 新聲類, 新韻類, 新調類):
+        '調免檢查，因為韻就會檢查掉矣'
         for 新聲 in 新聲類:
             if 新聲 not in 聲類:
                 raise RuntimeError('語料無這个音')
@@ -258,12 +259,6 @@ class Kaldi語料匯出(程式腳本):
                     raise RuntimeError('語料無這个韻抑是調')
             except KeyError:
                 raise RuntimeError('語料無這个韻抑是調')
-        for 調, 一个音素調 in 新調類:
-            try:
-                if 一个音素調 not in 調類[調]:
-                    raise RuntimeError('語料無這个調')
-            except KeyError:
-                raise RuntimeError('語料無這个調')
 
     @classmethod
     def _寫檔(cls, 資料夾, 檔名):

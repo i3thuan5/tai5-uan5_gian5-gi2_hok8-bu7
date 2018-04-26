@@ -83,6 +83,4 @@ class Kaldi語料處理():
                 輸出.add(辭典格式)
             except ValueError:
                 pass
-            except 解析錯誤:
-                pass
         return sorted(輸出)
