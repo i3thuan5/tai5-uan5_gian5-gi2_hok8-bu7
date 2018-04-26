@@ -55,8 +55,9 @@ class 詔安腔合成整合試驗(TestCase):
                 self.assertGreater(聲音檔.getnframes(), 0)
 
     @override_settings(HTS_PYRO4=True)
+    @patch('Pyro4.locateNS')
     @patch('Pyro4.Proxy')
-    def test_用pyro4(self, ProxyMock):
+    def test_用pyro4(self, ProxyMock, _NSmock):
         ProxyMock.return_value = HTS服務()
         服務介面 = HTS介面()
         ProxyMock.assert_called_once_with('PYRONAME:HTS服務')
