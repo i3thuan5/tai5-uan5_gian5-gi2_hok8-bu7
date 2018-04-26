@@ -11,7 +11,12 @@ from 臺灣言語服務.Moses介面 import Moses介面
 class 翻譯介面單元試驗(TestCase):
 
     def setUp(self):
+        self.locatePatch = patch('Pyro4.locateNS')
+        self.locatePatch.start()
         self.工具 = RequestFactory()
+
+    def tearDown(self):
+        self.locatePatch.stop()
 
     @patch('Pyro4.Proxy')
     def test_正規化翻譯支援腔口(self, ProxyMock):
