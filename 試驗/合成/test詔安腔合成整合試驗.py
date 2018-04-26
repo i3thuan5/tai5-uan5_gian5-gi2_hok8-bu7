@@ -60,7 +60,7 @@ class 詔安腔合成整合試驗(TestCase):
     def test_用pyro4(self, ProxyMock, _NSmock):
         ProxyMock.return_value = HTS服務()
         服務介面 = HTS介面()
-        ProxyMock.assert_called_once_with('PYRONAME:HTS服務')
+        ProxyMock.assert_called_once()
         連線要求 = RequestFactory().get('/語音合成')
         連線要求.GET = {
             '查詢腔口': '詔安腔',
