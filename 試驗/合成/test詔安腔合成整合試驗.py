@@ -54,19 +54,19 @@ class 詔安腔合成整合試驗(TestCase):
                 self.assertGreaterEqual(聲音檔.getframerate(), 16000)
                 self.assertGreater(聲音檔.getnframes(), 0)
 
-    @override_settings(HTS_PYRO4=True)
+    @override_settings(HTS_ING7_PYRO4=True)
     @patch('Pyro4.locateNS')
     @patch('Pyro4.Proxy')
     def test_用pyro4(self, ProxyMock, _NSmock):
         ProxyMock.return_value = HTS服務()
         服務介面 = HTS介面()
-        self.assertTrue(ProxyMock.called)
         連線要求 = RequestFactory().get('/語音合成')
         連線要求.GET = {
             '查詢腔口': '詔安腔',
             '查詢語句': '你｜henˋ 好｜hoo^'
         }
         連線回應 = 服務介面.語音合成(連線要求)
+        self.assertTrue(ProxyMock.called)
         self.assertEqual(連線回應.status_code, 200)
         with io.BytesIO(bytes(chain(*連線回應.streaming_content))) as 資料:
             with wave.open(資料, 'rb') as 聲音檔:
