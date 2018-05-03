@@ -7,13 +7,13 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
             '/羅馬字轉換',
             {
                 '查詢腔口': '閩南語',
-                '字': 'Lí tāinn-tio̍h sī jiá lāu-su siū-khì --ah --honnh,',
+                '查詢語句': 'Lí tāinn-tio̍h',
             }
         )
         回應物件 = 連線回應.json()
         self.assertEqual(
             回應物件['多元書寫'][0]['臺羅'],
-            'Lí tāinn-tio̍h sī jiá lāu-su siū-khì --ah --honnh,'
+            'Lí tāinn-tio̍h'
         )
 
     def test_臺羅轉換白話字(self):
@@ -21,13 +21,13 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
             '/羅馬字轉換',
             {
                 '查詢腔口': '閩南語',
-                '查詢語句': 'Lí tāinn-tio̍h sī jiá lāu-su siū-khì --ah --honnh,',
+                '查詢語句': 'Lí tāinn-tio̍h',
             }
         )
         回應物件 = 連線回應.json()
         self.assertEqual(
             回應物件['多元書寫'][0]['白話字'],
-            'Lí tāiⁿ-tio̍h sī jiá lāu-su siū-khì --ah --hoⁿh,'
+            'Lí tāiⁿ-tio̍h'
         )
 
     def test_不轉換漢字(self):
@@ -35,7 +35,7 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
             '/羅馬字轉換',
             {
                 '查詢腔口': '閩南語',
-                '字': '媠媠的姑娘',
+                '查詢語句': '媠媠的姑娘',
             }
         )
         回應物件 = 連線回應.json()
@@ -44,26 +44,66 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
             '媠媠的姑娘'
         )
 
-    def test_多句轉換(self):
+    def test_保留使用者的斷詞方式(self):
         連線回應 = self.client.get(
             '/羅馬字轉換',
             {
                 '查詢腔口': '閩南語',
-                '字': 'gua2,tāinn-tio̍h\n--honnh',
+                '查詢語句': 'Lí --ah --honnh,',
             }
         )
         回應物件 = 連線回應.json()
         self.assertEqual(
             回應物件['多元書寫'][0]['白話字'],
-            'góa'
+            'Lí --ah --hoⁿh,'
+        )
+
+    def test_頭字大寫(self):
+        連線回應 = self.client.get(
+            '/羅馬字轉換',
+            {
+                '查詢腔口': '閩南語',
+                '查詢語句': 'lí',
+            }
+        )
+        回應物件 = 連線回應.json()
+        self.assertEqual(
+            回應物件['多元書寫'][0]['臺羅'], 
+            'Lí'
+        )
+
+    def test_多句轉換(self):
+        連線回應 = self.client.get(
+            '/羅馬字轉換',
+            {
+                '查詢腔口': '閩南語',
+                '查詢語句': 'Guá\n--honnh',
+            }
+        )
+        回應物件 = 連線回應.json()
+        self.assertEqual(
+            回應物件['多元書寫'][0]['臺羅'],
+            'Guá'
         )
         self.assertEqual(
-            回應物件['多元書寫'][1]['白話字'],
-            'tāiⁿ-tio̍h'
+            回應物件['多元書寫'][1]['臺羅'],
+            '--Honnh'
+        )
+    
+    def test_逗號後壁小寫(self):
+        連線回應 = self.client.get(
+            '/羅馬字轉換',
+            {
+                '查詢腔口': '閩南語',
+                '查詢語句': 'Guá,guá',
+            }
+        )
+        回應物件 = 連線回應.json()
+        self.assertEqual(
+            回應物件['多元書寫'][0]['臺羅'],
+            'Guá'
         )
         self.assertEqual(
-            回應物件['多元書寫'][2]['白話字'],
-            '--honnⁿh'
+            回應物件['多元書寫'][1]['臺羅'],
+            'guá'
         )
-        
-        
