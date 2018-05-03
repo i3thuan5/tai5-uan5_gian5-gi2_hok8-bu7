@@ -12,6 +12,7 @@ from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語工具.音標系統.台語 import 新白話字
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 
+
 class 文本介面:
 
     @classmethod
@@ -87,7 +88,7 @@ class 文本介面:
         return 對齊結果
 
     @classmethod
-    def 取代揣著的羅馬字(cls, matchobj):
+    def 羅馬字轉臺羅傳統調(cls, matchobj):
         揣著的羅馬字 = matchobj.group(0)
         print('matchobj group0', )
         白話字物件 = 新白話字(揣著的羅馬字)
@@ -96,6 +97,17 @@ class 文本介面:
             return 揣著的羅馬字
         臺羅數字調 = 白話字物件.轉換到臺灣閩南語羅馬字拼音()
         return 臺灣閩南語羅馬字拼音(臺羅數字調).轉調符()
+
+    @classmethod
+    def 臺羅傳統調轉白話字傳統調(cls, matchobj):
+        揣著的臺羅 = matchobj.group(0)
+        print('matchobj group0', )
+        臺羅物件 = 臺灣閩南語羅馬字拼音(揣著的臺羅)
+        if 臺羅物件.音標 == None:
+            # 這是一个無合法的音標 免振動伊
+            return 揣著的臺羅
+        白話字 = 臺羅物件.轉白話字()
+        return 白話字
 
     @classmethod
     def 羅馬字轉換實作(cls, 語句參數):
@@ -109,9 +121,10 @@ class 文本介面:
 
         # 有羅馬字：koo1娘 koo娘 koo1-niu5 koo-niû koo1-娘 姑-niu5 出--lai5
         # 無羅馬字：姑娘 g0v
-        揣出羅馬字正規式 = re.compile('([a-z]+\d?)')
-        臺羅 = 揣出羅馬字正規式.sub(cls.取代揣著的羅馬字, 語句參數)
+        揣出羅馬字正規式 = re.compile('([a-zA-Z]+\d?)')
+        臺羅 = 揣出羅馬字正規式.sub(cls.羅馬字轉臺羅傳統調, 語句參數)
+        白話字 = 揣出羅馬字正規式.sub(cls.臺羅傳統調轉白話字傳統調, 臺羅)
         return {
             '臺羅': 臺羅,
-            '白話字': 臺羅
+            '白話字': 白話字
         }
