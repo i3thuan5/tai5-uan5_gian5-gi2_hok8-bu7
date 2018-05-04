@@ -62,12 +62,11 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
         )
 
     def test_保留大小寫(self):
-        # 全小寫 首字大寫 全大寫
-        回應物件 = self.取得羅馬字轉換物件('lí Lí A5 LÂ')
+        回應物件 = self.取得羅馬字轉換物件('lí Lí A5 LÂ LÂng LÂⁿ')
         self.assertEqual(
             回應物件,{
-            '臺羅': 'lí Lí Â LÂ',
-            '白話字': 'lí Lí Â LÂ',
+            '臺羅': 'lí Lí Â LÂ Lâng LÂⁿ',
+            '白話字': 'lí Lí Â LÂ Lâng LÂⁿ',
         })
 
     def test_不轉換非法的拼音(self):
