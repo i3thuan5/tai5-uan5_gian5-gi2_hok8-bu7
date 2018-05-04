@@ -14,10 +14,6 @@ class 判斷閩南語羅馬字大小寫單元試驗(TestCase):
         self.羅馬字 = 'lâ'
         self.預期結果 = '全小寫'
 
-    def test首字小寫視為全小寫(self):
-        self.羅馬字 = 'lÂ'
-        self.預期結果 = '全小寫'
-
     def test全大寫(self):
         self.羅馬字 = 'LÂ'
         self.預期結果 = '全大寫'
@@ -25,8 +21,23 @@ class 判斷閩南語羅馬字大小寫單元試驗(TestCase):
     def test首字大寫(self):
         self.羅馬字 = 'Lí'
         self.預期結果 = '首字大寫'
-    
+
+    def test首字小寫視為全小寫(self):
+        self.羅馬字 = 'lÂ'
+        self.預期結果 = '全小寫'
+
+    def test孤字大寫視為全大寫(self):
+        self.羅馬字 = 'M̄'
+        self.預期結果 = '首字大寫'
+
+    def test後半混雜視為首字大寫(self):
+        self.羅馬字 = 'LíNG'
+        self.預期結果 = '首字大寫'
+
     # 鼻化音
+    def test鼻化音全小寫(self):
+        self.羅馬字 = 'íⁿ'
+        self.預期結果 = '全小寫'
 
     def test鼻化音全大寫(self):
         self.羅馬字 = 'LÂⁿ'
