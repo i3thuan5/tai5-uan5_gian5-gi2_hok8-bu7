@@ -97,10 +97,14 @@ class 文本介面:
             return None
         if 羅馬字[0].isupper():
             結果 = '首字大寫'
-        後半都是大寫 = True 
+        # 如果輸入是數字調羅馬字，剔除數字調符
+        if 羅馬字[-1].isnumeric():
+            羅馬字 = 羅馬字[:-1]
+
+        後半都是大寫 = True
         for 字母 in 羅馬字:
             # 後半若有字母毋是大寫，就當作後半全小寫
-            if 字母!='ⁿ' and 字母.isupper() == False:
+            if 字母 != 'ⁿ' and 字母.isupper() == False:
                 後半都是大寫 = False
                 break
         if 後半都是大寫:
@@ -108,18 +112,29 @@ class 文本介面:
         return 結果
 
     @classmethod
+    def 調整閩南語羅馬字大小寫(cls, 原來音標, 轉過的羅馬字):
+        pass
+
+    @classmethod
     def 羅馬字轉臺羅傳統調(cls, matchobj):
         揣著的羅馬字 = matchobj.group(0)
-        
-        print('揣著的羅馬字：', 揣著的羅馬字)
+        大小寫 = cls.判斷羅馬字大小寫(揣著的羅馬字)
         白話字物件 = 新白話字(揣著的羅馬字)
         if 白話字物件.音標 == None:
             # 這是一个無合法的音標 免振動伊
             return 揣著的羅馬字
-        print('白話字物件.音標=', 白話字物件.音標)
-        print('isupper=', 白話字物件.音標[0].isupper())
         臺羅數字調 = 白話字物件.轉換到臺灣閩南語羅馬字拼音()
-        return 臺灣閩南語羅馬字拼音(臺羅數字調).轉調符()
+        臺羅傳統調 = 臺灣閩南語羅馬字拼音(臺羅數字調).轉調符()
+        結果 = ''
+        if 大小寫 == '首字大寫':
+            結果 = 臺羅傳統調[0].upper() + 臺羅傳統調[1:]
+        elif 大小寫 == '全大寫':
+            for 字母 in 臺羅傳統調:
+                結果 += 字母.upper()
+        elif 大小寫 == '全小寫':
+            for 字母 in 臺羅傳統調:
+                結果 += 字母.lower()
+        return 結果
 
     @classmethod
     def 臺羅傳統調轉白話字傳統調(cls, matchobj):
@@ -143,15 +158,15 @@ class 文本介面:
         #   合法：轉調符
         #   無合法：照原本輸入的直接輸出
         # 3. 就提著一種音標結果矣。
-#         arr = []
-#         for key, obj in 教會系羅馬音標聲調符號表.items():
-#             arr.append(key)
-#         str = ''.join(x for x in arr)
-#         print(str)
+        #         arr = []
+        #         for key, obj in 教會系羅馬音標聲調符號表.items():
+        #             arr.append(key)
+        #         str = ''.join(x for x in arr)
+        #         print(str)
         # 有羅馬字：koo1娘 koo娘 koo1-niu5 koo-niû koo1-娘 姑-niu5 出--lai5
         # 無羅馬字：姑娘 g0v
         揣出羅馬字正規式 = re.compile(
-            '([a-zA-Záàâǎāa̍a̋éèêěēe̍e̋íìîǐīı̍i̍i̋óòôǒōo̍őó͘ò͘ô͘ǒ͘ō͘o̍͘ő͘úùûǔūu̍űḿm̀m̂m̌m̄m̍m̋ńǹn̂ňn̄n̍n̋]+\d?)', 
+            '([a-zA-Záàâǎāa̍a̋éèêěēe̍e̋íìîǐīı̍i̍i̋óòôǒōo̍őó͘ò͘ô͘ǒ͘ō͘o̍͘ő͘úùûǔūu̍űḿm̀m̂m̌m̄m̍m̋ńǹn̂ňn̄n̍n̋]+\d?)',
             flags=re.IGNORECASE)
         臺羅 = 揣出羅馬字正規式.sub(cls.羅馬字轉臺羅傳統調, 語句參數)
         白話字 = 揣出羅馬字正規式.sub(cls.臺羅傳統調轉白話字傳統調, 臺羅)
