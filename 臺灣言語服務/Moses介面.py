@@ -2,12 +2,16 @@
 import Pyro4
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 
 class Moses介面:
-
-    def __init__(self):
-        self.服務 = Pyro4.Proxy("PYRONAME:Moses服務")
+    @property
+    def 服務(self):
+        pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
+        pyro4_naming主機 = Pyro4.locateNS(pyro4主機)
+        pyro4的uri = pyro4_naming主機.lookup("Moses服務")
+        return Pyro4.Proxy(pyro4的uri)
 
     def 正規化翻譯支援腔口(self, request):
         return JsonResponse({'腔口': self.服務.支援腔口()})

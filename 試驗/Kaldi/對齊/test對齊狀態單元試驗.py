@@ -20,7 +20,7 @@ class 對齊狀態單元試驗(TestCase):
             聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5\nkhiau2',
         )
         self.assertEqual(
-            語料對齊.影音.影音聽拍.get().聽拍.聽拍內容()[0]['內容'],
+            語料對齊.欲切開的聽拍,
             'tsiang5 tsiang5\nkhiau2'
         )
 
@@ -36,9 +36,8 @@ class 對齊狀態單元試驗(TestCase):
         ])
         self.assertTrue(語料對齊.對齊好猶未)
         self.assertFalse(語料對齊.對齊出問題)
-        聽拍 = 語料對齊.影音.影音聽拍.get().聽拍.聽拍校對.get().新聽拍
         self.assertEqual(
-            聽拍.聽拍內容(),
+            語料對齊.切好的聽拍,
             [
                 {
                     '語者': '媠媠',
@@ -68,9 +67,8 @@ class 對齊狀態單元試驗(TestCase):
         ])
         self.assertTrue(語料對齊.對齊好猶未)
         self.assertFalse(語料對齊.對齊出問題)
-        聽拍 = 語料對齊.影音.影音聽拍.get().聽拍.聽拍校對.get().新聽拍
         self.assertEqual(
-            聽拍.聽拍內容(),
+            語料對齊.切好的聽拍,
             [
                 {
                     '語者': '媠媠',

@@ -85,7 +85,7 @@ class 資料加到辭典單元試驗(TestCase):
         )
         self.assertEqual(len(全部詞), 詞數量 + 1)
 
-    def test_語料無就袂當加入辭典(self):
+    def test_聲無就袂當加入辭典(self):
         全部詞 = set()
         全部句 = []
         聲類 = set()
@@ -96,7 +96,26 @@ class 資料加到辭典單元試驗(TestCase):
             加語料=True,
         )
         Kaldi語料匯出._資料加到辭典(
-            聲類, 韻類, 調類, 全部詞, 全部句, '媠｜sui2', self.輸出單位,
+            聲類, 韻類, 調類, 全部詞, 全部句, '莉｜li7', self.輸出單位,
+            加語料=False,
+        )
+        self.assertEqual(len(聲類), 1)
+        self.assertEqual(len(韻類), 1)
+        self.assertEqual(len(調類), 1)
+        self.assertEqual(len(全部詞), 1)
+
+    def test_韻無就袂當加入辭典(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '豬｜ti1', self.輸出單位,
+            加語料=True,
+        )
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '豬｜tu1', self.輸出單位,
             加語料=False,
         )
         self.assertEqual(len(聲類), 1)
@@ -105,6 +124,25 @@ class 資料加到辭典單元試驗(TestCase):
         self.assertEqual(len(全部詞), 1)
 
     def test_調無仝就袂使加入辭典(self):
+        全部詞 = set()
+        全部句 = []
+        聲類 = set()
+        韻類 = {}
+        調類 = {}
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '滇｜tinn7', self.輸出單位,
+            加語料=True,
+        )
+        self.assertEqual(len(韻類['iⁿ']), 1, 韻類)
+        self.assertEqual(len(全部詞), 1)
+        Kaldi語料匯出._資料加到辭典(
+            聲類, 韻類, 調類, 全部詞, 全部句, '甜｜tinn1', self.輸出單位,
+            加語料=False,
+        )
+        self.assertEqual(len(韻類['iⁿ']), 1)
+        self.assertEqual(len(全部詞), 1)
+
+    def test_音素無仝就袂使加入辭典(self):
         全部詞 = set()
         全部句 = []
         聲類 = set()
