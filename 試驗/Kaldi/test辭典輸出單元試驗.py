@@ -32,6 +32,13 @@ class 辭典輸出單元試驗(TestCase):
         self.韻類結果 = [('ui', 'ui2')]
         self.調類結果 = {('2', 'ui2')}
 
+    def test_拆做聲韻莫調(self):
+        self.分詞 = '媠｜sui2'
+        self.輸出 = 辭典輸出(臺灣閩南語羅馬字拼音, '拆做聲韻莫調')
+        self.聲類結果 = ['s-']
+        self.韻類結果 = [('ui', 'ui')]
+        self.調類結果 = set()
+
     def test_拆做音節(self):
         self.分詞 = '媠｜sui2'
         self.輸出 = 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音節')
