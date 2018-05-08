@@ -9,12 +9,14 @@ from 臺灣言語服務.kaldi.lexicon import 辭典輸出
 class 辭典輸出單元試驗(TestCase):
 
     def tearDown(self):
+        原本物件 = 拆文分析器.分詞字物件(self.分詞)
         聲類, 韻類, 調類 = self.輸出.輸出函式(
-            拆文分析器.分詞字物件(self.分詞)
+            原本物件
         )
         self.assertEqual(聲類, self.聲類結果)
         self.assertEqual(韻類, self.韻類結果)
         self.assertEqual(調類, self.調類結果)
+        self.assertEqual(原本物件, 拆文分析器.分詞字物件(self.分詞))
 
     def test_拆做音素(self):
         self.分詞 = '媠｜sui2'
@@ -32,6 +34,13 @@ class 辭典輸出單元試驗(TestCase):
 
     def test_拆做音節(self):
         self.分詞 = '媠｜sui2'
+        self.輸出 = 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音節')
+        self.聲類結果 = []
+        self.韻類結果 = [('sui', 'sui2')]
+        self.調類結果 = {('2', 'sui2')}
+
+    def test_全羅(self):
+        self.分詞 = 'sui2'
         self.輸出 = 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音節')
         self.聲類結果 = []
         self.韻類結果 = [('sui', 'sui2')]
