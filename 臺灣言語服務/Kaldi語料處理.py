@@ -6,6 +6,7 @@ from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.Kaldi語料匯出 import Kaldi語料匯出
 from 臺灣言語服務.models import 訓練過渡格式
 import re
+from 臺灣言語工具.基本物件.公用變數 import 標點符號
 
 
 class Kaldi語料處理():
@@ -67,6 +68,8 @@ class Kaldi語料處理():
                     音標物件 = 音標系統(音)
                     if 音標物件.音標:
                         音節逝.append(音標物件.聲 + 音標物件.韻)
+                    elif 音 not in 標點符號:
+                        音節逝.append(音)
                 結果.append(' '.join(音節逝))
         return 結果
 
@@ -82,7 +85,5 @@ class Kaldi語料處理():
                 )
                 輸出.add(辭典格式)
             except ValueError:
-                pass
-            except 解析錯誤:
                 pass
         return sorted(輸出)

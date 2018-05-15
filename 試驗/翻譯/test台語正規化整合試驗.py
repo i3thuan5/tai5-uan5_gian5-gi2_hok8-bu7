@@ -17,15 +17,18 @@ class 台語正規化整合試驗(TestCase):
     def setUpClass(cls):
         super(cls, cls).setUpClass()
         cls.服務 = Moses服務({'台語': Moses載入.摩西翻譯模型('台語', 8500)})
+        cls.locatePatch = patch('Pyro4.locateNS')
         cls.ProxyPatch = patch('Pyro4.Proxy')
+        cls.locatePatch.start()
         ProxyMock = cls.ProxyPatch.start()
         ProxyMock.return_value = cls.服務
-        sleep(60)
+        sleep(30)
 
     @classmethod
     def tearDownClass(cls):
-        cls.服務.停()
+        cls.locatePatch.stop()
         cls.ProxyPatch.stop()
+        cls.服務.停()
 
     def setUp(self):
         self.服務功能 = Moses介面()

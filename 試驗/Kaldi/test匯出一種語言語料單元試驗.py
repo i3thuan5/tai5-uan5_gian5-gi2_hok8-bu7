@@ -198,6 +198,32 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 ]
             )
 
+    def test_無語者當作無註明(self):
+        訓練過渡格式.objects.create(
+            來源='媠巧',
+            年代='2017',
+            種類='語句',
+            影音所在=self.檔案.name,
+            文本='konn5 konn5',
+        )
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'text'),
+                [
+                    '0000000無註明-tong0000000-ku0000000 konn5 konn5',
+                ]
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
+                [
+                    '0000000無註明-tong0000000-ku0000000 0000000無註明',
+                ]
+            )
+
     def test_輸出一句(self):
         self.匯入音檔('konn5', 'konn5 konn5')
         一筆 = self.匯入音檔('媠巧', 'tsiang5 tsiang5')

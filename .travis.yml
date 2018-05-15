@@ -60,5 +60,5 @@ deploy:
     secure: J8T8072IpOA2NNRrJ0nnJVO21LbG0tH0KGAOEotDaCpusPIy1KuQyfVqdjFc+Dba+dCObgW0UQPgcAhOHk1//DhnwpRRL4L9wZsQjrkmLtKtZSG1z45oYKlF2WEPcCflcdzMyqCwnGfPtWTS5Iex6MfS0qTzRdWlFEnRFMdra6UjpTCIAiFLCETvDbL2VLKbhwENrVRzGSGRVFf9ICjohQyJRaC5Hpr+OVdLOhihev/lbdHZivPWvN6KqqP3ULad0+0ROiLadF6V46RDDYQT3CrNkJK1xVDNQ5F/9Cu95MMbUD1UsyeMBlvViMHSuvO0JzSiN4W6VmgzXxf1wYAlVS2MwbTWIak7+NTYlLt31I3a0dO82iF2ThDCkfK2JSy3UgCbq0x3tAH4wbT/ymXaOpsgKEPNnM+h7Td1o0Tz2ohxNU4g7MV3tGn3T8Fg4HLuGZFtSD/3S6be8TfWIuMJ7L6fuN9onNEvaAQs+gBFdjewbkKmHWHziSVZtTKSIUHFfJXV5Eht4pACiRysaU1zZMG+KyYM3o7dpsoLh+BBtaQLrmw5C/fbkiXSSpYASVDR/4a9umWvlB5YfSNHlF7fnZ1lENF/xMDmHha0RHmhm8gKuICV+qkOJQwVddZWw7jEnwYh9QuRO4vHfe03wOYZLG2AAsz4DIpUzs+oP6QB9Ww=
   on:
     tags: true
-    repo: sih4sing5hong5/tai5-uan5_gian5-gi2_hok8-bu7
+    repo: i3thuan5/tai5-uan5_gian5-gi2_hok8-bu7
     condition: $TRAVIS_PYTHON_VERSION == '3.5' && $TOX_ENV = 'tan1uan5'
