@@ -189,3 +189,12 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
 # For better celery performance
 CELERY_IGNORE_RESULT = True
 CELERY_TIMEZONE = TIME_ZONE
+
+try:
+    import 匯入
+except ImportError:
+    '一般試驗免匯入'
+else:
+    '整合試驗需要匯入'
+    匯入
+    INSTALLED_APPS += ('匯入',)
