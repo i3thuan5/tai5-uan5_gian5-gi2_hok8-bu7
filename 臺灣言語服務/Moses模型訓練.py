@@ -22,6 +22,7 @@ from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語服務.資料模型路徑 import 翻譯正規化模型資料夾
 from 臺灣言語工具.斷詞.國教院斷詞用戶端 import 國教院斷詞用戶端
+from sys import stderr
 
 
 class Moses模型訓練(程式腳本):
@@ -216,6 +217,7 @@ class Moses模型訓練(程式腳本):
     @classmethod
     def _外文斷詞(cls, 語料陣列, 暫存資料夾):
         斷詞檔名 = join(暫存資料夾, '外文斷詞.txt.gz')
+        幾逝 = 0
         with gzip.open(斷詞檔名, 'wt') as 寫檔:
             for 原本檔案 in 語料陣列:
                 for 一逝 in cls._讀檔案(原本檔案):
@@ -224,4 +226,7 @@ class Moses模型訓練(程式腳本):
                     for 詞條, 詞性 in 國教院斷詞用戶端.語句斷詞做陣列(句物件.看型(' ', ' ')):
                         斷詞結果.append("{}-（-{}-）".format(詞條, 詞性))
                     print(' '.join(斷詞結果), file=寫檔)
+                    幾逝 += 1
+                    if 幾逝 % 100 == 0:
+                        print('外文斷 {} 句矣'.format(幾逝), file=stderr)
         return [斷詞檔名]
