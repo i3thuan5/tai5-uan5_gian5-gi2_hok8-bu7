@@ -1,7 +1,6 @@
 from django.test.testcases import TestCase
-from 臺灣言語工具.音標系統.台語 import 新白話字
-from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語服務.文本介面 import 文本介面
+
 
 class 調整閩南語羅馬字大小寫單元試驗(TestCase):
     #
@@ -36,7 +35,7 @@ class 調整閩南語羅馬字大小寫單元試驗(TestCase):
         self.原本音標 = 'LÂng'
         self.轉過的羅馬字 = 'lâng'
         self.預期結果 = 'Lâng'
-    
+
     def test_調整為全小寫(self):
         self.原本音標 = 'lÂ'
         self.轉過的羅馬字 = 'lâ'

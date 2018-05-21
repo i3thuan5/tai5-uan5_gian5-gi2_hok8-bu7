@@ -46,7 +46,7 @@ class 判斷閩南語羅馬字大小寫單元試驗(TestCase):
     def test鼻化音首字大寫(self):
         self.羅馬字 = 'Líⁿ'
         self.預期結果 = '首字大寫'
-    
+
     # 數字調符不列入計算
     def test數字調符不列入判斷(self):
         self.羅馬字 = 'LA5'

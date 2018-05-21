@@ -29,6 +29,6 @@ urlpatterns = [
     url(r'^資料庫影音檔案/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT, 'show_indexes': False
     }),
-    
+
     url(r'^羅馬字轉換$', 文本介面.羅馬字轉換),
 ]

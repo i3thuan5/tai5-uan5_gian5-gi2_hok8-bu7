@@ -34,13 +34,6 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
         )
 
     def test_保留換行(self):
-        連線回應 = self.client.get(
-            '/羅馬字轉換',
-            {
-                '查詢腔口': '閩南語',
-                '查詢語句': 'Guá\n--honnh',
-            }
-        )
         回應物件 = self.取得羅馬字轉換物件('Guá\n--honnh')
         self.assertEqual(
             回應物件['臺羅'],
@@ -68,7 +61,7 @@ class 閩南語羅馬字轉換整合試驗(TestCase):
                 '臺羅': 'lí Lí Â LÂ Lâng',
                 '白話字': 'lí Lí Â LÂ Lâng',
             })
-        
+
     def test_nn不影響大小寫(self):
         回應物件 = self.取得羅馬字轉換物件('LÂⁿ')
         self.assertEqual(
