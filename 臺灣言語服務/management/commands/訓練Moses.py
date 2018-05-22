@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語服務.資料模型路徑 import 翻譯做母語模型資料夾
+from 臺灣言語工具.翻譯.摩西工具.安裝摩西翻譯佮相關程式 import 安裝摩西翻譯佮相關程式
 
 
 class Command(BaseCommand):
