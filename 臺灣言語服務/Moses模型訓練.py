@@ -2,8 +2,8 @@
 import gzip
 from os import makedirs
 from os.path import join, basename
-
-from setuptools.py31compat import TemporaryDirectory
+from sys import stderr
+from tempfile import TemporaryDirectory
 
 
 from 臺灣言語工具.翻譯.摩西工具.摩西翻譯模型訓練 import 摩西翻譯模型訓練
@@ -17,12 +17,9 @@ from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 from 臺灣言語工具.語言模型.KenLM語言模型訓練 import KenLM語言模型訓練
 from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭典揣詞
 from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀集內組
-from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
-from 臺灣言語服務.資料模型路徑 import 翻譯正規化模型資料夾
 from 臺灣言語工具.斷詞.國教院斷詞用戶端 import 國教院斷詞用戶端
-from sys import stderr
 
 
 class Moses模型訓練(程式腳本):
@@ -98,16 +95,9 @@ class Moses模型訓練(程式腳本):
             )
 
     @classmethod
-    def 訓練正規化模型(cls, 語言, 語族):
-        語料資料夾 = 翻譯語料資料夾(語言)
-        模型資料夾 = 翻譯正規化模型資料夾(語言)
+    def 訓練正規化模型(cls, 語料資料夾, 模型資料夾):
         makedirs(模型資料夾, exist_ok=True)
-        if 語族 == '漢語':
-            平行華語, 平行母語, 母語文本 = cls._漢語語料訓練(語料資料夾, 模型資料夾)
-        elif 語族 == '南島語':
-            平行華語, 平行母語, 母語文本 = cls._南島語語料訓練(語料資料夾, 模型資料夾)
-        else:
-            raise RuntimeError('{}的語族無設定!!'.format(語族))
+        平行華語, 平行母語, 母語文本 = cls._漢語語料訓練(語料資料夾, 模型資料夾)
 
         模型訓練 = 摩西翻譯模型訓練()
         模型訓練.訓練(
@@ -209,10 +199,6 @@ class Moses模型訓練(程式腳本):
             join(語言資料夾, '字詞文本.txt.gz'),
         ]
         return 平行華語, 平行母語, 母語文本
-
-    @classmethod
-    def _南島語語料訓練(cls, 語言資料夾, 翻譯模型資料夾):
-        return cls._漢語語料訓練(語言資料夾, 翻譯模型資料夾)
 
     @classmethod
     def _外文斷詞(cls, 語料陣列, 暫存資料夾):

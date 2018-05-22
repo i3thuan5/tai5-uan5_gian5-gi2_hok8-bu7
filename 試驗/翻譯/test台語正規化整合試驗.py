@@ -11,6 +11,7 @@ from 臺灣言語服務.Moses服務 import Moses服務
 from 臺灣言語服務.Moses介面 import Moses介面
 from 臺灣言語工具.翻譯.摩西工具.安裝摩西翻譯佮相關程式 import 安裝摩西翻譯佮相關程式
 from 臺灣言語服務.Moses模型訓練 import Moses模型訓練
+from django.core.management import call_command
 
 
 class 台語正規化整合試驗(TestCase):
@@ -20,7 +21,7 @@ class 台語正規化整合試驗(TestCase):
         super(cls, cls).setUpClass()
         安裝摩西翻譯佮相關程式.安裝gizapp()
         安裝摩西翻譯佮相關程式.安裝moses(編譯CPU數=4)
-        Moses模型訓練.訓練正規化模型('台語', '漢語')
+        call_command('訓練Moses正規化', '台語')
         cls.服務 = Moses服務({'台語': Moses載入.摩西翻譯模型('台語', 8500)})
         cls.locatePatch = patch('Pyro4.locateNS')
         cls.ProxyPatch = patch('Pyro4.Proxy')
