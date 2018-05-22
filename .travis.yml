@@ -11,45 +11,16 @@ env:
 - TOX_ENV=huan1ik8-gua7bun5
 - TOX_ENV=huan1ik8-tsing3kui1
 - TOX_ENV=flake8
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-4.9
-    - g++-4.9
-    - python3-dev
-    - libc6-dev-i386
-    - linux-libc-dev
-    - gcc-multilib
-    - git
-    - subversion
-    - automake
-    - libtool
-    - zlib1g-dev
-    - libbz2-dev
-    - liblzma-dev
-    - libboost-all-dev
-    - libgoogle-perftools-dev
-    - libxmlrpc-c++.*-dev
-    - cmake
-    - csh
-    - libyaml-dev
-    - libxslt1-dev
-    - libav-tools  
-    - libmp3lame0
 services:
+- docker
 - rabbitmq
-install:
-- sudo apt-get install -y libavcodec-extra-54 libx11-dev libx11-dev:i386
-- pip install tox
-- pip install python-coveralls
 branches:
   only:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
-- tox -e $TOX_ENV
+- docker build -t tai5-uan5_gian5-gi2_hok8-bu7_travis --build-arg TOX_ENV=$TOX_ENV .
+- docker run --rm tai5-uan5_gian5-gi2_hok8-bu7_travis cat .coverage > .coverage
 after_success:
 - coverage report
 - coveralls
