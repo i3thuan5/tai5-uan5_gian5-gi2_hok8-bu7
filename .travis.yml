@@ -20,8 +20,8 @@ branches:
   - "/\\d+\\.\\d+\\.\\d+/"
 script:
 - docker build -t tai5-uan5_gian5-gi2_hok8-bu7_travis --build-arg TOX_ENV=$TOX_ENV .
-- docker run --rm tai5-uan5_gian5-gi2_hok8-bu7_travis cat .coverage > .coverage
 after_success:
+- docker run --rm tai5-uan5_gian5-gi2_hok8-bu7_travis cat .coverage > .coverage
 - coverage report
 - coveralls
 deploy:
