@@ -171,9 +171,3 @@ class 音檔參數:
         return bytes(json.loads(
             '[' + b64decode(blob).decode('utf-8') + ']'
         ))
-
-
-def 無辨識過的重訓練一擺():
-    for Kaldi辨識 in Kaldi語料辨識.objects.filter(辨識好猶未=False):
-        Kaldi辨識.辨識()
-    return JsonResponse({'成功': '成功'})
