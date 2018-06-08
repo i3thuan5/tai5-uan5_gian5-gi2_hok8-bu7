@@ -1,4 +1,4 @@
-FROM i3thuan5/tai5-uan5_gian5-gi2_kang1-ku7:docker as ki1tshoo2
+FROM i3thuan5/tai5-uan5_gian5-gi2_kang1-ku7
 MAINTAINER i3thuan5
 
 ARG TOX_ENV
