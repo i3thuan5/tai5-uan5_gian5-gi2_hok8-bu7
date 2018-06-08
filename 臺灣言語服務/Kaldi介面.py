@@ -1,5 +1,7 @@
 from base64 import b64decode
 import json
+from subprocess import Popen, PIPE
+import wave
 
 from celery import shared_task
 from django.conf import settings
@@ -7,6 +9,8 @@ from django.http.response import HttpResponse, JsonResponse,\
     HttpResponseBadRequest
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
+from libavwrapper.avconv import Input, Output, AVConv
+from libavwrapper.codec import AudioCodec, NO_VIDEO
 
 
 from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
@@ -63,16 +67,42 @@ def Kaldi辨識(request):
         return HttpResponseBadRequest(
             '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
         )
+    except EOFError:
+        return HttpResponseBadRequest(
+            '「blob」抑是「音檔」比RIFF檔頭閣較短！！'
+        )
     Kaldi辨識影音.delay(Kaldi辨識.id)
     return HttpResponse('上傳成功！！')
 
 
 def 揣音檔出來(request):
+    音檔字串 = _揣音檔字串出來(request)
     try:
-        return 聲音檔.對資料轉(request.FILES['音檔'].read())
+        return 聲音檔.對資料轉(音檔字串)
+    except wave.Error:
+        return 聲音檔.對資料轉(_轉做wav檔(音檔字串))
+
+
+def _揣音檔字串出來(request):
+    try:
+        return request.FILES['音檔'].read()
     except MultiValueDictKeyError:
         pass
-    return 聲音檔.對資料轉(blob2bytes(request.POST['blob']))
+    return blob2bytes(request.POST['blob'])
+
+
+def _轉做wav檔(音檔字串):
+    wav聲音格式 = AudioCodec('pcm_s16le')
+    輸入 = Input('pipe:')
+    輸出 = Output('pipe:')
+    指令 = AVConv(
+        'avconv', ('-loglevel', 'panic'),
+        輸入,
+        ('-f', 'wav'), wav聲音格式, NO_VIDEO, 輸出
+    )
+    程序 = Popen(list(指令), stdin=PIPE, stdout=PIPE,)
+    結果, _錯誤 = 程序.communicate(input=音檔字串)
+    return 結果
 
 
 def blob2bytes(blob):
@@ -105,6 +135,10 @@ def Kaldi對齊(request):
     except MultiValueDictKeyError:
         return HttpResponseBadRequest(
             '設定「語言」參數以外，閣愛傳「文本」佮「blob」抑是「音檔」！！'
+        )
+    except EOFError:
+        return HttpResponseBadRequest(
+            '「blob」抑是「音檔」比RIFF檔頭閣較短！！'
         )
     Kaldi對齊影音.delay(語料對齊.pk)
     return HttpResponse('上傳成功！！')
