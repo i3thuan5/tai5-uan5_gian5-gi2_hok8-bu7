@@ -18,6 +18,9 @@ branches:
   only:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
+before_script:
+- rabbitmqctl list_users
+- netstat -tunlp
 script:
 - docker build -t tai5-uan5_gian5-gi2_hok8-bu7_travis --build-arg TOX_ENV=$TOX_ENV .
 after_success:
