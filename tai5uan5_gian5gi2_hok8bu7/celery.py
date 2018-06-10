@@ -11,13 +11,12 @@ os.environ.setdefault(
     'DJANGO_SETTINGS_MODULE', 'tai5uan5_gian5gi2_hok8bu7.settings')
 
 try:
-    rabbitmq = 'amqp://guest:guest@{}:5672//'.format(
+    rabbitmq = 'amqp://ti1a2:gau5tsa2@{}:5672/hok8_bu7'.format(
         settings.RABBIT_MQ_TSU2_KI1
     )
 except AttributeError:
     rabbitmq = None
 
-print('rabbitmq', rabbitmq)
 app = Celery('tai5uan5_gian5gi2_hok8bu7', broker=rabbitmq)
 
 # Using a string here means the worker don't have to serialize
