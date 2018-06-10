@@ -17,6 +17,7 @@ try:
 except AttributeError:
     rabbitmq = None
 
+print('rabbitmq', rabbitmq)
 app = Celery('tai5uan5_gian5gi2_hok8bu7', broker=rabbitmq)
 
 # Using a string here means the worker don't have to serialize
