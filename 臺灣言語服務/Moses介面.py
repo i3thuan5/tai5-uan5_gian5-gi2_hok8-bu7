@@ -27,7 +27,7 @@ class Moses介面:
             if 查詢腔口 not in self.服務.支援腔口():
                 raise RuntimeError()
         except (KeyError, RuntimeError):
-            查詢腔口 = '閩南語'
+            查詢腔口 = '台語'
         try:
             查詢語句 = 連線參數['查詢語句']
         except KeyError:
@@ -50,7 +50,7 @@ class Moses介面:
             if 查詢腔口 not in self.服務.支援腔口():
                 raise RuntimeError()
         except (KeyError, RuntimeError):
-            查詢腔口 = '閩南語'
+            查詢腔口 = '台語'
         try:
             查詢語句 = 連線參數['查詢語句']
         except KeyError:
