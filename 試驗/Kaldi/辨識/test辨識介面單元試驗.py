@@ -1,6 +1,7 @@
 from base64 import b64encode
 import io
 import json
+from os.path import abspath, dirname, join
 
 from django.test.testcases import TestCase
 from django.urls.base import resolve
@@ -49,6 +50,25 @@ class 辨識介面單元試驗(TestCase):
             Kaldi辨識結果.objects.get().聲音檔().wav格式資料(),
             self.音檔.wav格式資料()
         )
+
+    def test_短檔毋是wav(self):
+        with io.BytesIO(b'sui2') as 音檔:
+            回應 = self.client.post('/辨識音檔', {
+                '語言': '台語',
+                '音檔': 音檔,
+            })
+        self.assertEqual(回應.status_code, 400)
+
+    def test_長檔mp3(self):
+        with open(
+            join(dirname(abspath(__file__)), 'imtong', 'sui2.mp3'), 'rb'
+        ) as mp3_tong:
+            with io.BytesIO(mp3_tong.read()) as 音檔:
+                self.client.post('/辨識音檔', {
+                    '語言': '台語',
+                    '音檔': 音檔,
+                })
+        Kaldi辨識結果.objects.get().聲音檔().wav格式資料()
 
     def test_音檔佮blob攏無傳(self):
         回應 = self.client.post('/辨識音檔', {

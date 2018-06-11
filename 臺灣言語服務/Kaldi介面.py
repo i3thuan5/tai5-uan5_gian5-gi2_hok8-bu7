@@ -1,5 +1,7 @@
 from base64 import b64decode
 import json
+from subprocess import Popen, PIPE
+import wave
 
 from celery import shared_task
 from django.conf import settings
@@ -7,6 +9,8 @@ from django.http.response import HttpResponse, JsonResponse,\
     HttpResponseBadRequest
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
+from libavwrapper.avconv import Input, Output, AVConv
+from libavwrapper.codec import AudioCodec, NO_VIDEO
 
 
 from 臺灣言語服務.Kaldi語料辨識 import Kaldi語料辨識
@@ -17,8 +21,23 @@ from 臺灣言語服務.models import Kaldi對齊結果
 from 臺灣言語服務.KaldiModels import Kaldi辨識結果
 
 
+def Kaldi介面處理(參數無夠):
+    def 設定顯示資訊的函式(介面函式):
+        def 新函式(*陣列, **辭典):
+            try:
+                return 介面函式(*陣列, **辭典)
+            except MultiValueDictKeyError:
+                return HttpResponseBadRequest(參數無夠)
+            except EOFError:
+                return HttpResponseBadRequest(
+                    '「blob」抑是「音檔」比RIFF檔頭閣較短！！'
+                )
+        return 新函式
+    return 設定顯示資訊的函式
+
+
 @csrf_exempt
-def 看辨識結果(request):
+def 看辨識結果(_request):
     結果 = []
     for 辨識結果 in (
         Kaldi辨識結果.objects
@@ -52,39 +71,17 @@ def 看辨識結果(request):
 
 
 @csrf_exempt
+@Kaldi介面處理(參數無夠='設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！')
 def Kaldi辨識(request):
     try:
         啥人唸的 = request.POST['啥人唸的'].strip()
     except MultiValueDictKeyError:
         啥人唸的 = '無註明'
-    try:
-        Kaldi辨識 = Kaldi語料辨識.匯入音檔(request.POST['語言'], 啥人唸的, 揣音檔出來(request), '')
-    except MultiValueDictKeyError:
-        return HttpResponseBadRequest(
-            '設定「語言」參數以外，閣愛傳「blob」抑是「音檔」！！'
-        )
+    Kaldi辨識 = Kaldi語料辨識.匯入音檔(
+        request.POST['語言'], 啥人唸的, 音檔參數.揣音檔出來(request), ''
+    )
     Kaldi辨識影音.delay(Kaldi辨識.id)
     return HttpResponse('上傳成功！！')
-
-
-def 揣音檔出來(request):
-    try:
-        return 聲音檔.對資料轉(request.FILES['音檔'].read())
-    except MultiValueDictKeyError:
-        pass
-    return 聲音檔.對資料轉(blob2bytes(request.POST['blob']))
-
-
-def blob2bytes(blob):
-    return bytes(json.loads(
-        '[' + b64decode(blob).decode('utf-8') + ']'
-    ))
-
-
-def 無辨識過的重訓練一擺():
-    for Kaldi辨識 in Kaldi語料辨識.objects.filter(辨識好猶未=False):
-        Kaldi辨識.辨識()
-    return JsonResponse({'成功': '成功'})
 
 
 @shared_task
@@ -93,25 +90,7 @@ def Kaldi辨識影音(Kaldi辨識編號):
 
 
 @csrf_exempt
-def Kaldi對齊(request):
-    try:
-        語言 = request.POST['語言']
-        文本 = request.POST['文本']
-        語料對齊 = Kaldi語料對齊.匯入音檔(
-            語言, '無註明',
-            揣音檔出來(request),
-            文本.replace('\r\n', '\n').replace('\r', '\n')
-        )
-    except MultiValueDictKeyError:
-        return HttpResponseBadRequest(
-            '設定「語言」參數以外，閣愛傳「文本」佮「blob」抑是「音檔」！！'
-        )
-    Kaldi對齊影音.delay(語料對齊.pk)
-    return HttpResponse('上傳成功！！')
-
-
-@csrf_exempt
-def 看對齊結果(request):
+def 看對齊結果(_request):
     結果 = []
     for 對齊結果 in (
         Kaldi對齊結果.objects
@@ -137,6 +116,58 @@ def 看對齊結果(request):
     return JsonResponse({'對齊結果': 結果})
 
 
+@csrf_exempt
+@Kaldi介面處理(參數無夠='設定「語言」參數以外，閣愛傳「文本」佮「blob」抑是「音檔」！！')
+def Kaldi對齊(request):
+    語言 = request.POST['語言']
+    文本 = request.POST['文本']
+    語料對齊 = Kaldi語料對齊.匯入音檔(
+        語言, '無註明',
+        音檔參數.揣音檔出來(request),
+        文本.replace('\r\n', '\n').replace('\r', '\n')
+    )
+    Kaldi對齊影音.delay(語料對齊.pk)
+    return HttpResponse('上傳成功！！')
+
+
 @shared_task
 def Kaldi對齊影音(對齊編號):
     Kaldi語料對齊.objects.get(pk=對齊編號).對齊()
+
+
+class 音檔參數:
+    @classmethod
+    def 揣音檔出來(cls, request):
+        音檔字串 = cls._揣音檔字串出來(request)
+        try:
+            return 聲音檔.對資料轉(音檔字串)
+        except wave.Error:
+            return 聲音檔.對資料轉(cls._轉做wav檔(音檔字串))
+
+    @classmethod
+    def _揣音檔字串出來(cls, request):
+        try:
+            return request.FILES['音檔'].read()
+        except MultiValueDictKeyError:
+            pass
+        return cls._blob2bytes(request.POST['blob'])
+
+    @classmethod
+    def _轉做wav檔(cls, 音檔字串):
+        wav聲音格式 = AudioCodec('pcm_s16le')
+        輸入 = Input('pipe:')
+        輸出 = Output('pipe:')
+        指令 = AVConv(
+            'avconv', ('-loglevel', 'panic'),
+            輸入,
+            ('-f', 'wav'), wav聲音格式, NO_VIDEO, 輸出
+        )
+        程序 = Popen(list(指令), stdin=PIPE, stdout=PIPE,)
+        結果, _錯誤 = 程序.communicate(input=音檔字串)
+        return 結果
+
+    @classmethod
+    def _blob2bytes(cls, blob):
+        return bytes(json.loads(
+            '[' + b64decode(blob).decode('utf-8') + ']'
+        ))
