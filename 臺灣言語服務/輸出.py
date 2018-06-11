@@ -5,24 +5,14 @@ from os.path import join
 from django.db.models.query_utils import Q
 
 
-from 臺灣言語資料庫.資料模型 import 外語表
 from 臺灣言語資料庫.欄位資訊 import 語句
 from 臺灣言語資料庫.欄位資訊 import 字詞
 from 臺灣言語資料庫.資料模型 import 語言腔口表
-from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語資料庫.資料模型 import 文本表
 from 臺灣言語服務.資料模型路徑 import 翻譯語料資料夾
 
 
 class 資料輸出工具:
-    翻譯語料檔名 = [
-        '對齊外語語句',
-        '對齊母語語句',
-        '語句文本',
-        '對齊外語字詞',
-        '對齊母語字詞',
-        '字詞文本',
-    ]
     文本語料檔名 = [
         '語句文本',
         '字詞文本',
@@ -35,51 +25,6 @@ class 資料輸出工具:
         else:
             self.條件 = Q(語言腔口__語言腔口=要求語言)
             self.腔口條件 = Q(語言腔口=要求語言)
-
-    def 輸出翻譯語料(self):
-        檔案表 = self._建立檔案表(
-            語言腔口表.揣出有語句文本的語言腔口().filter(self.腔口條件), self.翻譯語料檔名
-        )
-        for 外語 in 外語表.全部外語資料().filter(self.條件):
-            try:
-                檔案表欄位 = 檔案表[外語.語言腔口.語言腔口][外語.種類.種類]
-            except KeyError:
-                pass
-            else:
-                self._加文本翻譯語料(
-                    檔案表欄位, [外語.分詞資料()], 外語.翻譯文本, '文本'
-                )
-                for 影音關係 in 外語.翻譯影音.all():
-                    影音 = 影音關係.影音
-                    self._加文本翻譯語料(
-                        檔案表欄位, [外語.分詞資料()], 影音.影音文本, '文本'
-                    )
-
-        for 影音 in 影音表.源頭的影音資料().filter(self.條件):
-            try:
-                檔案表欄位 = 檔案表[影音.語言腔口.語言腔口][影音.種類.種類]
-            except KeyError:
-                pass
-            else:
-                self._加文本翻譯語料(
-                    檔案表欄位, [], 影音.影音文本, '文本'
-                )
-        for 文本 in 文本表.源頭的文本資料().filter(self.條件):
-            try:
-                檔案表欄位 = 檔案表[文本.語言腔口.語言腔口][文本.種類.種類]
-            except KeyError:
-                pass
-            else:
-                分詞資料 = 文本.分詞資料()
-                if 文本.文本校對.exists():
-                    self._加文本翻譯語料(
-                        檔案表欄位, [分詞資料], 文本.文本校對, '新文本'
-                    )
-                else:
-                    print(分詞資料, file=檔案表欄位['對齊外語'])
-                    print(分詞資料, file=檔案表欄位['對齊母語'])
-                    print(分詞資料, file=檔案表欄位['文本'])
-        self._關檔案表的檔案(檔案表)
 
     def 輸出文本語料(self):
         檔案表 = self._建立檔案表(
@@ -109,17 +54,3 @@ class 資料輸出工具:
             for 種類內檔案 in 腔檔案.values():
                 for 一个檔案 in 種類內檔案.values():
                     一个檔案.close()
-
-    def _加文本翻譯語料(self, 檔案表, 目前資料, 關係表, 文本物件名):
-        for 文本關係 in 關係表.all():
-            文本 = getattr(文本關係, 文本物件名)
-            分詞資料 = 文本.分詞資料()
-            目前資料.append(分詞資料)
-            if 文本.文本校對.exists():
-                self._加文本翻譯語料(檔案表, 目前資料, 文本.文本校對, '新文本')
-            else:
-                print('\n'.join(目前資料), file=檔案表['對齊外語'])
-                for _ in 目前資料:
-                    print(分詞資料, file=檔案表['對齊母語'])
-                print(分詞資料, file=檔案表['文本'])
-            目前資料.pop()
