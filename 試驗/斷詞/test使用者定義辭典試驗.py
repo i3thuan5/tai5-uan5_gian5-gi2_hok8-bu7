@@ -19,14 +19,12 @@ class 使用者定義辭典試驗(TestCase):
 
     @patch('臺灣言語服務.斷詞介面.斷詞介面.服務')
     def test_提供辭典(self, 服務Mock):
-        服務Mock.return_value.支援腔口.return_value = ['台語', '客話', 'Kaxabu']
         服務Mock.return_value = Moses服務({'台語': {
             '解析拼音': 新白話字,
-            '辭典': 現掀辭典,
-            '語言模型': 實際語言模型,
+            '辭典': 現掀辭典(4),
+            '語言模型': 實際語言模型(2),
         }})
 
-#  with patch.dict(foo, {'newkey': 'newvalue'}, clear=True):
         連線回應 = self.client.get(
             '/標漢羅', {
                 '查詢腔口': '台語',
@@ -38,8 +36,44 @@ class 使用者定義辭典試驗(TestCase):
         )
         self.assertEqual(連線回應.status_code, 200)
         回應物件 = 連線回應.json()
-        self.assertIn('分詞', 回應物件)
-        self.assertIn('多元書寫', 回應物件)
+        self.assertIn(回應物件[0]['分詞'].split(), 1)
+        self.assertIn('多元書寫', 回應物件[0])
 
-    def test_對濟失敗(self):
-        self.fail()
+    @patch('臺灣言語服務.斷詞介面.斷詞介面.服務')
+    def test_無提供使用者辭典(self,服務Mock):
+        服務Mock.return_value = Moses服務({'台語': {
+            '解析拼音': 新白話字,
+            '辭典': 現掀辭典(4),
+            '語言模型': 實際語言模型(2),
+        }})
+
+        連線回應 = self.client.get(
+            '/標漢羅', {
+                '查詢腔口': '台語',
+                '查詢語句': '你好',
+            }
+        )
+        self.assertEqual(連線回應.status_code, 200)
+        回應物件 = 連線回應.json()
+        self.assertIn(回應物件[0]['分詞'].split(), 2)
+
+    @patch('臺灣言語服務.斷詞介面.斷詞介面.服務')
+    def test_對齊失敗當作無傳(self,服務Mock):
+        服務Mock.return_value = Moses服務({'台語': {
+            '解析拼音': 新白話字,
+            '辭典': 現掀辭典(4),
+            '語言模型': 實際語言模型(2),
+        }})
+
+        連線回應 = self.client.get(
+            '/標漢羅', {
+                '查詢腔口': '台語',
+                '查詢語句': '你好',
+                '使用者辭典': json.dumps(
+                    [ ['你好', 'li2-ho2-bo5']]
+                ),
+            }
+        )
+        self.assertEqual(連線回應.status_code, 200)
+        回應物件 = 連線回應.json()
+        self.assertIn(回應物件[0]['分詞'].split(), 2)

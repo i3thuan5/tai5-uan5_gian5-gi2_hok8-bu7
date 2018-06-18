@@ -32,7 +32,13 @@ class 斷詞介面:
         except KeyError:
             查詢語句 = '你好嗎？我很好！'
         try:
-            return JsonResponse(cls.服務.標漢羅實作(查詢腔口, 查詢語句))
+            使用者辭典 = 連線參數['使用者辭典']
+        except KeyError:
+            使用者辭典 = '[]'
+        try:
+            return JsonResponse(
+                cls.服務().標漢羅實作(查詢腔口, 查詢語句, 使用者辭典)
+            )
         except Pyro4.errors.NamingError:
             return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
         except ConnectionRefusedError:

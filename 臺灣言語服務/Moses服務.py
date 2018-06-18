@@ -67,7 +67,6 @@ class Moses服務:
             .揣詞(拄好長度辭典揣詞, 母語模型['辭典'])
             .揀(語言模型揀集內組, 母語模型['語言模型'])
         )
-        return {}
         return 文本介面.章物件轉回應結果(settings.HOK8_BU7_SIAT4_TING7[查詢腔口], 母語章物件)
 
     def 停(self):
