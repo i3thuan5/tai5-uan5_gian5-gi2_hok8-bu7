@@ -22,7 +22,6 @@ class 斷詞介面:
             連線參數 = request.POST
         try:
             查詢腔口 = 連線參數['查詢腔口']
-            print(cls.服務)
             if 查詢腔口 not in cls.服務().支援腔口():
                 raise RuntimeError()
         except (KeyError, RuntimeError):
