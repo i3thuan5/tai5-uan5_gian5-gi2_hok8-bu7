@@ -26,7 +26,39 @@ class 匯出漢語音節text單元試驗(TestCase):
             音節,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                'kan｜kan na｜na san｜san poo｜poo leh｜leh'
+                'kan na san poo leh'
+            ]
+        )
+
+    def test_無法度解析就照顯示(self):
+        音節 = Kaldi語料處理.轉音節text格式(
+            臺灣閩南語羅馬字拼音,
+            [
+                'tong0000000-0000000無註明-ku0000000 '
+                '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜咧'
+            ]
+        )
+        self.assertEqual(
+            音節,
+            [
+                'tong0000000-0000000無註明-ku0000000 '
+                'kan na san poo 咧'
+            ]
+        )
+
+    def test_漢羅(self):
+        音節 = Kaldi語料處理.轉音節text格式(
+            臺灣閩南語羅馬字拼音,
+            [
+                'tong0000000-0000000無註明-ku0000000 '
+                'kan2-na2 san3-poo7 咧'
+            ]
+        )
+        self.assertEqual(
+            音節,
+            [
+                'tong0000000-0000000無註明-ku0000000 '
+                'kan na san poo 咧'
             ]
         )
 
@@ -35,14 +67,14 @@ class 匯出漢語音節text單元試驗(TestCase):
             臺灣閩南語羅馬字拼音,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜咧 !｜!'
+                '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4 !｜!'
             ]
         )
         self.assertEqual(
             音節,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                'kan｜kan na｜na san｜san poo｜poo'
+                'kan na san poo leh'
             ]
         )
 
@@ -65,7 +97,7 @@ class 匯出漢語音節text單元試驗(TestCase):
             臺灣閩南語羅馬字拼音,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜咧 !｜!',
+                '敢-若｜kan2-na2 散-步｜san3-poo7 咧｜leh4',
                 ''
             ]
         )
@@ -73,7 +105,7 @@ class 匯出漢語音節text單元試驗(TestCase):
             音節,
             [
                 'tong0000000-0000000無註明-ku0000000 '
-                'kan｜kan na｜na san｜san poo｜poo'
+                'kan na san poo leh'
             ]
         )
 
@@ -81,7 +113,7 @@ class 匯出漢語音節text單元試驗(TestCase):
     def test_指令有輸出辭典檔(self, 轉音節text格式mock):
         轉音節text格式mock.return_value = [
             'tong0000000-0000000無註明-ku0000000 '
-            'kan｜kan na｜na san｜san poo｜poo leh｜leh'
+            'kan na san poo leh'
         ]
         with TemporaryDirectory() as 資料夾路徑:
             原本語料 = join(資料夾路徑, 'train_dev')
@@ -100,7 +132,7 @@ class 匯出漢語音節text單元試驗(TestCase):
                 程式腳本._讀檔案(join(結果語料, 'text')),
                 [
                     'tong0000000-0000000無註明-ku0000000 '
-                    'kan｜kan na｜na san｜san poo｜poo leh｜leh'
+                    'kan na san poo leh'
                 ]
             )
 
