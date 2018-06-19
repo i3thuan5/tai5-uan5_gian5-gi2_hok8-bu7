@@ -69,10 +69,10 @@ class Moses服務:
         )
         sin_sutian = 型音辭典(6)
         try:
-            for han, lo in json.loads(使用者辭典):
+            for su in json.loads(使用者辭典):
                 try:
-                    詞物件 = 拆文分析器.建立詞物件(han, lo)
-                except 解析錯誤:
+                    詞物件 = 拆文分析器.建立詞物件(*su)
+                except (TypeError, 解析錯誤):
                     pass
                 else:
                     sin_sutian.加詞(詞物件)
