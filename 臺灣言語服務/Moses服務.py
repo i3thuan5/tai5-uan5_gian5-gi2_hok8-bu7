@@ -71,7 +71,7 @@ class Moses服務:
         try:
             for su in json.loads(使用者辭典):
                 try:
-                    詞物件 = 拆文分析器.建立詞物件(*su)
+                    詞物件 = 拆文分析器.建立詞物件(*su).轉音(母語模型['解析拼音'])
                 except (TypeError, 解析錯誤):
                     pass
                 else:
