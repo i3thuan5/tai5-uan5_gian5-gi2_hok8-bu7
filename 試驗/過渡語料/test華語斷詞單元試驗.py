@@ -17,3 +17,18 @@ class test華語斷詞單元試驗(TestCase):
         過渡語料處理.objects.create(外文='我愛小豬', **self.公家內容)
         過渡語料處理.外文用國教院斷詞()
         self.assertEqual(過渡語料處理.objects.get().外文, '我 愛 小-豬')
+
+    @patch('臺灣言語工具.斷詞.國教院斷詞用戶端.國教院斷詞用戶端.語句斷詞做陣列')
+    def test_會回傳數量(self, 回應mock):
+        回應mock.return_value = [
+            ["我", "Nc"], ["愛", "Ncd"], ["小豬", "D"],
+        ]
+        for _ in range(333):
+            過渡語料處理.objects.create(外文='我愛小豬', **self.公家內容)
+        斷詞數量 = 過渡語料處理.外文用國教院斷詞()
+        self.assertEqual(斷詞數量, 333)
+
+    def test_無華語(self):
+        過渡語料處理.objects.create(文本='我愛豬仔', **self.公家內容)
+        斷詞數量 = 過渡語料處理.外文用國教院斷詞()
+        self.assertEqual(斷詞數量, 0)

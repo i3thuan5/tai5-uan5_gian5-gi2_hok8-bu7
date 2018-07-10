@@ -1,7 +1,6 @@
 from 臺灣言語服務.models import 訓練過渡格式
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.斷詞.國教院斷詞用戶端 import 國教院斷詞用戶端
-from sys import stderr
 
 
 class 過渡語料處理(訓練過渡格式):
@@ -16,5 +15,4 @@ class 過渡語料處理(訓練過渡格式):
             一逝.外文 = 國教院斷詞用戶端.斷詞(句物件).看分詞()
             一逝.save()
             幾逝 += 1
-            if 幾逝 % 100 == 0:
-                print('外文斷 {} 句矣'.format(幾逝), file=stderr)
+        return 幾逝
