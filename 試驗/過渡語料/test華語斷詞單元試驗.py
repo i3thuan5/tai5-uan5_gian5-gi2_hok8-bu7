@@ -16,4 +16,4 @@ class test華語斷詞單元試驗(TestCase):
         ]
         過渡語料處理.objects.create(外文='我愛小豬', **self.公家內容)
         過渡語料處理.外文用國教院斷詞()
-        self.assertEqual(過渡語料處理.objects.get().外文, '我 愛 小豬')
+        self.assertEqual(過渡語料處理.objects.get().外文, '我 愛 小-豬')
