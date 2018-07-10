@@ -5,7 +5,7 @@ from django.test import TestCase
 from 臺灣言語服務.過渡語料 import 過渡語料處理
 
 
-class test華語斷詞單元試驗試驗(TestCase):
+class test華語斷詞單元試驗(TestCase):
 
     公家內容 = {'來源': 'Dr. Pigu', '種類':  '語句', '年代':  '2018', }
 
