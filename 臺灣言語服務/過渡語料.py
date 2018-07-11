@@ -17,7 +17,7 @@ class 過渡語料處理(訓練過渡格式):
         proxy = True
 
     @classmethod
-    def 台文語料斷詞(cls, 會當參考的來源, 欲斷詞的來源, 辭典詞長=4,連紲詞長度=3):
+    def 台文語料斷詞(cls, 會當參考的來源, 欲斷詞的來源, 辭典詞長=4, 連紲詞長度=3):
         無出現的來源 = []
         for 來源 in chain(會當參考的來源, 欲斷詞的來源):
             if not cls.objects.filter(來源=來源).exists():
