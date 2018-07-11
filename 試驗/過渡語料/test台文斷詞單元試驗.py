@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-import io
-from unittest.mock import patch
-
-from django.core.management import call_command
 from django.test import TestCase
 
 
@@ -33,7 +29,15 @@ class test台文斷詞單元試驗(TestCase):
         過渡語料處理.objects.get(文本='豬-仔｜ti1-a2 愛｜ai3 我｜gua2')
 
     def test_來源無出現(self):
-        self.fail()
+        過渡語料處理.objects.create(
+            來源='ti-a', 文本='豬仔愛我', **self.公家內容
+        )
+        with self.assertRaises(ValueError):
+            過渡語料處理.台文語料斷詞(['su-tian'], ['ti-a'])
 
     def test_目標無出現(self):
-        self.fail()
+        過渡語料處理.objects.create(
+            來源='su-tian', 文本='我｜gua2 愛｜ai3 豬-仔｜ti1-a2', **self.公家內容
+        )
+        with self.assertRaises(ValueError):
+            過渡語料處理.台文語料斷詞(['su-tian'], ['ti-a'])
