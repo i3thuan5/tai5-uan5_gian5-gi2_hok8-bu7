@@ -42,6 +42,8 @@ class 過渡語料處理(訓練過渡格式):
         辭典 = 型音辭典(4)
         for 詞物件 in 全部詞:
             辭典.加詞(詞物件)
+
+        幾逝 = 0
         for 一逝 in cls.objects.filter(
             來源__in=欲斷詞的來源, 文本__isnull=False
         ):
@@ -55,6 +57,8 @@ class 過渡語料處理(訓練過渡格式):
                     字物件.音 = 字物件.型
             一逝.文本 = 標好句物件.看分詞()
             一逝.save()
+            幾逝 += 1
+        return 幾逝
 
     @classmethod
     def 外文用國教院斷詞(cls):
