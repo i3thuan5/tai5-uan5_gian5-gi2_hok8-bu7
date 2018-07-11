@@ -7,6 +7,7 @@ from django.test import TestCase
 
 
 from 臺灣言語服務.過渡語料 import 過渡語料處理
+from django.core.management.base import CommandError
 
 
 class test台文斷詞單元試驗(TestCase):
@@ -17,13 +18,15 @@ class test台文斷詞單元試驗(TestCase):
         with io.StringIO() as err:
             call_command(
                 '台文用語料斷詞',
-                '--參考', 'su-tian', '--參考', 'su-lui',
+                '--欲參考', 'su-tian', 'su-lui',
                 '--欲斷詞', 'ti-a',
+                '--辭典詞長', '4', '--連紲詞長度', '3',
                 stderr=err
             )
         台文語料斷詞mock.assert_called_once_with(
             ['su-tian', 'su-lui'],
-            ['ti-a']
+            ['ti-a'],
+            4, 3,
         )
 
     @patch('臺灣言語服務.過渡語料.過渡語料處理.台文語料斷詞')
@@ -32,11 +35,11 @@ class test台文斷詞單元試驗(TestCase):
         with io.StringIO() as err:
             call_command(
                 '台文用語料斷詞',
-                '--參考', 'su-tian', '--參考', 'su-lui',
+                '--欲參考', 'su-tian',  'su-lui',
                 '--欲斷詞', 'ti-a',
                 stderr=err
             )
-        self.assertIn('斷詞 333 句', err.getvalue())
+            self.assertIn('斷詞 333 句', err.getvalue())
 
     @patch('sys.exit')
     @patch('臺灣言語服務.過渡語料.過渡語料處理.台文語料斷詞')
@@ -45,12 +48,17 @@ class test台文斷詞單元試驗(TestCase):
         with io.StringIO() as err:
             call_command(
                 '台文用語料斷詞',
-                '--參考', 'su-tian', '--參考', 'su-lui',
+                '--欲參考', 'su-tian', 'su-lui',
                 '--欲斷詞', 'ti-a',
                 stderr=err,
             )
-            call_command('台文語料斷詞', stderr=err)
         exitMock.assert_called_once_with(1)
+
+    def test_無參數愛錯誤(self):
+        with self.assertRaises(CommandError):
+            call_command(
+                '台文用語料斷詞'
+            )
 
     def test_有斷著詞(self):
         過渡語料處理.objects.create(
