@@ -2,8 +2,6 @@
 import gzip
 from os import makedirs
 from os.path import join, basename
-from sys import stderr
-from tempfile import TemporaryDirectory
 
 
 from 臺灣言語工具.翻譯.摩西工具.摩西翻譯模型訓練 import 摩西翻譯模型訓練
@@ -19,7 +17,6 @@ from 臺灣言語工具.斷詞.拄好長度辭典揣詞 import 拄好長度辭�
 from 臺灣言語工具.斷詞.語言模型揀集內組 import 語言模型揀集內組
 from 臺灣言語工具.解析整理.解析錯誤 import 解析錯誤
 from 臺灣言語服務.models import 訓練過渡格式
-from 臺灣言語工具.斷詞.國教院斷詞用戶端 import 國教院斷詞用戶端
 
 
 class Moses模型訓練(程式腳本):
@@ -83,18 +80,16 @@ class Moses模型訓練(程式腳本):
     @classmethod
     def 訓練翻譯做外文模型(cls, 語料資料夾, 模型資料夾):
         平行華語, 平行母語, _母語文本 = cls._原始語料(語料資料夾)
-        with TemporaryDirectory() as 暫存資料夾:
-            平行斷詞華語 = cls._外文斷詞(平行華語, 暫存資料夾)
-            模型訓練 = 摩西翻譯模型訓練()
-            模型訓練.訓練(
-                平行母語, 平行斷詞華語, 平行斷詞華語,
-                模型資料夾,
-                連紲詞長度=3,
-                編碼器=語句編碼器(),  # 若用著Unicdoe擴充就需要,
-                使用記憶體量='80%',
-                愛直接顯示輸出=True,
-                刣掉暫存檔=False,
-            )
+        模型訓練 = 摩西翻譯模型訓練()
+        模型訓練.訓練(
+            平行母語, 平行華語, 平行華語,
+            模型資料夾,
+            連紲詞長度=3,
+            編碼器=語句編碼器(),  # 若用著Unicdoe擴充就需要,
+            使用記憶體量='80%',
+            愛直接顯示輸出=True,
+            刣掉暫存檔=False,
+        )
 
     @classmethod
     def 訓練正規化模型(cls, 語料資料夾, 模型資料夾):
@@ -202,20 +197,3 @@ class Moses模型訓練(程式腳本):
             join(語言資料夾, '字詞文本.txt.gz'),
         ]
         return 平行華語, 平行母語, 母語文本
-
-    @classmethod
-    def _外文斷詞(cls, 語料陣列, 暫存資料夾):
-        斷詞檔名 = join(暫存資料夾, '外文斷詞.txt.gz')
-        幾逝 = 0
-        with gzip.open(斷詞檔名, 'wt') as 寫檔:
-            for 原本檔案 in 語料陣列:
-                for 一逝 in cls._讀檔案(原本檔案):
-                    斷詞結果 = []
-                    句物件 = 拆文分析器.分詞句物件(一逝)
-                    for 詞條, 詞性 in 國教院斷詞用戶端.語句斷詞做陣列(句物件.看型(' ', ' ')):
-                        斷詞結果.append("{}-（-{}-）".format(詞條, 詞性))
-                    print(' '.join(斷詞結果), file=寫檔)
-                    幾逝 += 1
-                    if 幾逝 % 100 == 0:
-                        print('外文斷 {} 句矣'.format(幾逝), file=stderr)
-        return [斷詞檔名]
