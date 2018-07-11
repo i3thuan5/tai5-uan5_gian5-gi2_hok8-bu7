@@ -8,6 +8,10 @@ class 過渡語料處理(訓練過渡格式):
         proxy = True
 
     @classmethod
+    def 台文語料斷詞(cls, 會當參考的來源, 欲斷詞的來源):
+        pass
+
+    @classmethod
     def 外文用國教院斷詞(cls):
         幾逝 = 0
         for 一逝 in cls.objects.filter(外文__isnull=False):
