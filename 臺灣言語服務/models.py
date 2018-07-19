@@ -43,8 +43,8 @@ class 訓練過渡格式(models.Model):
         for 一筆 in 資料陣列:
             try:
                 一筆.full_clean()
-            except ValidationError:
-                print(str(ValidationError), file=錯誤輸出)
+            except ValidationError as 錯誤:
+                print(錯誤, file=錯誤輸出)
             else:
                 會使的資料.append(一筆)
         訓練過渡格式.objects.bulk_create(會使的資料)
