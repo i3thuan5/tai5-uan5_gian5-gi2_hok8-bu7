@@ -266,7 +266,31 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 ['0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
             )
 
+    def test_仝音檔愛公家(self):
+        self.匯入聽拍('媠', 'sui2')
+        self.匯入聽拍('巧', 'khiau2')
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            with open(join(資料夾路徑, '語料資料夾', 'train', 'wav.scp')) as wavscp:
+                self.assertEqual(
+                    len(wavscp.read().strip().split('\n')),
+                    1
+                )
+
     def 匯入音檔(self, 語者, 內容):
+        return 訓練過渡格式.objects.create(
+            來源='媠巧',
+            年代='2017',
+            種類='語句',
+            影音所在=self.檔案.name,
+            影音語者=語者,
+            文本=內容,
+        )
+
+    def 匯入聽拍(self, 語者, 內容):
         return 訓練過渡格式.objects.create(
             來源='媠巧',
             年代='2017',
