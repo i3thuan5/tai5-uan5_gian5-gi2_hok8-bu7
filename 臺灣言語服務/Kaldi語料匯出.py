@@ -171,7 +171,9 @@ class Kaldi語料匯出(程式腳本):
                     '音檔長度': 一筆.聲音檔().時間長度(),
                     '聽拍': [一筆.聽拍],
                 }
-        for 影音所在, 狀況, in sorted(影音對應聽拍.items(), key=lambda tong: tong[1]['pk']):
+        for 影音所在, 狀況, in sorted(
+            影音對應聽拍.items(), key=lambda tong: tong[1]['pk']
+        ):
             音檔名 = 'tong{0:07}'.format(第幾个)
             cls._音檔資訊(影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
             for 第幾句, 一句聽拍 in enumerate(chain.from_iterable(狀況['聽拍'])):
