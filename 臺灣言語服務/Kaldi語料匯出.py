@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from itertools import chain
 from os import makedirs
 from os.path import join, isdir
 from shutil import rmtree
@@ -153,6 +154,7 @@ class Kaldi語料匯出(程式腳本):
         第幾个人 = 0
         語者名對應輸出名 = {}
         第幾个 = 0
+        影音對應聽拍 = {}
         for 一筆 in (
             訓練過渡格式.objects
             .distinct()
@@ -161,13 +163,23 @@ class Kaldi語料匯出(程式腳本):
             .filter(匯出條件)
             .order_by('pk')
         ):
+            try:
+                影音對應聽拍[一筆.影音所在]['聽拍'].append(一筆.聽拍)
+            except KeyError:
+                影音對應聽拍[一筆.影音所在] = {
+                    'pk': 一筆.pk,
+                    '音檔長度': 一筆.聲音檔().時間長度(),
+                    '聽拍': [一筆.聽拍],
+                }
+        for 影音所在, 狀況, in sorted(
+            影音對應聽拍.items(), key=lambda tong: tong[1]['pk']
+        ):
             音檔名 = 'tong{0:07}'.format(第幾个)
-            cls._音檔資訊(一筆.影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
-            音檔長度 = 一筆.聲音檔().時間長度()
-            for 第幾句, 一句聽拍 in enumerate(一筆.聽拍):
+            cls._音檔資訊(影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
+            for 第幾句, 一句聽拍 in enumerate(chain.from_iterable(狀況['聽拍'])):
                 第幾个人 = cls._語句資訊(
                     辭典資料, 辭典輸出物件, 語者名對應輸出名,
-                    音檔名, 音檔長度, 第幾句, 第幾个人,
+                    音檔名, 狀況['音檔長度'], 第幾句, 第幾个人,
                     一句聽拍['開始時間'], 一句聽拍['結束時間'], 一句聽拍['語者'], 一句聽拍['內容'],
                     聽拍內容, 語句目錄, 語句對應語者
                 )
