@@ -19,6 +19,15 @@ class Command(BaseCommand):
         parser.add_argument(
             '辭典輸出函式',
             type=str,
+            choices=[
+                func
+                for func in dir(辭典輸出)
+                if (
+                    callable(getattr(辭典輸出, func)) and
+                    not func.startswith("_") and
+                    func != '漢字聲韻'
+                )
+            ],
             help='選擇lexicon佮聲學單位格式'
         )
         parser.add_argument(
