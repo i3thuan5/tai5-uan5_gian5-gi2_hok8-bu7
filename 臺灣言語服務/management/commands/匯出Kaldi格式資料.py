@@ -19,12 +19,12 @@ class Command(BaseCommand):
             '辭典輸出函式',
             type=str,
             choices=[
-                func
-                for func in dir(辭典輸出)
+                mia
+                for mia in dir(辭典輸出)
                 if (
-                    callable(getattr(辭典輸出, func)) and
-                    not func.startswith("_") and
-                    func != '漢字聲韻'
+                    callable(getattr(辭典輸出, mia)) and
+                    not mia.startswith("_") and
+                    mia != '漢字聲韻'
                 )
             ],
             help='選擇lexicon佮聲學單位格式'
