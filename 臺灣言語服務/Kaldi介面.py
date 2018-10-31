@@ -37,11 +37,15 @@ def Kaldi介面處理(參數無夠):
 
 
 @csrf_exempt
-def 看辨識結果(_request):
+def 看辨識結果(request):
+    try:
+        數量 = request.GET['數量']
+    except MultiValueDictKeyError:
+        數量 = 300
     結果 = []
     for 辨識結果 in (
         Kaldi辨識結果.objects
-        .order_by('-pk')[:300]
+        .order_by('-pk')[:數量]
     ):
         這筆 = {
             '編號': 辨識結果.id,
@@ -90,11 +94,15 @@ def Kaldi辨識影音(Kaldi辨識編號):
 
 
 @csrf_exempt
-def 看對齊結果(_request):
+def 看對齊結果(request):
+    try:
+        數量 = request.GET['數量']
+    except MultiValueDictKeyError:
+        數量 = 300
     結果 = []
     for 對齊結果 in (
         Kaldi對齊結果.objects
-        .order_by('-pk')[:300]
+        .order_by('-pk')[:數量]
     ):
         這筆 = {
             '編號': 對齊結果.pk,
