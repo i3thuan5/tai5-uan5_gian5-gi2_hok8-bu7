@@ -39,7 +39,7 @@ def Kaldi介面處理(參數無夠):
 @csrf_exempt
 def 看辨識結果(request):
     try:
-        數量 = request.GET['數量']
+        數量 = int(request.GET['數量'])
     except MultiValueDictKeyError:
         數量 = 300
     結果 = []
@@ -96,7 +96,7 @@ def Kaldi辨識影音(Kaldi辨識編號):
 @csrf_exempt
 def 看對齊結果(request):
     try:
-        數量 = request.GET['數量']
+        數量 = int(request.GET['數量'])
     except MultiValueDictKeyError:
         數量 = 300
     結果 = []
