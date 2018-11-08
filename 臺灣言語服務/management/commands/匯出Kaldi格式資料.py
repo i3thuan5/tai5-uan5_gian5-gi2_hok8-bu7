@@ -57,7 +57,6 @@ class Command(BaseCommand):
             參數['匯出路徑'], 參數['資料夾名'], 辭典資料
         )
         if 參數['語言文本'] is not None:
-            服務設定 = settings.HOK8_BU7_SIAT4_TING7[參數['語言']]
             Kaldi語料匯出.辭典資料載入語句文本(參數['語言文本'], 辭典輸出物件, 辭典資料)
         Kaldi語料匯出.匯出辭典資料(辭典資料, 參數['匯出路徑'], 參數['資料夾名'])
         self.stdout.write('輸出 {} 段音檔'.format(幾段音檔))
