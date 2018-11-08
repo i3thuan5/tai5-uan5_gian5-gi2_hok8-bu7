@@ -22,7 +22,8 @@ class 文本介面:
         'a-zA-Záàâǎāa̍a̋éèêěēe̍e̋íìîǐīı̍i̍i̋'
         'óòôǒōo̍őó͘ò͘ô͘ǒ͘ō͘o̍͘ő͘úùûǔūu̍űḿm̀m̂m̌m̄m̍m̋ńǹn̂ňn̄n̍n̋ⁿ'
         ']+\d?)',
-        flags=re.IGNORECASE)
+        flags=re.IGNORECASE
+    )
 
     @classmethod
     @csrf_exempt
