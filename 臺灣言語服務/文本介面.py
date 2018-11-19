@@ -18,10 +18,10 @@ class 文本介面:
     # 有羅馬字：koo1娘 koo娘 koo1-niu5 koo-niû koo1-娘 姑-niu5 出--lai5
     # 無羅馬字：姑娘 g0v
     揣出羅馬字正規式 = re.compile(
-        '(['
-        'a-zA-Záàâǎāa̍a̋éèêěēe̍e̋íìîǐīı̍i̍i̋'
-        'óòôǒōo̍őó͘ò͘ô͘ǒ͘ō͘o̍͘ő͘úùûǔūu̍űḿm̀m̂m̌m̄m̍m̋ńǹn̂ňn̄n̍n̋ⁿ'
-        ']+\d?)',
+        r'(['
+        r'a-zA-Záàâǎāa̍a̋éèêěēe̍e̋íìîǐīı̍i̍i̋'
+        r'óòôǒōo̍őó͘ò͘ô͘ǒ͘ō͘o̍͘ő͘úùûǔūu̍űḿm̀m̂m̌m̄m̍m̋ńǹn̂ňn̄n̍n̋ⁿ'
+        r']+\d?)',
         flags=re.IGNORECASE
     )
 
