@@ -49,3 +49,13 @@ class Kaldi匯入音檔單元試驗(TestCase):
 
         回應資料 = self.client.get('/辨識結果').json()
         self.assertEqual(回應資料['辨識結果'][0]['狀態'], '辨識出問題')
+
+    def test_有thang控制數量(self):
+        for _ in range(5):
+            Kaldi語料辨識.匯入音檔(
+                '台語', '啥人唸的',
+                聲音檔.對參數轉(2, 16000, 1, b'sui2khiau2'), 'tsiang5 tsiang5',
+            ).辨識成功('sui2')
+
+        回應資料 = self.client.get('/辨識結果', {'數量': '3'}).json()
+        self.assertEqual(len(回應資料['辨識結果']), 3)
