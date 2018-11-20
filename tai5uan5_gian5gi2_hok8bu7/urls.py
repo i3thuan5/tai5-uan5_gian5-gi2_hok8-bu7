@@ -6,5 +6,5 @@ from django.urls import path
 urlpatterns = [
     path(r'', include('臺灣言語服務.網址')),
 
-    path(r'^admin/', admin.site.urls),
+    path(r'admin/', admin.site.urls),
 ]
