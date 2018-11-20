@@ -1,8 +1,8 @@
 
 from tempfile import NamedTemporaryFile
 
-from django.core.urlresolvers import resolve
 from django.test.testcases import TestCase
+from django.urls.base import resolve
 
 
 from 臺灣言語服務.Kaldi語料對齊 import Kaldi語料對齊

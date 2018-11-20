@@ -58,7 +58,7 @@ setup(
     ],
     install_requires=[
         'django',
-        'tai5-uan5_gian5-gi2_tsu1-liau7-khoo3>=3.1.13',
+        'tai5-uan5_gian5-gi2_tsu1-liau7-khoo3>=3.1.21',
         'pyro4',
         'gunicorn',
         'django-ranged-response',
