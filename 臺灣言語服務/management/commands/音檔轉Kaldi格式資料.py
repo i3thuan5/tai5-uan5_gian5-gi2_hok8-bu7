@@ -57,3 +57,4 @@ class Command(BaseCommand):
             參數['匯出路徑'], 參數['資料夾名'], Kaldi語料匯出.初使化辭典資料(),
             Q(pk=過渡格式.編號())
         )
+        過渡格式.delete()
