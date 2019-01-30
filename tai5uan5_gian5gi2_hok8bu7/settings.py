@@ -53,12 +53,12 @@ INSTALLED_APPS = (
     '臺灣言語服務',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -123,7 +123,7 @@ TEMPLATES = [
 MEDIA_ROOT = os.path.join(BASE_DIR, "資料庫影音檔案")
 MEDIA_URL = "/資料庫影音檔案/"
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += (
     'corsheaders.middleware.CorsMiddleware',
 )
 CORS_ORIGIN_REGEX_WHITELIST = ('^.*$', )

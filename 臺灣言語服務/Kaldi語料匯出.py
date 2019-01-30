@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from itertools import chain
 from os import makedirs
 from os.path import join, isdir
 from shutil import rmtree
@@ -46,9 +47,9 @@ class Kaldi語料匯出(程式腳本):
                             )
 
     @classmethod
-    def 辭典資料載入語句文本(cls, 語言文本, 辭典輸出物件, 辭典資料):
+    def 辭典資料載入語句文本(cls, 語言文本, 辭典輸出物件, 辭典資料, 加語料=False):
         for 一逝 in cls._讀檔案(語言文本):
-            這擺參數 = {'辭典輸出物件': 辭典輸出物件, '一逝': 一逝, '加語料': False}
+            這擺參數 = {'辭典輸出物件': 辭典輸出物件, '一逝': 一逝, '加語料': 加語料}
             這擺參數.update(辭典資料)
             cls._資料加到辭典(**這擺參數)
 
@@ -75,6 +76,7 @@ class Kaldi語料匯出(程式腳本):
         for 仝調 in 辭典資料['調類'].values():
             調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'extra_questions.txt'), sorted(調問題))
+        return 訓練語料資料夾
 
     @classmethod
     def 匯出語言模型(cls, 語言文本, 連紲詞長度, 語料資料夾, 資料夾名):
@@ -88,6 +90,8 @@ class Kaldi語料匯出(程式腳本):
     def _資料加到辭典(cls, 聲類, 韻類, 調類, 全部詞, 全部句, 一逝, 辭典輸出物件, 加語料):
         章物件 = 拆文分析器.分詞章物件(一逝)
         一句 = []
+        SIL數量 = 0
+        NSN數量 = 0
         外來語數量 = 0
         for 詞物件 in 章物件.網出詞物件():
             分詞 = 詞物件.看分詞()
@@ -109,6 +113,7 @@ class Kaldi語料匯出(程式腳本):
                     字物件陣列[0].音 == 無音
                 ):
                     全部詞.add(cls.環境噪音)
+                    NSN數量 += 1
                 elif (
                     len(字物件陣列) == 1 and
                     (字物件陣列[0].型 in 標點符號 or 字物件陣列[0].型 == "'") and
@@ -116,13 +121,14 @@ class Kaldi語料匯出(程式腳本):
                 ):
                     一項 = '{}\tSIL'.format(分詞)
                     全部詞.add(一項)
+                    SIL數量 += 1
                 else:
                     一項 = '{}\tSPN'.format(分詞)
                     外來語數量 += 1
 #                     全部詞.add(一項)
             一句.append(分詞)
         全部句.append(' '.join(一句))
-        return len(一句), 外來語數量
+        return len(一句), SIL數量, NSN數量, 外來語數量
 
     @classmethod
     def 音節轉辭典格式(cls, 物件, 辭典輸出物件, 詞條=None):
@@ -153,6 +159,7 @@ class Kaldi語料匯出(程式腳本):
         第幾个人 = 0
         語者名對應輸出名 = {}
         第幾个 = 0
+        影音對應聽拍 = {}
         for 一筆 in (
             訓練過渡格式.objects
             .distinct()
@@ -161,13 +168,23 @@ class Kaldi語料匯出(程式腳本):
             .filter(匯出條件)
             .order_by('pk')
         ):
+            try:
+                影音對應聽拍[一筆.影音所在]['聽拍'].append(一筆.聽拍)
+            except KeyError:
+                影音對應聽拍[一筆.影音所在] = {
+                    'pk': 一筆.pk,
+                    '音檔長度': 一筆.聲音檔().時間長度(),
+                    '聽拍': [一筆.聽拍],
+                }
+        for 影音所在, 狀況, in sorted(
+            影音對應聽拍.items(), key=lambda tong: tong[1]['pk']
+        ):
             音檔名 = 'tong{0:07}'.format(第幾个)
-            cls._音檔資訊(一筆.影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
-            音檔長度 = 一筆.聲音檔().時間長度()
-            for 第幾句, 一句聽拍 in enumerate(一筆.聽拍):
+            cls._音檔資訊(影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
+            for 第幾句, 一句聽拍 in enumerate(chain.from_iterable(狀況['聽拍'])):
                 第幾个人 = cls._語句資訊(
                     辭典資料, 辭典輸出物件, 語者名對應輸出名,
-                    音檔名, 音檔長度, 第幾句, 第幾个人,
+                    音檔名, 狀況['音檔長度'], 第幾句, 第幾个人,
                     一句聽拍['開始時間'], 一句聽拍['結束時間'], 一句聽拍['語者'], 一句聽拍['內容'],
                     聽拍內容, 語句目錄, 語句對應語者
                 )
@@ -197,7 +214,7 @@ class Kaldi語料匯出(程式腳本):
     def _音檔資訊(cls, 影音所在, 音檔名, 音檔目錄, 音檔對應頻道):
         print(
             音檔名,
-            'sox -G {} -b 16 -c 1 -r 16k -t wav - | '.format(影音所在),
+            "sox -G '{}' -b 16 -c 1 -r 16k -t wav - | ".format(影音所在),
             file=音檔目錄
         )
 #             sw02001-A sw02001 A
@@ -225,7 +242,7 @@ class Kaldi語料匯出(程式腳本):
             語句名 = '{0}-{1}-ku{2:07}'.format(語者, 音檔名, 第幾句)
             這擺參數 = {'辭典輸出物件': 辭典輸出物件, '一逝': 內容, '加語料': True}
             這擺參數.update(辭典資料)
-            _詞數量, _外來語數量 = cls._資料加到辭典(**這擺參數)
+            _詞數量, _SIL數量, _NSN數量, _外來語數量 = cls._資料加到辭典(**這擺參數)
             print(語句名, 內容.replace('\n', 分詞符號).strip(), file=聽拍內容)
     #                 sw02001-A_000098-001156 sw02001-A 0.98 11.56
             print(語句名, 音檔名, 開始時間, 結束時間, file=語句目錄)
