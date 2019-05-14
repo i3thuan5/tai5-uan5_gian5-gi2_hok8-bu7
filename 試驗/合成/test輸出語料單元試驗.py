@@ -1,101 +1,86 @@
-import io
 from os import listdir
-from os.path import join, dirname, isdir
-from shutil import rmtree
+from os.path import join
 import wave
 
 from django.test.testcases import TestCase
 
 
-from 臺灣言語資料庫.資料模型 import 版權表
-from 臺灣言語資料庫.欄位資訊 import 會使公開
-from 臺灣言語資料庫.資料模型 import 來源表
-from 臺灣言語資料庫.資料模型 import 影音表
 from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 import 臺灣閩南語羅馬字拼音
 from 臺灣言語服務.HTS模型訓練 import HTS模型訓練
 from 臺灣言語工具.語音合成.漢語語音標仔轉換 import 漢語語音標仔轉換
+from tempfile import TemporaryDirectory
+from 臺灣言語服務.models import 訓練過渡格式
 
 
 class 輸出語料單元試驗(TestCase):
 
-    def setUp(self):
-        版權表.objects.create(版權=會使公開)
-        Pigu = 來源表.objects.create(名='Dr. Pigu')
-        self.資料內容 = {
-            '收錄者': Pigu.編號(),
-            '來源': Pigu.編號(),
-            '版權': '會使公開',
-            '種類': '語句',
-            '語言腔口': '閩南語',
-            '著作所在地': '花蓮',
-            '著作年': '2015',
-        }
+    def test_有文本(self):
+        with TemporaryDirectory() as 目錄:
+            影音資料 = join(目錄, 'iannim.wav')
+            with wave.open(影音資料, 'wb') as 音檔:
+                音檔.setnchannels(1)
+                音檔.setframerate(16000)
+                音檔.setsampwidth(2)
+                音檔.writeframesraw(b'0' * 100)
+            self.資料內容 = {
+                '影音所在': 影音資料,
+                '種類': '語句',
+                '年代': '2019',
+            }
+            self.資料內容['文本'] = '媠｜suí'
+            self.資料內容['影音語者'] = '豬仔'
+            訓練過渡格式.objects.create(**self.資料內容)
+            HTS模型訓練.輸出語料(
+                目錄, '豬仔', 8000, 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換
+            )
+            self.確定檔案數量(目錄, 1)
 
-        self.目錄 = join(dirname(__file__), '結果目錄')
+    def test_無文本免輸出(self):
+        with TemporaryDirectory() as 目錄:
+            影音資料 = join(目錄, 'iannim.wav')
+            with wave.open(影音資料, 'wb') as 音檔:
+                音檔.setnchannels(1)
+                音檔.setframerate(16000)
+                音檔.setsampwidth(2)
+                音檔.writeframesraw(b'0' * 100)
+            self.資料內容 = {
+                '影音所在': 影音資料,
+                '種類': '語句',
+                '年代': '2019',
+            }
+            self.資料內容['影音語者'] = '豬仔'
+            訓練過渡格式.objects.create(**self.資料內容)
 
-    def tearDown(self):
-        if isdir(self.目錄):
-            rmtree(self.目錄)
+            HTS模型訓練.輸出語料(
+                目錄, '豬仔', 8000, 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換
+            )
+            self.確定檔案數量(目錄, 0)
 
-    def test_影音母語對應(self):
-        影音 = self.加一筆影音食飽未()
-        self.母語影音加一筆食飽未(影音)
-        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換)
-        self.確定檔案數量(1)
+    def test_指定語者(self):
+        with TemporaryDirectory() as 目錄:
+            影音資料 = join(目錄, 'iannim.wav')
+            with wave.open(影音資料, 'wb') as 音檔:
+                音檔.setnchannels(1)
+                音檔.setframerate(16000)
+                音檔.setsampwidth(2)
+                音檔.writeframesraw(b'0' * 100)
+            self.資料內容 = {
+                '影音所在': 影音資料,
+                '種類': '語句',
+                '年代': '2019',
+            }
+            self.資料內容['文本'] = '媠｜suí'
+            self.資料內容['影音語者'] = '大隻豬仔'
+            訓練過渡格式.objects.create(**self.資料內容)
 
-    def test_兩个影音母語對應輸出其中一筆就好(self):
-        影音 = self.加一筆影音食飽未()
-        self.母語影音加一筆食飽未(影音)
-        self.母語影音加一筆食飽未(影音)
-        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換)
-        self.確定檔案數量(1)
+            HTS模型訓練.輸出語料(
+                目錄, '豬仔', 8000, 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換
+            )
+            self.確定檔案數量(目錄, 0)
 
-    def test_一个影音無對應(self):
-        self.加一筆影音食飽未()
-        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換)
-        self.確定檔案數量(0)
-
-    def test_兩層文本(self):
-        影音 = self.加一筆影音食飽未()
-        第一層文本 = self.母語影音加一筆食飽未(影音)
-        self.母語文本加一筆斷詞食飽未(第一層文本)
-        self.母語文本加一筆斷詞食飽未(第一層文本)
-        HTS模型訓練.輸出一種語言語料(self.目錄, '閩南語', '豬仔', 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換)
-        self.確定檔案數量(1)
-
-    def test_無仝語言袂使出現(self):
-        影音 = self.加一筆影音食飽未()
-        self.母語影音加一筆食飽未(影音)
-        self.資料內容['語言腔口'] = '臺語'
-        影音 = self.加一筆影音食飽未()
-        self.母語影音加一筆食飽未(影音)
-        HTS模型訓練.輸出一種語言語料(self.目錄, '臺語', '豬仔', 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換)
-        self.確定檔案數量(1)
-
-    def 加一筆影音食飽未(self):
-        影音資料 = io.BytesIO()
-        with wave.open(影音資料, 'wb') as 音檔:
-            音檔.setnchannels(1)
-            音檔.setframerate(16000)
-            音檔.setsampwidth(2)
-            音檔.writeframesraw(b'0' * 100)
-        影音內容 = {'影音資料': 影音資料, '屬性': {'語者': '豬仔'}}
-        影音內容.update(self.資料內容)
-        return 影音表.加資料(影音內容)
-
-    def 母語影音加一筆食飽未(self, 影音):
-        文本內容 = {'文本資料': '食飽未？'}
-        文本內容.update(self.資料內容)
-        return 影音.寫文本(文本內容)
-
-    def 母語文本加一筆斷詞食飽未(self, 文本):
-        文本內容 = {'文本資料': '食飽 未？'}
-        文本內容.update(self.資料內容)
-        return 文本.校對做(文本內容)
-
-    def 確定檔案數量(self, 數量):
+    def 確定檔案數量(self, 目錄, 數量):
         for 資料夾 in ['音檔', '孤音標仔', '相依標仔']:
             self.assertEqual(
-                len(listdir(join(self.目錄, 資料夾))),
+                len(listdir(join(目錄, 資料夾))),
                 數量
             )
