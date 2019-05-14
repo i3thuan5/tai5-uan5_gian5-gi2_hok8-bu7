@@ -14,18 +14,24 @@ from 臺灣言語工具.語音合成.HTS工具.安裝HTS語音辨識程式 impor
 
 
 class Command(BaseCommand):
-    help = '訓練一个語言的HTS模型'
+    help = '訓練HTS模型'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '語言',
             type=str,
-            help='愛訓練的語言'
+            help='愛訓練的語言設定'
         )
+
         parser.add_argument(
             '語者',
             type=str,
             help='發音人'
+        )
+        parser.add_argument(
+            '--頻率',
+            type=int,
+            default=16000,
         )
         parser.add_argument(
             '--免確定HTS相關軟體有裝無',
@@ -51,8 +57,8 @@ class Command(BaseCommand):
                 音韻規則 = 服務設定['音韻規則']
             except KeyError:
                 音韻規則 = None
-            HTS模型訓練.輸出一種語言語料(
-                語料資料夾, 語言, 語者,
+            HTS模型訓練.輸出語料(
+                語料資料夾, 語者, 參數['頻率'],
                 服務設定['音標系統'],
                 音韻規則,
                 服務設定['語音標仔轉換']
