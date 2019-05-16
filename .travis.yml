@@ -4,7 +4,7 @@ language: python
 python:
 - '3.5'
 env:
-- TOX_ENV=tan1uan5
+- TOX_ENV=tan1guan5
 - TOX_ENV=hap8sing5-tsi3giam7
 - TOX_ENV=hap8sing5-hun3lian7
 - TOX_ENV=huan1ik8
