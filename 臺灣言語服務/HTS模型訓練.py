@@ -46,7 +46,6 @@ class HTS模型訓練(程式腳本):
                     實際音句物件 = 音值句物件
                 相依標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
                 孤音標仔陣列 = 語音標仔轉換.提出標仔陣列主要音值(相依標仔陣列)
-                全部音值 |= set(孤音標仔陣列)
 
                 cls._陣列寫入檔案(join(孤音標仔資料夾, 'im{:07}.lab'.format(第幾个)), 孤音標仔陣列)
                 cls._陣列寫入檔案(join(相依標仔資料夾, 'im{:07}.lab'.format(第幾个)), 相依標仔陣列)
@@ -57,6 +56,7 @@ class HTS模型訓練(程式腳本):
                     '-ac', '1',
                     '-y', join(音檔資料夾, 'im{:07}.wav'.format(第幾个)),
                 ], stdout=PIPE, stderr=PIPE, check=True)
+                全部音值 |= set(孤音標仔陣列)
             except Exception as tshongoo:
                 print(tshongoo, 文本句物件, file=stderr)
         音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
