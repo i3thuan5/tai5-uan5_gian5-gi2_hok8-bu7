@@ -15,7 +15,7 @@ from 臺灣言語服務.models import 訓練過渡格式
 class Tacotron模型訓練(程式腳本):
 
     @classmethod
-    def 輸出LJ格式(cls, 合成語料資料夾,  語者, 頻率, 音標系統, 音韻規則, 語音標仔轉換):
+    def 輸出LJ格式(cls, 合成語料資料夾,  語者, 頻率, 音標系統):
         音檔資料夾 = join(合成語料資料夾, 'taioanoe', 'wavs')
         for 資料夾 in [音檔資料夾]:
             if isdir(資料夾):
@@ -43,3 +43,5 @@ class Tacotron模型訓練(程式腳本):
 
         with open(join(合成語料資料夾, 'taioanoe', 'metadata.csv'), 'wt') as tong:
             print('\n'.join(LJ資料), file=tong)
+
+        return len(LJ資料)
