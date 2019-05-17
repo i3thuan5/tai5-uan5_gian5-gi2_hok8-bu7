@@ -11,7 +11,6 @@ from 臺灣言語工具.音標系統.閩南語.臺灣閩南語羅馬字拼音 im
 from 臺灣言語服務.HTS模型訓練 import HTS模型訓練
 from 臺灣言語工具.語音合成.漢語語音標仔轉換 import 漢語語音標仔轉換
 from 臺灣言語服務.models import 訓練過渡格式
-from 臺灣言語工具.基本物件.句 import 句
 from 臺灣言語工具.語音合成.閩南語音韻規則 import 閩南語音韻規則
 
 
