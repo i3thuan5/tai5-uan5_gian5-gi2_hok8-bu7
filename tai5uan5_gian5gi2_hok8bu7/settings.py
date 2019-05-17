@@ -22,6 +22,7 @@ from 臺灣言語工具.語音合成.南島語語音標仔轉換 import 南島�
 from 臺灣言語工具.音標系統.Pangcah.原住民族語言書寫系統秀姑巒阿美語 import 原住民族語言書寫系統秀姑巒阿美語
 from 臺灣言語工具.語音合成.漢語語音標仔轉換 import 漢語語音標仔轉換
 from 臺灣言語工具.語音合成.閩南語音韻規則 import 閩南語音韻規則
+from 臺灣言語工具.音標系統.台語.多元書寫 import 台語多元書寫
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -52,12 +53,12 @@ INSTALLED_APPS = (
     '臺灣言語服務',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -122,26 +123,48 @@ TEMPLATES = [
 MEDIA_ROOT = os.path.join(BASE_DIR, "資料庫影音檔案")
 MEDIA_URL = "/資料庫影音檔案/"
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += (
     'corsheaders.middleware.CorsMiddleware',
 )
 CORS_ORIGIN_REGEX_WHITELIST = ('^.*$', )
 CORS_ALLOW_CREDENTIALS = True
 
 HOK8_BU7_SIAT4_TING7 = {
-    '閩南語': {
+    '台語': {
         '語族': '漢語',
         '音標系統': 臺灣閩南語羅馬字拼音,
         '解析拼音': 臺灣閩南語羅馬字拼音相容教會羅馬字音標,
         '字綜合標音': 閩南語綜合標音,
+        '多元書寫': 台語多元書寫,
         '音韻規則': 閩南語音韻規則,
         '語音標仔轉換': 漢語語音標仔轉換,
         '決策樹仔': 閩南語決策樹仔,
         '辨識設定': {
               '腳本資料夾': os.path.join(BASE_DIR, 'kaldi/egs/taiwanese/s5c'),
+              '腳本': '服務來試.sh',
               '語料資料夾': 'data',
               '模型資料夾': 'tri5.2',
               '圖資料夾': 'graph_sp',
+              '重估語言模型資料夾': 'data/lang-3grams',
+              '結果檔名': '7.0.0.txt',
+        },
+    },
+    '閩南語': {
+        '語族': '漢語',
+        '音標系統': 臺灣閩南語羅馬字拼音,
+        '解析拼音': 臺灣閩南語羅馬字拼音相容教會羅馬字音標,
+        '字綜合標音': 閩南語綜合標音,
+        '多元書寫': 台語多元書寫,
+        '音韻規則': 閩南語音韻規則,
+        '語音標仔轉換': 漢語語音標仔轉換,
+        '決策樹仔': 閩南語決策樹仔,
+        '辨識設定': {
+              '腳本資料夾': os.path.join(BASE_DIR, 'kaldi/egs/taiwanese/s5c'),
+              '腳本': '服務來試.sh',
+              '語料資料夾': 'data',
+              '模型資料夾': 'tri5.2',
+              '圖資料夾': 'graph_sp',
+              '重估語言模型資料夾': 'data/lang-3grams',
               '結果檔名': '7.0.0.txt',
         },
     },

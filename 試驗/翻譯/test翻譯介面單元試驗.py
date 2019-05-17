@@ -11,7 +11,12 @@ from 臺灣言語服務.Moses介面 import Moses介面
 class 翻譯介面單元試驗(TestCase):
 
     def setUp(self):
+        self.locatePatch = patch('Pyro4.locateNS')
+        self.locatePatch.start()
         self.工具 = RequestFactory()
+
+    def tearDown(self):
+        self.locatePatch.stop()
 
     @patch('Pyro4.Proxy')
     def test_正規化翻譯支援腔口(self, ProxyMock):
@@ -51,17 +56,3 @@ class 翻譯介面單元試驗(TestCase):
         }
         服務功能.正規化翻譯(要求)
         ProxyMock.return_value.正規化翻譯實作.assert_called_once_with('母語', '你好')
-
-    def test_無開服務(self):
-        服務功能 = Moses介面()
-
-        要求 = self.工具.get('/正規化翻譯')
-        要求.POST = {
-            '查詢腔口': '母語',
-            '查詢語句': '你好'
-        }
-
-        回應 = 服務功能.正規化翻譯(要求)
-        self.assertNotEqual(回應.status_code, 200)
-        回應資料 = json.loads(回應.content.decode("utf-8"))
-        self.assertIn('失敗', 回應資料)
