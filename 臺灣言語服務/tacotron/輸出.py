@@ -31,7 +31,9 @@ class Tacotron模型訓練(程式腳本):
                 if 字物件.音 == 無音 and 字物件.型 not in 標點符號:
                     字物件.音 = 字物件.型
             LJ資料.append('{}|{}|{}'.format(
-                'im{:07}'.format(第幾个), 文本句物件.看型(), 文本句物件.看音()
+                'im{:07}'.format(第幾个),
+                文本句物件.看型().replace('\n', ' '),
+                文本句物件.看音().replace('\n', ' '),
             ))
             run([
                 'ffmpeg', '-i', 資料.影音所在,
