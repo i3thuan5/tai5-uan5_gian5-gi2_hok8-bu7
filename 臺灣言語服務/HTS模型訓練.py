@@ -15,12 +15,13 @@ from 臺灣言語工具.語音合成.HTS工具.訓練HTSengine模型 import 訓�
 from 臺灣言語工具.基本物件.公用變數 import 無音
 from 臺灣言語工具.基本物件.公用變數 import 標點符號
 from 臺灣言語服務.models import 訓練過渡格式
+from sys import stderr
 
 
 class HTS模型訓練(程式腳本):
 
     @classmethod
-    def 輸出語料(cls, 合成語料資料夾,  語者, 頻率, 音標系統, 音韻規則, 語音標仔轉換):
+    def 輸出語料(cls, 合成語料資料夾,  語者, 頻率, 音標系統, 音韻規則, 語音標仔轉換, stderr=stderr):
         音檔資料夾 = join(合成語料資料夾, '音檔')
         孤音標仔資料夾 = join(合成語料資料夾, '孤音標仔')
         相依標仔資料夾 = join(合成語料資料夾, '相依標仔')
@@ -33,28 +34,31 @@ class HTS模型訓練(程式腳本):
             訓練過渡格式.objects
             .filter(影音所在__isnull=False, 影音語者=語者, 文本__isnull=False)
         ):
-            文本句物件 = 拆文分析器.分詞句物件(資料.文本).轉音(音標系統)
-            for 字物件 in 文本句物件.篩出字物件():
-                if 字物件.音 == 無音 and 字物件.型 not in 標點符號:
-                    字物件.音 = 字物件.型
-            音值句物件 = 文本句物件.轉音(音標系統, '音值')
-            if 音韻規則 is not None:
-                實際音句物件 = 音值句物件.做(音韻規則, '套用')
-            else:
-                實際音句物件 = 音值句物件
-            相依標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
-            孤音標仔陣列 = 語音標仔轉換.提出標仔陣列主要音值(相依標仔陣列)
-            全部音值 |= set(孤音標仔陣列)
+            try:
+                文本句物件 = 拆文分析器.分詞句物件(資料.文本).轉音(音標系統)
+                for 字物件 in 文本句物件.篩出字物件():
+                    if 字物件.音 == 無音 and 字物件.型 not in 標點符號:
+                        字物件.音 = 字物件.型
+                音值句物件 = 文本句物件.轉音(音標系統, '音值')
+                if 音韻規則 is not None:
+                    實際音句物件 = 音值句物件.做(音韻規則, '套用')
+                else:
+                    實際音句物件 = 音值句物件
+                相依標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
+                孤音標仔陣列 = 語音標仔轉換.提出標仔陣列主要音值(相依標仔陣列)
 
-            cls._陣列寫入檔案(join(孤音標仔資料夾, 'im{:07}.lab'.format(第幾个)), 孤音標仔陣列)
-            cls._陣列寫入檔案(join(相依標仔資料夾, 'im{:07}.lab'.format(第幾个)), 相依標仔陣列)
-            run([
-                'ffmpeg', '-i', 資料.影音所在,
-                '-acodec', 'pcm_s16le',
-                '-ar', '{}'.format(頻率),
-                '-ac', '1',
-                '-y', join(音檔資料夾, 'im{:07}.wav'.format(第幾个)),
-            ], stdout=PIPE, stderr=PIPE, check=True)
+                cls._陣列寫入檔案(join(孤音標仔資料夾, 'im{:07}.lab'.format(第幾个)), 孤音標仔陣列)
+                cls._陣列寫入檔案(join(相依標仔資料夾, 'im{:07}.lab'.format(第幾个)), 相依標仔陣列)
+                run([
+                    'ffmpeg', '-i', 資料.影音所在,
+                    '-acodec', 'pcm_s16le',
+                    '-ar', '{}'.format(頻率),
+                    '-ac', '1',
+                    '-y', join(音檔資料夾, 'im{:07}.wav'.format(第幾个)),
+                ], stdout=PIPE, stderr=PIPE, check=True)
+                全部音值 |= set(孤音標仔陣列)
+            except Exception as tshongoo:
+                print(tshongoo, 文本句物件, file=stderr)
         音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
         聲韻對照 = ['{0}\t{0}'.format(音值) for 音值 in sorted(全部音值)]
         cls._陣列寫入檔案(音節聲韻對照檔, 聲韻對照)
