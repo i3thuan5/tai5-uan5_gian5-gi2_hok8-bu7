@@ -13,6 +13,7 @@ from 臺灣言語服務.models import 訓練過渡格式
 
 
 class 輸出語料單元試驗(TestCase):
+    模型訓練 = HTS模型訓練.輸出語料
 
     def test_有文本(self):
         with TemporaryDirectory() as 目錄:
@@ -30,7 +31,7 @@ class 輸出語料單元試驗(TestCase):
             self.資料內容['文本'] = '媠｜suí'
             self.資料內容['影音語者'] = '豬仔'
             訓練過渡格式.objects.create(**self.資料內容)
-            HTS模型訓練.輸出語料(
+            self.模型訓練(
                 目錄, '豬仔', 8000, 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換
             )
             self.確定檔案數量(目錄, 1)
@@ -51,7 +52,7 @@ class 輸出語料單元試驗(TestCase):
             self.資料內容['影音語者'] = '豬仔'
             訓練過渡格式.objects.create(**self.資料內容)
 
-            HTS模型訓練.輸出語料(
+            self.模型訓練(
                 目錄, '豬仔', 8000, 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換
             )
             self.確定檔案數量(目錄, 0)
@@ -73,7 +74,7 @@ class 輸出語料單元試驗(TestCase):
             self.資料內容['影音語者'] = '大隻豬仔'
             訓練過渡格式.objects.create(**self.資料內容)
 
-            HTS模型訓練.輸出語料(
+            self.模型訓練(
                 目錄, '豬仔', 8000, 臺灣閩南語羅馬字拼音, None, 漢語語音標仔轉換
             )
             self.確定檔案數量(目錄, 0)
