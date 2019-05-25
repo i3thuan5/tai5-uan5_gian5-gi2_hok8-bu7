@@ -36,4 +36,4 @@ deploy:
   on:
     tags: true
     repo: i3thuan5/tai5-uan5_gian5-gi2_hok8-bu7
-    condition: $TRAVIS_PYTHON_VERSION == '3.5' && $TOX_ENV = 'tan1uan5'
+    condition: $TRAVIS_PYTHON_VERSION == '3.5' && $TOX_ENV = 'tan1guan5'
