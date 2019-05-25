@@ -166,7 +166,7 @@ class 音檔參數:
         輸入 = Input('pipe:')
         輸出 = Output('pipe:')
         指令 = AVConv(
-            'avconv', ('-loglevel', 'panic'),
+            'ffmpeg', ('-loglevel', 'panic'),
             輸入,
             ('-f', 'wav'), wav聲音格式, NO_VIDEO, 輸出
         )
