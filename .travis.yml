@@ -13,15 +13,10 @@ env:
 - TOX_ENV=flake8
 services:
 - docker
-- rabbitmq
 branches:
   only:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
-before_script:
-- sudo rabbitmqctl add_user ti1a2 gau5tsa2
-- sudo rabbitmqctl add_vhost hok8_bu7
-- sudo rabbitmqctl set_permissions -p hok8_bu7 ti1a2 '.*' '.*' '.*'
 script:
 - docker build -t tai5-uan5_gian5-gi2_hok8-bu7_travis --build-arg TOX_ENV=$TOX_ENV .
 after_success:
