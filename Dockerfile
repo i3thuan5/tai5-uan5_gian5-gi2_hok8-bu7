@@ -7,4 +7,4 @@ RUN apt-get update && apt-get install -y libav-tools libpq-dev wget
 WORKDIR /opt/tai5-uan5_gian5-gi2_hok8-bu7
 RUN pip install tox
 COPY . .
-RUN tox -e ${TOX_ENV}
+RUN tox --sitepackages -e ${TOX_ENV}
