@@ -67,4 +67,8 @@ MANIFEST
 /Dockerfile
 /docker-compose.yml
 /外部程式
+/語料/
+# /服務資料/ in-ui tshi-giam ai.
+/.tox
+/資料庫影音檔案/
 

@@ -64,14 +64,15 @@ class 辨識介面單元試驗(TestCase):
         self.assertEqual(回應.status_code, 400)
 
     def test_長檔mp3(self):
-        with open(
-            join(dirname(abspath(__file__)), 'imtong', 'sui2.mp3'), 'rb'
-        ) as mp3_tong:
-            with io.BytesIO(mp3_tong.read()) as 音檔:
-                self.client.post('/辨識音檔', {
-                    '語言': '台語',
-                    '音檔': 音檔,
-                })
+        with patch('臺灣言語服務.Kaldi介面.Kaldi辨識影音'):
+            with open(
+                join(dirname(abspath(__file__)), 'imtong', 'sui2.mp3'), 'rb'
+            ) as mp3_tong:
+                with io.BytesIO(mp3_tong.read()) as 音檔:
+                    self.client.post('/辨識音檔', {
+                        '語言': '台語',
+                        '音檔': 音檔,
+                    })
         Kaldi辨識結果.objects.get().聲音檔().wav格式資料()
 
     def test_音檔佮blob攏無傳(self):
