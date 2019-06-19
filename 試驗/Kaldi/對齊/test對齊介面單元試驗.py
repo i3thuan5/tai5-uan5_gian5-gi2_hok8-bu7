@@ -1,6 +1,7 @@
 from base64 import b64encode
 import io
 import json
+from unittest.mock import patch
 
 from django.test.testcases import TestCase
 from django.urls.base import resolve
@@ -23,31 +24,34 @@ class 對齊介面單元試驗(TestCase):
         self.assertEqual(對應.func, Kaldi對齊)
 
     def test_成功(self):
-        回應 = self.client.post('/對齊音檔', {
-            '語言': '台語',
-            'blob': self.blob,
-            '文本': 'sannh4',
-        })
+        with patch('臺灣言語服務.Kaldi介面.Kaldi對齊影音'):
+            回應 = self.client.post('/對齊音檔', {
+                '語言': '台語',
+                'blob': self.blob,
+                '文本': 'sannh4',
+            })
         self.assertEqual(回應.status_code, 200)
 
     def test_blob有音檔(self):
-        self.client.post('/對齊音檔', {
-            '語言': '台語',
-            'blob': self.blob,
-            '文本': 'sannh4',
-        })
+        with patch('臺灣言語服務.Kaldi介面.Kaldi對齊影音'):
+            self.client.post('/對齊音檔', {
+                '語言': '台語',
+                'blob': self.blob,
+                '文本': 'sannh4',
+            })
         self.assertEqual(
             Kaldi對齊結果.objects.get().聲音檔().wav格式資料(),
             self.音檔.wav格式資料()
         )
 
     def test_file有音檔(self):
-        with io.BytesIO(self.音檔.wav格式資料()) as 音檔:
-            self.client.post('/對齊音檔', {
-                '語言': '台語',
-                '音檔': 音檔,
-                '文本': 'sannh4',
-            })
+        with patch('臺灣言語服務.Kaldi介面.Kaldi對齊影音'):
+            with io.BytesIO(self.音檔.wav格式資料()) as 音檔:
+                self.client.post('/對齊音檔', {
+                    '語言': '台語',
+                    '音檔': 音檔,
+                    '文本': 'sannh4',
+                })
         self.assertEqual(
             Kaldi對齊結果.objects.get().聲音檔().wav格式資料(),
             self.音檔.wav格式資料()

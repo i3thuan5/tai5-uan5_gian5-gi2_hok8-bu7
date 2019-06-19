@@ -4,24 +4,19 @@ language: python
 python:
 - '3.5'
 env:
-- TOX_ENV=tan1uan5
+- TOX_ENV=tan1guan5
 - TOX_ENV=hap8sing5-tsi3giam7
-# - TOX_ENV=hap8sing5-hun3lian7
-- TOX_ENV=huan1ik8
-- TOX_ENV=huan1ik8-gua7bun5
-- TOX_ENV=huan1ik8-tsing3kui1
+- TOX_ENV=hap8sing5-hun3lian7
+#- TOX_ENV=huan1ik8
+#- TOX_ENV=huan1ik8-gua7bun5
+#- TOX_ENV=huan1ik8-tsing3kui1
 - TOX_ENV=flake8
 services:
 - docker
-- rabbitmq
 branches:
   only:
   - master
   - "/\\d+\\.\\d+\\.\\d+/"
-before_script:
-- sudo rabbitmqctl add_user ti1a2 gau5tsa2
-- sudo rabbitmqctl add_vhost hok8_bu7
-- sudo rabbitmqctl set_permissions -p hok8_bu7 ti1a2 '.*' '.*' '.*'
 script:
 - docker build -t tai5-uan5_gian5-gi2_hok8-bu7_travis --build-arg TOX_ENV=$TOX_ENV .
 after_success:
@@ -36,4 +31,4 @@ deploy:
   on:
     tags: true
     repo: i3thuan5/tai5-uan5_gian5-gi2_hok8-bu7
-    condition: $TRAVIS_PYTHON_VERSION == '3.5' && $TOX_ENV = 'tan1uan5'
+    condition: $TRAVIS_PYTHON_VERSION == '3.5' && $TOX_ENV = 'tan1guan5'
