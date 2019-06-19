@@ -14,14 +14,14 @@ from 臺灣言語工具.辭典.型音辭典 import 型音辭典
 from 臺灣言語工具.語言模型.KenLM語言模型 import KenLM語言模型
 
 
-class 標書寫服務:
+class 漢羅服務:
 
     def __init__(self):
         self.全部模型 = {}
 
-        for 語言 in enumerate(settings.HOK8_BU7_SIAT4_TING7.keys()):
+        for 語言 in settings.HOK8_BU7_SIAT4_TING7.keys():
             try:
-                辭典檔案 = join(self.資料所在(語言), '辭典.txt')
+                辭典檔案 = join(self.資料所在(語言), '辭典.txt.gz')
                 母語辭典 = 型音辭典(4)
                 母語辭典.加檔案的詞(辭典檔案)
 
@@ -55,4 +55,4 @@ class 標書寫服務:
         return 文本介面.章物件轉回應結果(settings.HOK8_BU7_SIAT4_TING7[查詢腔口], 母語章物件)
 
     def 資料所在(self, 語言):
-        return join(settings.BASE_DIR, '服務資料', 語言, '標書寫')
+        return join(settings.BASE_DIR, '服務資料', 語言, '標漢羅')
