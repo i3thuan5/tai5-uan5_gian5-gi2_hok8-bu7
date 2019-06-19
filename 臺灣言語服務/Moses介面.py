@@ -50,7 +50,7 @@ class Moses介面:
             連線參數 = request.POST
         try:
             查詢腔口 = 連線參數['查詢腔口']
-            if 查詢腔口 not in self.服務.支援腔口():
+            if 查詢腔口 != '台語' and 查詢腔口 not in self.服務.支援腔口():
                 raise RuntimeError()
         except (KeyError, RuntimeError):
             查詢腔口 = '台語'
