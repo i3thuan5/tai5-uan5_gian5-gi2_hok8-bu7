@@ -16,10 +16,11 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **參數):
-        pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
+        pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", 'pyro4')
         daemon = Pyro4.Daemon(host=參數['翻譯主機'])
         ns = Pyro4.locateNS(host=pyro4主機)
 
+        print("讀服務", file=self.stderr)
         uri = daemon.register(漢羅服務())
         while True:
             try:
