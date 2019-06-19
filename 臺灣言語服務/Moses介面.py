@@ -8,9 +8,12 @@ from django.conf import settings
 class Moses介面:
     @property
     def 服務(self):
+        return self.專門服務("Moses服務")
+
+    def 專門服務(self, 服務名):
         pyro4主機 = getattr(settings, "PYRO4_TSU2_KI1", None)
         pyro4_naming主機 = Pyro4.locateNS(pyro4主機)
-        pyro4的uri = pyro4_naming主機.lookup("Moses服務")
+        pyro4的uri = pyro4_naming主機.lookup(服務名)
         return Pyro4.Proxy(pyro4的uri)
 
     def 正規化翻譯支援腔口(self, request):
@@ -55,8 +58,12 @@ class Moses介面:
             查詢語句 = 連線參數['查詢語句']
         except KeyError:
             查詢語句 = '你好嗎？我很好！'
+        if 查詢腔口 == '台語':
+            服務函式 = self.專門服務('台語標書寫').標漢羅實作
+        else:
+            服務函式 = self.服務.標漢字音標實作
         try:
-            return JsonResponse(self.服務.標漢字音標實作(查詢腔口, 查詢語句))
+            return JsonResponse(服務函式(查詢腔口, 查詢語句))
         except Pyro4.errors.NamingError:
             return JsonResponse({'失敗': '服務無啟動，請通知阮！'}, status=503)
         except ConnectionRefusedError:
