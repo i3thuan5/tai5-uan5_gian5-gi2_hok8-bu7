@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 from os import walk
 import os
 import sys
@@ -36,6 +36,7 @@ setup(
     version=版本,
     description='臺灣語言服務',
     long_description=讀('README.md'),
+    long_description_content_type="text/markdown",
     author='薛丞宏',
     author_email='ihcaoe@gmail.com',
     url='https://xn--v0qr21b.xn--kpry57d/',
@@ -57,8 +58,8 @@ setup(
         'Topic :: Text Processing :: Linguistic',
     ],
     install_requires=[
-        'django<2.0',
-        'tai5-uan5_gian5-gi2_tsu1-liau7-khoo3>=3.1.13',
+        'django',
+        'tai5-uan5_gian5-gi2_tsu1-liau7-khoo3>=3.1.21',
         'pyro4',
         'gunicorn',
         'django-ranged-response',

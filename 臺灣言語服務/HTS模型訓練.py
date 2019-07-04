@@ -4,23 +4,24 @@ from os.path import join, exists, isdir
 from posix import listdir
 from shutil import rmtree
 import shutil
+from subprocess import run, PIPE
 
 
 from 臺灣言語工具.系統整合.程式腳本 import 程式腳本
 from 臺灣言語工具.解析整理.拆文分析器 import 拆文分析器
 from 臺灣言語工具.語音辨識.HTK工具.HTK辨識模型訓練 import HTK辨識模型訓練
-from 臺灣言語資料庫.資料模型 import 影音表
-from 臺灣言語資料庫.資料模型 import 資料屬性表
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
 from 臺灣言語工具.語音合成.HTS工具.訓練HTSengine模型 import 訓練HTSEngine模型
 from 臺灣言語工具.基本物件.公用變數 import 無音
 from 臺灣言語工具.基本物件.公用變數 import 標點符號
+from 臺灣言語服務.models import 訓練過渡格式
+from sys import stderr
 
 
 class HTS模型訓練(程式腳本):
 
     @classmethod
-    def 輸出一種語言語料(cls, 合成語料資料夾, 語言, 語者, 音標系統, 音韻規則, 語音標仔轉換):
+    def 輸出語料(cls, 合成語料資料夾,  語者, 頻率, 音標系統, 音韻規則, 語音標仔轉換, stderr=stderr):
         音檔資料夾 = join(合成語料資料夾, '音檔')
         孤音標仔資料夾 = join(合成語料資料夾, '孤音標仔')
         相依標仔資料夾 = join(合成語料資料夾, '相依標仔')
@@ -29,34 +30,35 @@ class HTS模型訓練(程式腳本):
                 rmtree(資料夾)
             makedirs(資料夾)
         全部音值 = set()
-        for 第幾个, 影音 in enumerate(
-            影音表.objects
-            .distinct()
-            .filter(影音文本__isnull=False)
-            .filter(語言腔口__語言腔口=語言)
-            .filter(屬性=資料屬性表.揣屬性('語者', 語者))
+        for 第幾个, 資料 in enumerate(
+            訓練過渡格式.objects
+            .filter(影音所在__isnull=False, 影音語者=語者, 文本__isnull=False)
         ):
-            文本 = cls._揣上尾的文本(影音.影音文本.first().文本)
-            文本句物件 = 拆文分析器.分詞句物件(文本.分詞資料(音標系統)).轉音(音標系統)
-            for 字物件 in 文本句物件.篩出字物件():
-                if 字物件.音 == 無音 and 字物件.型 not in 標點符號:
-                    字物件.音 = 字物件.型
-            音值句物件 = 文本句物件.轉音(音標系統, '音值')
-            if 音韻規則 is not None:
-                實際音句物件 = 音值句物件.做(音韻規則, '套用')
-            else:
-                實際音句物件 = 音值句物件
-            相依標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
-            孤音標仔陣列 = 語音標仔轉換.提出標仔陣列主要音值(相依標仔陣列)
-            全部音值 |= set(孤音標仔陣列)
+            try:
+                文本句物件 = 拆文分析器.分詞句物件(資料.文本).轉音(音標系統)
+                for 字物件 in 文本句物件.篩出字物件():
+                    if 字物件.音 == 無音 and 字物件.型 not in 標點符號:
+                        字物件.音 = 字物件.型
+                音值句物件 = 文本句物件.轉音(音標系統, '音值')
+                if 音韻規則 is not None:
+                    實際音句物件 = 音值句物件.做(音韻規則, '套用')
+                else:
+                    實際音句物件 = 音值句物件
+                相依標仔陣列 = 語音標仔轉換.物件轉完整合成標仔(實際音句物件)
+                孤音標仔陣列 = 語音標仔轉換.提出標仔陣列主要音值(相依標仔陣列)
 
-            cls._陣列寫入檔案(join(孤音標仔資料夾, 'im{:07}.lab'.format(第幾个)), 孤音標仔陣列)
-            cls._陣列寫入檔案(join(相依標仔資料夾, 'im{:07}.lab'.format(第幾个)), 相依標仔陣列)
-            with open(join(音檔資料夾, 'im{:07}.wav'.format(第幾个)), 'wb') as 目標wav檔案:
-                影音資料 = 影音.影音資料
-                影音資料.open()
-                目標wav檔案.write(影音資料.read())
-                影音資料.close()
+                cls._陣列寫入檔案(join(孤音標仔資料夾, 'im{:07}.lab'.format(第幾个)), 孤音標仔陣列)
+                cls._陣列寫入檔案(join(相依標仔資料夾, 'im{:07}.lab'.format(第幾个)), 相依標仔陣列)
+                run([
+                    'ffmpeg', '-i', 資料.影音所在,
+                    '-acodec', 'pcm_s16le',
+                    '-ar', '{}'.format(頻率),
+                    '-ac', '1',
+                    '-y', join(音檔資料夾, 'im{:07}.wav'.format(第幾个)),
+                ], stdout=PIPE, stderr=PIPE, check=True)
+                全部音值 |= set(孤音標仔陣列)
+            except Exception as tshongoo:
+                print(tshongoo, 文本句物件, file=stderr)
         音節聲韻對照檔 = join(合成語料資料夾, '聲韻對照.dict')
         聲韻對照 = ['{0}\t{0}'.format(音值) for 音值 in sorted(全部音值)]
         cls._陣列寫入檔案(音節聲韻對照檔, 聲韻對照)

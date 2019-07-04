@@ -47,9 +47,9 @@ class Kaldi語料匯出(程式腳本):
                             )
 
     @classmethod
-    def 辭典資料載入語句文本(cls, 語言文本, 辭典輸出物件, 辭典資料):
+    def 辭典資料載入語句文本(cls, 語言文本, 辭典輸出物件, 辭典資料, 加語料=False):
         for 一逝 in cls._讀檔案(語言文本):
-            這擺參數 = {'辭典輸出物件': 辭典輸出物件, '一逝': 一逝, '加語料': False}
+            這擺參數 = {'辭典輸出物件': 辭典輸出物件, '一逝': 一逝, '加語料': 加語料}
             這擺參數.update(辭典資料)
             cls._資料加到辭典(**這擺參數)
 
@@ -76,6 +76,7 @@ class Kaldi語料匯出(程式腳本):
         for 仝調 in 辭典資料['調類'].values():
             調問題.add(' '.join(sorted(仝調)))
         cls._陣列寫入檔案(join(訓練語料資料夾, 'extra_questions.txt'), sorted(調問題))
+        return 訓練語料資料夾
 
     @classmethod
     def 匯出語言模型(cls, 語言文本, 連紲詞長度, 語料資料夾, 資料夾名):
