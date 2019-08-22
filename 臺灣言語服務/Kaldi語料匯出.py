@@ -30,8 +30,8 @@ class Kaldi語料匯出(程式腳本):
         }
 
     @classmethod
-    def 匯出一種語言語料(cls, 語言, 辭典輸出物件, 語料資料夾, 資料夾名, 辭典資料, 匯出條件=Q()):
-        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'train')
+    def 匯出一種語言語料(cls, 語言, 辭典輸出物件, 語料資料夾, 資料夾名, 辭典資料, 匯出條件=Q(), 語料名='train'):
+        訓練語料資料夾 = join(語料資料夾, 資料夾名, 語料名)
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)
@@ -54,8 +54,8 @@ class Kaldi語料匯出(程式腳本):
             cls._資料加到辭典(**這擺參數)
 
     @classmethod
-    def 匯出辭典資料(cls, 辭典資料, 語料資料夾, 資料夾名):
-        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 'dict')
+    def 匯出辭典資料(cls, 辭典資料, 語料資料夾, 資料夾名, 語料名='dict'):
+        訓練語料資料夾 = join(語料資料夾, 資料夾名, 'local', 語料名)
         if isdir(訓練語料資料夾):
             rmtree(訓練語料資料夾)
         makedirs(訓練語料資料夾, exist_ok=True)

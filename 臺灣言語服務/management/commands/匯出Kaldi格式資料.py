@@ -44,7 +44,14 @@ class Command(BaseCommand):
             type=str,
             dest='資料夾名',
             default='data',
-            help='s5底下的資料夾名',
+            help='s5下底的資料夾名',
+        )
+        parser.add_argument(
+            '--語料名',
+            type=str,
+            dest='語料名',
+            default='train',
+            help='data下底的資料夾名',
         )
 
     def handle(self, *args, **參數):
@@ -54,9 +61,13 @@ class Command(BaseCommand):
         辭典輸出物件 = 辭典輸出(服務設定['音標系統'], 參數['辭典輸出函式'])
         幾段音檔 = Kaldi語料匯出.匯出一種語言語料(
             語言, 辭典輸出物件,
-            參數['匯出路徑'], 參數['資料夾名'], 辭典資料
+            參數['匯出路徑'], 參數['資料夾名'], 辭典資料,
+            語料名=參數['語料名']
         )
         if 參數['語言文本'] is not None:
             Kaldi語料匯出.辭典資料載入語句文本(參數['語言文本'], 辭典輸出物件, 辭典資料)
-        Kaldi語料匯出.匯出辭典資料(辭典資料, 參數['匯出路徑'], 參數['資料夾名'])
+        if 參數['語料名'] == 'train':
+            Kaldi語料匯出.匯出辭典資料(辭典資料, 參數['匯出路徑'], 參數['資料夾名'])
+        else:
+            Kaldi語料匯出.匯出辭典資料(辭典資料, 參數['匯出路徑'], 參數['資料夾名'], 參數['語料名'])
         self.stdout.write('輸出 {} 段音檔'.format(幾段音檔))
