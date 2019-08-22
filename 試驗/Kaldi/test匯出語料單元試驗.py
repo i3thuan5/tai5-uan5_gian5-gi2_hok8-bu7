@@ -27,6 +27,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
 
     def test_文本有text(self):
         self.匯入音檔('媠巧', 'tsiang5 tsiang5')
+        self.匯入音檔('豬仔', 'kônn kônn')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
                 '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
@@ -34,7 +35,11 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             )
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                ['語料庫-0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
+                [
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
+                    '語料庫-0000001豬仔-tong0000001-ku0000000 kônn kônn',
+
+                ]
             )
 
     def test_聽拍有text(self):
@@ -63,7 +68,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 join(資料夾路徑, '語料資料夾', 'train', 'text'),
                 [
                     '語料庫-0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
-                    '語料庫-0000001豬仔-tong0000001-ku0000000 konn5 konn5',
+                    '語料庫-0000001豬仔-tong0000000-ku0000001 konn5 konn5',
                 ]
             )
 
@@ -112,11 +117,11 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             )
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
-                ['語料庫-0000000媠巧-tong0000000-ku0000000 0000000媠巧']
+                ['語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧']
             )
 
     def test_kāng檔kāng名就kānglâng(self):
-        一筆 = self.匯入音檔('媠巧', None)
+        一筆 = self.匯入音檔('媠巧!', None)
         一筆.聽拍 = [
             {
                 '語者': '媠巧',
@@ -125,7 +130,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 '結束時間': 1,
             },
             {
-                '語者': '豬仔',
+                '語者': '媠巧',
                 '內容': 'konn5 konn5',
                 '開始時間': 2,
                 '結束時間': 3,
@@ -179,11 +184,13 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
         一筆 = self.匯入音檔('媠巧', None)
         一筆.聽拍 = [
             {
+                '語者': '',
                 '內容': 'tsiang5 tsiang5',
                 '開始時間': 0.3,
                 '結束時間': 1,
             },
             {
+                '語者': '',
                 '內容': 'konn5 konn5',
                 '開始時間': 2,
                 '結束時間': 3,
@@ -274,8 +281,8 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
                 [
-                    '0Sui-khoo-0000000媠巧-tong0000000-ku0000000 0Sui-khoo-0000000媠巧',
-                    '1Khiau-khoo-0000000媠巧-tong0000000-ku0000000 1Khiau-khoo-0000000媠巧',
+                    'Sui-khoo-0000000媠巧-tong0000000-ku0000000 Sui-khoo-0000000媠巧',
+                    'Khiau-khoo-0000001媠巧-tong0000001-ku0000000 Khiau-khoo-0000001媠巧',
                 ]
             )
 
