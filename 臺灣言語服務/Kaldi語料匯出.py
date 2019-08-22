@@ -180,7 +180,7 @@ class Kaldi語料匯出(程式腳本):
         for 影音所在, 狀況, in sorted(
             影音對應聽拍.items(), key=lambda tong: tong[1]['pk']
         ):
-            音檔名 = '{}-tong{:07}'.format(狀況['來源'],第幾个)
+            音檔名 = '{}-tong{:07}'.format(狀況['來源'], 第幾个)
             cls._音檔資訊(影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
             for 第幾句, 一句聽拍 in enumerate(chain.from_iterable(狀況['聽拍'])):
                 第幾个人 = cls._語句資訊(
@@ -200,7 +200,7 @@ class Kaldi語料匯出(程式腳本):
             .filter(匯出條件)
             .order_by('pk')
         ):
-            音檔名 = '{}-tong{:07}'.format(''.join(一筆.來源.split()),第幾个)
+            音檔名 = '{}-tong{:07}'.format(''.join(一筆.來源.split()), 第幾个)
             cls._音檔資訊(一筆.影音所在, 音檔名, 音檔目錄, 音檔對應頻道)
             音檔長度 = 一筆.聲音檔().時間長度()
             第幾个人 = cls._語句資訊(

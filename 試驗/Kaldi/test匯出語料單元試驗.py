@@ -281,8 +281,14 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
                 [
-                    'Sui-khoo-0000000媠巧-tong0000000-ku0000000 Sui-khoo-0000000媠巧',
-                    'Khiau-khoo-0000001媠巧-tong0000001-ku0000000 Khiau-khoo-0000001媠巧',
+                    (
+                        'Sui-khoo-0000000媠巧-tong0000000-ku0000000 '
+                        'Sui-khoo-0000000媠巧'
+                    ),
+                    (
+                        'Khiau-khoo-0000001媠巧-tong0000001-ku0000000 '
+                        'Khiau-khoo-0000001媠巧'
+                    ),
                 ]
             )
 
