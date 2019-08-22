@@ -25,43 +25,9 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
     def tearDown(self):
         remove(self.檔案.name)
 
-    def test_一條一句(self):
+    def test_文本有text(self):
         self.匯入音檔('媠巧', 'tsiang5 tsiang5')
-        with TemporaryDirectory() as 資料夾路徑:
-            Kaldi語料匯出.匯出一種語言語料(
-                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
-                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
-            )
-            self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                ['0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'wav.scp'),
-                'sox'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'segments'),
-                '0000000媠巧-tong0000000-ku0000000'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'reco2file_and_channel'),
-                'tong0000000'
-            )
-            self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
-                ['0000000媠巧-tong0000000-ku0000000 0000000媠巧']
-            )
-
-    def test_兩句一條(self):
-        self.匯入音檔(
-            '媠巧',
-            'tsiang5 tsiang5',
-        )
-        self.匯入音檔(
-            '豬仔',
-            'konn5 konn5',
-        )
+        self.匯入音檔('豬仔', 'kônn kônn')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
                 '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
@@ -70,39 +36,13 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'text'),
                 [
-                    '0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
-                    '0000001豬仔-tong0000001-ku0000000 konn5 konn5',
-                ]
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'wav.scp'),
-                'sox'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'segments'),
-                '0000000媠巧-tong0000000-ku0000000'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'segments'),
-                '0000001豬仔-tong0000001-ku0000000'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'reco2file_and_channel'),
-                'tong0000000'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'reco2file_and_channel'),
-                'tong0000001'
-            )
-            self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
-                [
-                    '0000000媠巧-tong0000000-ku0000000 0000000媠巧',
-                    '0000001豬仔-tong0000001-ku0000000 0000001豬仔',
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
+                    '語料庫-0000001豬仔-tong0000001-ku0000000 kônn kônn',
+
                 ]
             )
 
-    def test_一條兩句(self):
+    def test_聽拍有text(self):
         一筆 = self.匯入音檔('媠巧', None)
         一筆.聽拍 = [
             {
@@ -127,58 +67,194 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'text'),
                 [
-                    '0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
-                    '0000001豬仔-tong0000000-ku0000001 konn5 konn5',
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
+                    '語料庫-0000001豬仔-tong0000000-ku0000001 konn5 konn5',
                 ]
+            )
+
+    def test_音檔有用sox調聲道Kah頻率(self):
+        self.匯入音檔('媠巧', 'tsiang5 tsiang5')
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.檔案內底有(
                 join(資料夾路徑, '語料資料夾', 'train', 'wav.scp'),
                 'sox'
             )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'segments'),
-                '0000000媠巧-tong0000000-ku0000000'
+
+    def test_有segments(self):
+        self.匯入音檔('媠巧', 'tsiang5 tsiang5')
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.檔案內底有(
                 join(資料夾路徑, '語料資料夾', 'train', 'segments'),
-                '0000001豬仔-tong0000000-ku0000001'
+                '語料庫-0000000媠巧-tong0000000-ku0000000'
+            )
+
+    def test_有reco(self):
+        self.匯入音檔('媠巧', 'tsiang5 tsiang5')
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.檔案內底有(
                 join(資料夾路徑, '語料資料夾', 'train', 'reco2file_and_channel'),
-                'tong0000000'
-            )
-            self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
-                [
-                    '0000000媠巧-tong0000000-ku0000000 0000000媠巧',
-                    '0000001豬仔-tong0000000-ku0000001 0000001豬仔',
-                ]
+                '語料庫-tong0000000'
             )
 
-    def test_仝名愛當作仝人(self):
+    def test_一條一句ê語者(self):
         self.匯入音檔('媠巧', 'tsiang5 tsiang5')
-        self.匯入音檔('媠巧', 'konn5 konn5')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
                 '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                [
-                    '0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5',
-                    '0000000媠巧-tong0000001-ku0000000 konn5 konn5',
-                ]
+                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
+                ['語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧']
+            )
+
+    def test_kāng檔kāng名就kānglâng(self):
+        一筆 = self.匯入音檔('媠巧!', None)
+        一筆.聽拍 = [
+            {
+                '語者': '媠巧',
+                '內容': 'tsiang5 tsiang5',
+                '開始時間': 0.3,
+                '結束時間': 1,
+            },
+            {
+                '語者': '媠巧',
+                '內容': 'konn5 konn5',
+                '開始時間': 2,
+                '結束時間': 3,
+            },
+        ]
+        一筆.save()
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
                 [
-                    '0000000媠巧-tong0000000-ku0000000 0000000媠巧',
-                    '0000000媠巧-tong0000001-ku0000000 0000000媠巧',
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧',
+                    '語料庫-0000000媠巧-tong0000000-ku0000001 語料庫-0000000媠巧',
                 ]
             )
 
-    def test_無註明愛當作無仝人(self):
+    def test_kāng檔無kāng名(self):
+        一筆 = self.匯入音檔('媠巧', None)
+        一筆.聽拍 = [
+            {
+                '語者': '媠巧',
+                '內容': 'tsiang5 tsiang5',
+                '開始時間': 0.3,
+                '結束時間': 1,
+            },
+            {
+                '語者': '豬仔',
+                '內容': 'konn5 konn5',
+                '開始時間': 2,
+                '結束時間': 3,
+            },
+        ]
+        一筆.save()
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
+                [
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧',
+                    '語料庫-0000001豬仔-tong0000000-ku0000001 語料庫-0000001豬仔',
+                ]
+            )
+
+    def test_kāng檔無名(self):
+        一筆 = self.匯入音檔('媠巧', None)
+        一筆.聽拍 = [
+            {
+                '語者': '',
+                '內容': 'tsiang5 tsiang5',
+                '開始時間': 0.3,
+                '結束時間': 1,
+            },
+            {
+                '語者': '',
+                '內容': 'konn5 konn5',
+                '開始時間': 2,
+                '結束時間': 3,
+            },
+        ]
+        一筆.save()
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
+                [
+                    '語料庫-0000000無註明-tong0000000-ku0000000 語料庫-0000000無註明',
+                    '語料庫-0000001無註明-tong0000000-ku0000001 語料庫-0000001無註明',
+                ]
+            )
+
+    def test_無kāng檔kāng名嘛kānglâng(self):
+        self.匯入音檔(
+            '媠巧',
+            'tsiang5 tsiang5',
+        )
+        self.匯入音檔(
+            '媠巧',
+            'konn5 konn5',
+        )
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
+                [
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧',
+                    '語料庫-0000000媠巧-tong0000001-ku0000000 語料庫-0000000媠巧',
+                ]
+            )
+
+    def test_無kāng檔無kāng名(self):
+        self.匯入音檔(
+            '媠巧',
+            'tsiang5 tsiang5',
+        )
+        self.匯入音檔(
+            '豬仔',
+            'konn5 konn5',
+        )
+        with TemporaryDirectory() as 資料夾路徑:
+            Kaldi語料匯出.匯出一種語言語料(
+                '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
+                資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
+            )
+            self.比較檔案(
+                join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
+                [
+                    '語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧',
+                    '語料庫-0000001豬仔-tong0000001-ku0000000 語料庫-0000001豬仔',
+                ]
+            )
+
+    def test_無kāng檔無名(self):
         self.匯入音檔('無註明', 'tsiang5 tsiang5')
         self.匯入音檔('無註明', 'konn5 konn5')
         with TemporaryDirectory() as 資料夾路徑:
@@ -187,47 +263,36 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                [
-                    '0000000無註明-tong0000000-ku0000000 tsiang5 tsiang5',
-                    '0000001無註明-tong0000001-ku0000000 konn5 konn5',
-                ]
-            )
-            self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
                 [
-                    '0000000無註明-tong0000000-ku0000000 0000000無註明',
-                    '0000001無註明-tong0000001-ku0000000 0000001無註明',
+                    '語料庫-0000000無註明-tong0000000-ku0000000 語料庫-0000000無註明',
+                    '語料庫-0000001無註明-tong0000001-ku0000000 語料庫-0000001無註明',
                 ]
             )
 
-    def test_無語者當作無註明(self):
-        訓練過渡格式.objects.create(
-            來源='媠巧',
-            年代='2017',
-            種類='語句',
-            影音所在=self.檔案.name,
-            文本='konn5 konn5',
-        )
+    def test_無kāng來源就攏無kâng(self):
+        self.匯入音檔('媠巧', 'Sui', 'Sui-khoo')
+        self.匯入音檔('媠巧', 'Khiau', 'Khiau-khoo')
         with TemporaryDirectory() as 資料夾路徑:
             Kaldi語料匯出.匯出一種語言語料(
                 '台語', 辭典輸出(臺灣閩南語羅馬字拼音, '拆做音素'),
                 資料夾路徑, '語料資料夾', Kaldi語料匯出.初使化辭典資料()
             )
             self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                [
-                    '0000000無註明-tong0000000-ku0000000 konn5 konn5',
-                ]
-            )
-            self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
                 [
-                    '0000000無註明-tong0000000-ku0000000 0000000無註明',
+                    (
+                        'Sui-khoo-0000000媠巧-tong0000000-ku0000000 '
+                        'Sui-khoo-0000000媠巧'
+                    ),
+                    (
+                        'Khiau-khoo-0000001媠巧-tong0000001-ku0000000 '
+                        'Khiau-khoo-0000001媠巧'
+                    ),
                 ]
             )
 
-    def test_輸出一句(self):
+    def test_輸出指定一句(self):
         self.匯入音檔('konn5', 'konn5 konn5')
         一筆 = self.匯入音檔('媠巧', 'tsiang5 tsiang5')
         with TemporaryDirectory() as 資料夾路徑:
@@ -237,24 +302,8 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                 Q(pk=一筆.編號())
             )
             self.比較檔案(
-                join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                ['0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'wav.scp'),
-                'sox'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'segments'),
-                '0000000媠巧-tong0000000-ku0000000'
-            )
-            self.檔案內底有(
-                join(資料夾路徑, '語料資料夾', 'train', 'reco2file_and_channel'),
-                'tong0000000'
-            )
-            self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'utt2spk'),
-                ['0000000媠巧-tong0000000-ku0000000 0000000媠巧']
+                ['語料庫-0000000媠巧-tong0000000-ku0000000 語料庫-0000000媠巧']
             )
 
     def test_一條內底有換逝(self):
@@ -266,10 +315,10 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
             )
             self.比較檔案(
                 join(資料夾路徑, '語料資料夾', 'train', 'text'),
-                ['0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
+                ['語料庫-0000000媠巧-tong0000000-ku0000000 tsiang5 tsiang5']
             )
 
-    def test_仝音檔愛公家(self):
+    def test_仝音檔_wav愛公家(self):
         self.匯入聽拍(self.檔案, '媠', 'sui2')
         self.匯入聽拍(self.檔案, '巧', 'khiau2')
         with TemporaryDirectory() as 資料夾路徑:
@@ -283,7 +332,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                     1
                 )
 
-    def test_無仝音檔愛分開(self):
+    def test_無仝音檔_wav愛分開(self):
         self.匯入聽拍(self.檔案, '媠', 'sui2')
         self.匯入聽拍(self.檔案2, '巧', 'khiau2')
         with TemporaryDirectory() as 資料夾路徑:
@@ -297,9 +346,9 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
                     2
                 )
 
-    def 匯入音檔(self, 語者, 內容):
+    def 匯入音檔(self, 語者, 內容, 來源='語料庫'):
         return 訓練過渡格式.objects.create(
-            來源='媠巧',
+            來源=來源,
             年代='2017',
             種類='語句',
             影音所在=self.檔案.name,
@@ -309,7 +358,7 @@ class Kaldi匯出一種語言語料單元試驗(TestCase):
 
     def 匯入聽拍(self, 檔案, 語者, 內容):
         return 訓練過渡格式.objects.create(
-            來源='媠巧',
+            來源='語料庫',
             年代='2018',
             種類='語句',
             影音所在=檔案.name,
