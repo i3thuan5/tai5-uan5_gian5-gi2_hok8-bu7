@@ -65,5 +65,6 @@ setup(
         'django-ranged-response',
         'jsonfield',
         'celery',
+        'librosa',
     ],
 )

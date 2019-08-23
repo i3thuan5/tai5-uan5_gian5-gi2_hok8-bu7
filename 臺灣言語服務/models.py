@@ -4,6 +4,7 @@ from sys import stderr
 from django.core.exceptions import ValidationError
 from django.db import models
 from jsonfield.fields import JSONField
+from librosa.core.audio import get_duration
 
 
 from 臺灣言語工具.語音辨識.聲音檔 import 聲音檔
@@ -55,13 +56,16 @@ class 訓練過渡格式(models.Model):
     def 聲音檔(self):
         return 聲音檔.對檔案讀(self.影音所在)
 
+    def 影音長度(self):
+        return get_duration(filename=self.影音所在)
+
     def clean(self):
         super().clean()
         if self.影音所在 is not None:
             self.影音所在 = abspath(self.影音所在)
             檢查敢是影音檔案(self.影音所在)
             if self.聽拍:
-                檢查聽拍結束時間有超過音檔無(self.聲音檔().時間長度(), self.聽拍)
+                檢查聽拍結束時間有超過音檔無(self.影音長度(), self.聽拍)
                 if self.文本 is not None:
                     raise ValidationError('有聽拍就袂使有文本')
                 if self.影音語者 != '':
