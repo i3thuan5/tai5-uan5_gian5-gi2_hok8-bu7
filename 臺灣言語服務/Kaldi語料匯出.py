@@ -217,7 +217,8 @@ class Kaldi語料匯出(程式腳本):
     def _音檔資訊(cls, 影音所在, 音檔名, 音檔目錄, 音檔對應頻道):
         print(
             音檔名,
-            "sox -G '{}' -b 16 -c 1 -r 16k -t wav - | ".format(影音所在),
+            "ffmpeg -i '{}'  -f wav pipe:1 | "
+            "sox -G -t wav - -b 16 -c 1 -r 16k -t wav - | ".format(影音所在),
             file=音檔目錄
         )
 #             sw02001-A sw02001 A

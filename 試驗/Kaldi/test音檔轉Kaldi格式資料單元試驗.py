@@ -1,4 +1,4 @@
-from os.path import join
+from os.path import join, dirname
 from tempfile import TemporaryDirectory
 
 from django.core.management import call_command
@@ -29,3 +29,13 @@ class 音檔轉Kaldi格式資料單元試驗(TestCase):
             self.s5 = join(資料夾路徑, 's5')
             call_command('音檔轉Kaldi格式資料', '台語', self.音檔所在, self.s5)
         self.assertEqual(訓練過渡格式.objects.count(), 0)
+
+    def test_mp4(self):
+        with TemporaryDirectory() as 資料夾路徑:
+            self.音檔所在 = join(dirname(__file__), 'iannim', '26-意傳-節氣.mp4')
+            self.s5 = join(資料夾路徑, 's5')
+            call_command(
+                '音檔轉Kaldi格式資料', '台語', self.音檔所在, self.s5
+            )
+            with open(join(self.s5, 'data', 'train', 'segments')) as tong:
+                self.assertIn('ku', tong.read())
